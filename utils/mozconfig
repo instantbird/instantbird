@@ -1,0 +1,7 @@
+. $topsrcdir/xulrunner/config/mozconfig
+mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-@CONFIG_GUESS@
+
+ac_add_options --disable-tests
+ac_add_options --enable-debug
+ac_add_options --disable-optimize
+ac_add_options --disable-javaxpcom

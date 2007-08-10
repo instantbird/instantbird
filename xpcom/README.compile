@@ -1,0 +1,22 @@
+Build prerequistes:
+  - Gecko SDK for your compiler/platform
+  - Pidgin source tree (for headers)
+  - libpurple.so (must have been built from the pidgin source tree)
+  - GTK devel packages (needed to build Pidgin, so you should have it anyway)
+
+To compile this, use configure with the relevant paths:
+
+ ./configure --with-gecko=/path/to/gecko/sdk --with-gtk=/path/to/gtk-dev
+   --with-pidgin-src=/path/to/pidgin/src/tree --with-libpurple=/path/to/libpurple.so
+ make
+ make install
+
+The application will be installed in ../testapp/
+
+By default on Windows this attempts to build using MSVC.  If you want to use
+mingw to compile instead:
+
+ CC=gcc CXX=g++ LD=g++ ./configure ...
+
+Note that this means you need to use a mingw-built Gecko SDK, since mingw-gcc
+does not like the MSVC-built Gecko SDK distributed by mozilla.com
