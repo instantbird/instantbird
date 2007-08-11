@@ -1,3 +1,3 @@
 #!/bin/sh
 
-exec xulrunner/xulrunner application.ini "$@"
+LD_LIBRARY_PATH=libraries/prpl/ exec xulrunner/xulrunner application.ini "$@"
