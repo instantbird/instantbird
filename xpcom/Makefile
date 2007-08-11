@@ -37,12 +37,13 @@ purplexpcom.xpt:			\
 
 $(call EXPAND_DLLNAME,purpleloader): \
 	src/purpleLoader.o \
-	$(GECKO_LIBS)/$(call EXPAND_LIBNAME,xpcomglue_s) \
-	$(GECKO_LIBS)/$(call EXPAND_DYLIBNAME,xpcom) \
-	$(GECKO_LIBS)/$(call EXPAND_DYLIBNAME,nspr4) \
+#	$(GECKO_LIBS)/$(call EXPAND_LIBNAME,xpcomglue_s) \
+#	$(GECKO_LIBS)/$(call EXPAND_DYLIBNAME,xpcom) \
+#	$(GECKO_LIBS)/$(call EXPAND_DYLIBNAME,nspr4) \
 	$(NULL)
 
-	$(LINK.dll) $^ $(LOADLIBES) $(LDLIBS) $(LD_OUT_OPTION)
+	g++ -g -shared $^ -L$(GECKO_LIBS) -L$(GECKO_LIBS)/../bin -Wl,-rpath-link,$(GECKO_LIBS)/../bin,-rpath-link,../testapp/xulrunner -lxpcomglue_s -lxpcom -lnspr4 -o $@
+#	$(LINK.dll) $^ $(LOADLIBES) $(LDLIBS) $(LD_OUT_OPTION)
 
 install: all
 	rm -rf dist
