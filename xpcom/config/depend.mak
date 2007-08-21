@@ -15,7 +15,10 @@ src/purpleAccount.h: src/purpleIAccount.h
 src/purpleBuddy.o: src/purpleBuddy.h
 src/purpleBuddy.h: src/purpleIBuddy.h
 
-src/purpleModule.o: src/purpleCoreService.o
+src/purpleMessage.o: src/purpleMessage.h
+src/purpleMessage.h: src/purpleIMessage.h
+
+src/purpleModule.o: src/purpleCoreService.o src/purpleMessage.h
 
 OBJS += \
     src/purpleModule.o \
@@ -28,6 +31,7 @@ OBJS += \
     src/purpleLoader.o \
     src/purpleInit.o \
     src/purpleBuddy.o \
+    src/purpleMessage.o \
     libpurple.$(DYLIB_SUFFIX) \
     $(call EXPAND_DLLNAME,purpleloader) \
     $(call EXPAND_DLLNAME,purplexpcom) purplexpcom.xpt \
@@ -37,4 +41,5 @@ OBJS += \
     public/purpleIPref.xpt src/purpleIPref.h \
     public/purpleIAccount.xpt src/purpleIAccount.h \
     public/purpleIBuddy.xpt src/purpleIBuddy.h \
+    public/purpleIMessage.xpt src/purpleIMessage.h \
     $(NULL)
