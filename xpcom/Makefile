@@ -17,6 +17,7 @@ $(call EXPAND_DLLNAME,purplexpcom): 	\
 	src/purplePref.o		\
 	src/purpleAccount.o		\
 	src/purpleUtils.o		\
+	src/purpleBuddy.o		\
 	libpurple.$(DYLIB_SUFFIX) 	\
 	$(NULL)
 
@@ -31,6 +32,7 @@ purplexpcom.xpt:			\
 	public/purpleIProtocol.xpt	\
 	public/purpleIAccount.xpt	\
 	public/purpleIPref.xpt		\
+	public/purpleIBuddy.xpt		\
 	$(NULL)
 
 	$(XPTLINK) $@ $^
