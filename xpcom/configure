@@ -3497,7 +3497,7 @@ if test "${with_pidgin_src+set}" = set; then
 fi
 
 
-if test -z "$PIDGIN_SRC_PREFIX" ; then PIDGIN_SRC_PREFIX="../libpurple/pidgin-2.0.2" ; fi
+if test -z "$PIDGIN_SRC_PREFIX" ; then PIDGIN_SRC_PREFIX="../libpurple/pidgin-2.1.0" ; fi
 
 
 CPPFLAGS="${CPPFLAGS} -I${PIDGIN_SRC_PREFIX}"
@@ -3747,9 +3747,6 @@ else
 echo "${ECHO_T}no" >&6; }
 fi
 
-
-
-CPPFLAGS="${CPPFLAGS} -g"
 
 
 ### output

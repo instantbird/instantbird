@@ -116,7 +116,7 @@ AC_ARG_WITH(
     [  --with-pidgin-src=DIR   pidgin source code prefix],
     [PIDGIN_SRC_PREFIX=$withval])
 
-AC_SETIF([PIDGIN_SRC_PREFIX], [../libpurple/pidgin-2.0.2])
+AC_SETIF([PIDGIN_SRC_PREFIX], [../libpurple/pidgin-2.1.0])
 
 
 CPPFLAGS="${CPPFLAGS} -I${PIDGIN_SRC_PREFIX}"
@@ -167,9 +167,6 @@ AC_PATH_PROG([XPIDL], [xpidl], [:],
 
 AC_PATH_PROG([XPTLINK], [xpt_link], [:],
     [$PATH:${GECKO_PREFIX}/bin])
-
-CPPFLAGS="${CPPFLAGS} -g"
-
 
 ### output
 AC_SUBST([OS_TARGET])

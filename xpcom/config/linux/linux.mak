@@ -13,4 +13,4 @@ libpurple.$(DYLIB_SUFFIX).0: $(LIBPURPLE_PATH)/libpurple.$(DYLIB_SUFFIX).0
 
 OBJS += libpurple.$(DYLIB_SUFFIX).0
 
-CXXFLAGS += -Wall -Wno-non-virtual-dtor
+CXXFLAGS += -g -Wall -Wno-non-virtual-dtor
