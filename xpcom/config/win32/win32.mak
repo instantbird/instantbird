@@ -12,11 +12,11 @@ ifeq (,$(GNU_CC))
 
 # msvc - we need to remake the lib because mingw's export libs don't work
 
-# teach make to build the gaim import library
-libgaim.$(DYLIB_SUFFIX): src/win32/libgaim.$(DYLIB_SUFFIX)
+# teach make to build the purple import library
+libpurple.$(DYLIB_SUFFIX): src/win32/libpurple.$(DYLIB_SUFFIX)
 	mv $< $@
 
-src/win32/libgaim.exports: $(GAIM_LIBS)/libgaim.$(DLL_SUFFIX)
+src/win32/libpurple.exports: $(LIBPURPLE_PATH)/libpurple.$(DLL_SUFFIX)
 	dumpbin -exports -out:$@ $^
 
 # dlltool doesn't work because it lists things gaim _imports_ too
@@ -44,9 +44,9 @@ src/win32/libgaim.exports: $(GAIM_LIBS)/libgaim.$(DLL_SUFFIX)
 	lib -def:$*.def -out:$@ $<
 
 OBJS += \
-    $(call EXPAND_DYLIBNAME,gaimloader) gaimloader.exp \
-    $(call EXPAND_DYLIBNAME,gaimxpcom) gaimxpcom.exp \
-    src/win32/libgaim.exp src/win32/libgaim.exports \
+    $(call EXPAND_DYLIBNAME,purpleloader) purpleloader.exp \
+    $(call EXPAND_DYLIBNAME,purplexpcom) purplexpcom.exp \
+    src/win32/libpurple.exp src/win32/libpurple.exports \
     $(NULL)
 
 

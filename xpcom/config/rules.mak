@@ -23,5 +23,3 @@ else
 endif
 
 CXXFLAGS += -DDLL_PREFIX=\"$(DLL_PREFIX)\" -DDLL_SUFFIX=\".$(DLL_SUFFIX)\"
-
-CXXFLAGS += -Wall -Wno-non-virtual-dtor

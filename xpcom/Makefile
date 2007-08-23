@@ -4,6 +4,7 @@ all:
 -include config/rules.mak
 
 all: \
+	libpurple.$(DYLIB_SUFFIX)\
 	$(call EXPAND_DLLNAME,purplexpcom) purplexpcom.xpt \
 	$(call EXPAND_DLLNAME,purpleloader) \
 	$(NULL)
@@ -19,11 +20,11 @@ $(call EXPAND_DLLNAME,purplexpcom): 	\
 	src/purpleUtils.o		\
 	src/purpleBuddy.o		\
 	src/purpleMessage.o		\
-	libpurple.$(DYLIB_SUFFIX) 	\
 	$(NULL)
 
 #see http://developer.mozilla.org/en/docs/XPCOM_Glue
-	g++ -g -shared $^ -L$(GECKO_LIBS) -L$(GECKO_LIBS)/../bin -Wl,-rpath-link,$(GECKO_LIBS)/../bin,-rpath-link,../testapp/xulrunner -lxpcomglue_s -lxpcom -lnspr4 -o $@
+	g++ -g -shared $^ libpurple.$(DYLIB_SUFFIX) -L$(GECKO_LIBS) -L$(GECKO_LIBS)/../bin -Wl,-rpath-link,$(GECKO_LIBS)/../bin,-rpath-link,../testapp/xulrunner -lxpcomglue_s -lxpcom -lnspr4 -o $@
+#win	$(LD) -nologo -DLL -OUT:$@ -LIBPATH:$(GECKO_LIBS) xpcomglue_s.lib xpcom.lib nspr4.lib libpurple.lib $^
 #	$(LINK.dll) $^ $(LOADLIBES) $(LDLIBS) $(LD_OUT_OPTION)
 
 
