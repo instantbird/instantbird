@@ -24,7 +24,7 @@ $(call EXPAND_DLLNAME,purplexpcom): 	\
 
 #see http://developer.mozilla.org/en/docs/XPCOM_Glue
 	g++ -g -shared $^ libpurple.$(DYLIB_SUFFIX) -L$(GECKO_LIBS) -L$(GECKO_LIBS)/../bin -Wl,-rpath-link,$(GECKO_LIBS)/../bin,-rpath-link,../testapp/xulrunner -lxpcomglue_s -lxpcom -lnspr4 -o $@
-#win	$(LD) -nologo -DLL -OUT:$@ -LIBPATH:$(GECKO_LIBS) xpcomglue_s.lib xpcom.lib nspr4.lib libpurple.lib $^
+#win	$(LD) -nologo -DLL -OUT:$@  $^  libpurple.lib glib-2.0.lib -LIBPATH:$(GECKO_LIBS) xpcomglue_s.lib xpcom.lib nspr4.lib
 #	$(LINK.dll) $^ $(LOADLIBES) $(LDLIBS) $(LD_OUT_OPTION)
 
 
@@ -48,6 +48,7 @@ $(call EXPAND_DLLNAME,purpleloader): \
 	$(NULL)
 
 	g++ -g -shared $^ -L$(GECKO_LIBS) -L$(GECKO_LIBS)/../bin -Wl,-rpath-link,$(GECKO_LIBS)/../bin,-rpath-link,../testapp/xulrunner -lxpcomglue_s -lxpcom -lnspr4 -o $@
+#win	$(LD) -nologo -DLL -OUT:$@  $^  -LIBPATH:$(GECKO_LIBS) xpcomglue_s.lib xpcom.lib nspr4.lib
 #	$(LINK.dll) $^ $(LOADLIBES) $(LDLIBS) $(LD_OUT_OPTION)
 
 install: all

@@ -7,6 +7,7 @@ DYLIB_SUFFIX := lib
 LIB_PREFIX := 
 LIB_SUFFIX := lib
 
+CXXFLAGS += -DXP_WIN
 
 ifeq (,$(GNU_CC))
 
