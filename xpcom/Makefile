@@ -20,6 +20,7 @@ $(call EXPAND_DLLNAME,purplexpcom): 	\
 	src/purpleUtils.o		\
 	src/purpleBuddy.o		\
 	src/purpleMessage.o		\
+	src/purpleTimer.o		\
 	$(NULL)
 
 #see http://developer.mozilla.org/en/docs/XPCOM_Glue
