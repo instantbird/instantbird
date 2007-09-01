@@ -18,6 +18,9 @@ src/purpleBuddy.h: src/purpleIBuddy.h
 src/purpleMessage.o: src/purpleMessage.h
 src/purpleMessage.h: src/purpleIMessage.h
 
+src/purpleSockets.o: src/purpleSockets.h
+src/purpleSockets.h: src/purpleISocket.h
+
 src/purpleModule.o: src/purpleCoreService.o src/purpleMessage.h
 
 src/purpleTimer.o: src/purpleTimer.h
@@ -35,6 +38,7 @@ OBJS += \
     src/purpleBuddy.o \
     src/purpleMessage.o \
     src/purpleTimer.o \
+    src/purpleSockets.o \
     libpurple.$(DYLIB_SUFFIX) \
     $(call EXPAND_DLLNAME,purpleloader) \
     $(call EXPAND_DLLNAME,purplexpcom) purplexpcom.xpt \

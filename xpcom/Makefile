@@ -21,6 +21,7 @@ $(call EXPAND_DLLNAME,purplexpcom): 	\
 	src/purpleBuddy.o		\
 	src/purpleMessage.o		\
 	src/purpleTimer.o		\
+	src/purpleSockets.o		\
 	$(NULL)
 
 #see http://developer.mozilla.org/en/docs/XPCOM_Glue
@@ -37,6 +38,7 @@ purplexpcom.xpt:			\
 	public/purpleIPref.xpt		\
 	public/purpleIBuddy.xpt		\
 	public/purpleIMessage.xpt	\
+	public/purpleISocket.xpt	\
 	$(NULL)
 
 	$(XPTLINK) $@ $^
