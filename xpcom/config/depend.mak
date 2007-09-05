@@ -21,7 +21,7 @@ src/purpleMessage.h: src/purpleIMessage.h
 src/purpleSockets.o: src/purpleSockets.h
 src/purpleSockets.h: src/purpleISocket.h
 
-src/purpleModule.o: src/purpleCoreService.o src/purpleMessage.h
+src/purpleModule.o: src/purpleCoreService.o src/purpleMessage.h src/purpleSockets.h
 
 src/purpleTimer.o: src/purpleTimer.h
 
@@ -49,4 +49,5 @@ OBJS += \
     public/purpleIAccount.xpt src/purpleIAccount.h \
     public/purpleIBuddy.xpt src/purpleIBuddy.h \
     public/purpleIMessage.xpt src/purpleIMessage.h \
+    public/purpleISocket.xpt src/purpleISocket.h \
     $(NULL)
