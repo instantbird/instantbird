@@ -14,3 +14,5 @@ libpurple.$(DYLIB_SUFFIX).0: $(LIBPURPLE_PATH)/libpurple.$(DYLIB_SUFFIX).0
 OBJS += libpurple.$(DYLIB_SUFFIX).0
 
 CXXFLAGS += -g -Wall -Wno-non-virtual-dtor
+
+LINKXPCOM = g++ -g -shared $^ -L$(GECKO_LIBS) -L$(GECKO_BINS) -Wl,-rpath-link,$(GECKO_BINS),-rpath-link,../testapp/xulrunner -lxpcomglue_s -lxpcom -lnspr4 -o $@

@@ -11,6 +11,8 @@ CXXFLAGS += -DXP_WIN
 
 ifeq (,$(GNU_CC))
 
+LINKXPCOM = $(LD) -nologo -DLL -OUT:$@ $^ -LIBPATH:$(GECKO_LIBS) xpcomglue_s.lib xpcom.lib nspr4.lib
+
 # msvc - we need to remake the lib because mingw's export libs don't work
 
 # teach make to build the purple import library

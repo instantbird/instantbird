@@ -641,6 +641,7 @@ CXXCPP
 XPIDL
 XPTLINK
 OS_TARGET
+CONFIG_TARGET
 GNU_CC
 LD
 LIB_PREFIX
@@ -3418,10 +3419,16 @@ case "${target}" in
             OUTPUT_OPTION="-Fo\$@"
         fi
         OS_TARGET=WINNT
+        CONFIG_TARGET=win32
+        ;;
+    *apple*)
+        OS_TARGET=MacOSX
+        CONFIG_TARGET=macosx
         ;;
     *)
         # for now assume everything else is close enough to linux
         OS_TARGET=Linux
+        CONFIG_TARGET=linux
         ;;
 esac
 
@@ -3562,9 +3569,22 @@ fi
 
 if test -z "$LIBPURPLE_PATH" ; then LIBPURPLE_PATH="../libpurple/_inst/lib" ; fi
 
-as_ac_File=`echo "ac_cv_file_$LIBPURPLE_PATH/libpurple.so.0" | $as_tr_sh`
-{ echo "$as_me:$LINENO: checking for $LIBPURPLE_PATH/libpurple.so.0" >&5
-echo $ECHO_N "checking for $LIBPURPLE_PATH/libpurple.so.0... $ECHO_C" >&6; }
+case "${target}" in
+    *msvc|*cygwin|*mingw*)
+        LIBPURPLE_NAME=libpurple.dll
+        ;;
+    *apple*)
+        LIBPURPLE_NAME=libpurple.0.dylib
+        ;;
+    *)
+        # for now assume everything else uses lib_.so
+        LIBPURPLE_NAME=libpurple.so.1
+        ;;
+esac
+
+as_ac_File=`echo "ac_cv_file_$LIBPURPLE_PATH/$LIBPURPLE_NAME" | $as_tr_sh`
+{ echo "$as_me:$LINENO: checking for $LIBPURPLE_PATH/$LIBPURPLE_NAME" >&5
+echo $ECHO_N "checking for $LIBPURPLE_PATH/$LIBPURPLE_NAME... $ECHO_C" >&6; }
 if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
@@ -3572,7 +3592,7 @@ else
   { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
 echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
    { (exit 1); exit 1; }; }
-if test -r "$LIBPURPLE_PATH/libpurple.so.0"; then
+if test -r "$LIBPURPLE_PATH/$LIBPURPLE_NAME"; then
   eval "$as_ac_File=yes"
 else
   eval "$as_ac_File=no"
@@ -3584,8 +3604,8 @@ echo "${ECHO_T}$ac_res" >&6; }
 if test `eval echo '${'$as_ac_File'}'` = yes; then
   :
 else
-  { { echo "$as_me:$LINENO: error: libpurple.so.1 not found" >&5
-echo "$as_me: error: libpurple.so.1 not found" >&2;}
+  { { echo "$as_me:$LINENO: error: $LIBPURPLE_NAME not found" >&5
+echo "$as_me: error: $LIBPURPLE_NAME not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -3750,6 +3770,7 @@ fi
 
 
 ### output
+
 
 
 
@@ -4458,6 +4479,7 @@ CXXCPP!$CXXCPP$ac_delim
 XPIDL!$XPIDL$ac_delim
 XPTLINK!$XPTLINK$ac_delim
 OS_TARGET!$OS_TARGET$ac_delim
+CONFIG_TARGET!$CONFIG_TARGET$ac_delim
 GNU_CC!$GNU_CC$ac_delim
 LD!$LD$ac_delim
 LIB_PREFIX!$LIB_PREFIX$ac_delim
@@ -4473,7 +4495,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 77; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 78; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

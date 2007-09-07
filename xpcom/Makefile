@@ -9,6 +9,7 @@ all: \
 	$(call EXPAND_DLLNAME,purpleloader) \
 	$(NULL)
 
+#see http://developer.mozilla.org/en/docs/XPCOM_Glue
 $(call EXPAND_DLLNAME,purplexpcom): 	\
 	src/purpleModule.o 		\
 	src/purpleInit.o 		\
@@ -22,11 +23,13 @@ $(call EXPAND_DLLNAME,purplexpcom): 	\
 	src/purpleMessage.o		\
 	src/purpleTimer.o		\
 	src/purpleSockets.o		\
+	libpurple.$(DYLIB_SUFFIX)	\
 	$(NULL)
 
-#see http://developer.mozilla.org/en/docs/XPCOM_Glue
-	g++ -g -shared $^ libpurple.$(DYLIB_SUFFIX) -L$(GECKO_LIBS) -L$(GECKO_LIBS)/../bin -Wl,-rpath-link,$(GECKO_LIBS)/../bin,-rpath-link,../testapp/xulrunner -lxpcomglue_s -lxpcom -lnspr4 -o $@
-#win	$(LD) -nologo -DLL -OUT:$@  $^  libpurple.lib glib-2.0.lib -LIBPATH:$(GECKO_LIBS) xpcomglue_s.lib xpcom.lib nspr4.lib
+	$(LINKXPCOM)
+#	g++ -g -shared $^ -L$(GECKO_LIBS) -L$(GECKO_LIBS)/../bin -Wl,-rpath-link,$(GECKO_LIBS)/../bin,-rpath-link,../testapp/xulrunner -lxpcomglue_s -lxpcom -lnspr4 -o $@
+#mac	g++ -g $^ -L$(GECKO_LIBS) -L$(GECKO_BINS) -Wl,-executable_path,$(MOZ_BINS) -lxpcomglue_s -lxpcom -lnspr4 -o $@ -Wl,-exported_symbols_list -Wl,/Users/florian/goinfre/instantbird/mozilla/build/unix/gnu-ld-scripts/components-export-list -bundle
+#win	$(LD) -nologo -DLL -OUT:$@  $^ glib-2.0.lib -LIBPATH:$(GECKO_LIBS) xpcomglue_s.lib xpcom.lib nspr4.lib
 #	$(LINK.dll) $^ $(LOADLIBES) $(LDLIBS) $(LD_OUT_OPTION)
 
 
@@ -45,12 +48,11 @@ purplexpcom.xpt:			\
 
 $(call EXPAND_DLLNAME,purpleloader): \
 	src/purpleLoader.o \
-#	$(GECKO_LIBS)/$(call EXPAND_LIBNAME,xpcomglue_s) \
-#	$(GECKO_LIBS)/$(call EXPAND_DYLIBNAME,xpcom) \
-#	$(GECKO_LIBS)/$(call EXPAND_DYLIBNAME,nspr4) \
 	$(NULL)
 
-	g++ -g -shared $^ -L$(GECKO_LIBS) -L$(GECKO_LIBS)/../bin -Wl,-rpath-link,$(GECKO_LIBS)/../bin,-rpath-link,../testapp/xulrunner -lxpcomglue_s -lxpcom -lnspr4 -o $@
+	$(LINKXPCOM)
+#	g++ -g -shared $^ -L$(GECKO_LIBS) -L$(GECKO_LIBS)/../bin -Wl,-rpath-link,$(GECKO_LIBS)/../bin,-rpath-link,../testapp/xulrunner -lxpcomglue_s -lxpcom -lnspr4 -o $@
+#mac	g++ -g $^ -L$(GECKO_LIBS) -L$(GECKO_BINS) -Wl,-executable_path,$(MOZ_BINS) -lxpcomglue_s -lxpcom -lnspr4 -o $@ -Wl,-exported_symbols_list -Wl,/Users/florian/goinfre/instantbird/mozilla/build/unix/gnu-ld-scripts/components-export-list -bundle
 #win	$(LD) -nologo -DLL -OUT:$@  $^  -LIBPATH:$(GECKO_LIBS) xpcomglue_s.lib xpcom.lib nspr4.lib
 #	$(LINK.dll) $^ $(LOADLIBES) $(LDLIBS) $(LD_OUT_OPTION)
 

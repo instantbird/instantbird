@@ -82,10 +82,16 @@ case "${target}" in
             OUTPUT_OPTION="-Fo\$@"
         fi
         OS_TARGET=WINNT
+        CONFIG_TARGET=win32
+        ;;
+    *apple*)
+        OS_TARGET=MacOSX
+        CONFIG_TARGET=macosx
         ;;
     *)
         # for now assume everything else is close enough to linux
         OS_TARGET=Linux
+        CONFIG_TARGET=linux
         ;;
 esac
 
@@ -139,8 +145,21 @@ AC_ARG_WITH(
 
 AC_SETIF([LIBPURPLE_PATH], [../libpurple/_inst/lib])
 
-AC_CHECK_FILE([$LIBPURPLE_PATH/libpurple.so.0], ,
-        [AC_MSG_ERROR([libpurple.so.1 not found])])
+case "${target}" in
+    *msvc|*cygwin|*mingw*)
+        LIBPURPLE_NAME=libpurple.dll
+        ;;
+    *apple*)
+        LIBPURPLE_NAME=libpurple.0.dylib
+        ;;
+    *)
+        # for now assume everything else uses lib_.so
+        LIBPURPLE_NAME=libpurple.so.1
+        ;;
+esac
+
+AC_CHECK_FILE([$LIBPURPLE_PATH/$LIBPURPLE_NAME], ,
+        [AC_MSG_ERROR([$LIBPURPLE_NAME not found])])
 
 ### find Gecko SDK
 AC_ARG_WITH(
@@ -170,6 +189,7 @@ AC_PATH_PROG([XPTLINK], [xpt_link], [:],
 
 ### output
 AC_SUBST([OS_TARGET])
+AC_SUBST([CONFIG_TARGET])
 AC_SUBST([GNU_CC])
 AC_SUBST([CPP])
 AC_SUBST([CXXCPP])
