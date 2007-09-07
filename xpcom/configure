@@ -3578,7 +3578,7 @@ case "${target}" in
         ;;
     *)
         # for now assume everything else uses lib_.so
-        LIBPURPLE_NAME=libpurple.so.1
+        LIBPURPLE_NAME=libpurple.so.0
         ;;
 esac
 
