@@ -1,0 +1,87 @@
+Index: netwerk/base/public/nsPISocketTransportService.idl
+===================================================================
+RCS file: /cvsroot/mozilla/netwerk/base/public/nsPISocketTransportService.idl,v
+retrieving revision 1.1
+diff -u -r1.1 nsPISocketTransportService.idl
+--- netwerk/base/public/nsPISocketTransportService.idl	14 Apr 2005 23:18:34 -0000	1.1
++++ netwerk/base/public/nsPISocketTransportService.idl	1 Sep 2007 13:28:49 -0000
+@@ -37,11 +37,21 @@
+  * ***** END LICENSE BLOCK ***** */
+ 
+ #include "nsISocketTransportService.idl"
++#include "nsIRunnable.idl"
+ 
+ /**
+  * This is a private interface used by the internals of the networking library.
+  * It will never be frozen.  Do not use it in external code.
+  */
++
++%{ C++
++  class nsASocketHandler;
++  struct PRFileDesc;
++%}
++
++[ptr] native PRFileDescStar(PRFileDesc);
++[ptr] native nsASocketHandlerStar(nsASocketHandler);
++
+ [scriptable, uuid(6F704E69-A5FB-11D9-8CE8-0011246ECD24)]
+ interface nsPISocketTransportService : nsISocketTransportService
+ {
+@@ -56,4 +66,32 @@
+    * the autodialer on connection failure.
+    */
+   attribute boolean autodialEnabled;
++
++  //
++  // the number of sockets that can be attached at any given time is
++  // limited.  this is done because some operating systems (e.g., Win9x)
++  // limit the number of sockets that can be created by an application.
++  // AttachSocket will fail if the limit is exceeded.  consumers should
++  // call CanAttachSocket and check the result before creating a socket.
++  //
++  //PRBool CanAttachSocket();
++
++  //
++  // if the number of sockets reaches the limit, then consumers can be
++  // notified when the number of sockets becomes less than the limit.  the
++  // notification is asynchronous, delivered via the given nsIRunnable
++  // instance on the socket transport thread.
++  //
++   void NotifyWhenCanAttachSocket(in nsIRunnable event);
++
++  //
++  // add a new socket to the list of controlled sockets.  returns a socket
++  // reference for the newly attached socket that can be used with other
++  // methods to control the socket.
++  //
++  // NOTE: this function may only be called from an event dispatch on the
++  //       socket thread.
++  //
++   [noscript] void AttachSocket(in PRFileDescStar fd,
++                                in nsASocketHandlerStar handler);
+ };
+Index: netwerk/base/src/nsSocketTransportService2.h
+===================================================================
+RCS file: /cvsroot/mozilla/netwerk/base/src/nsSocketTransportService2.h,v
+retrieving revision 1.18
+diff -u -r1.18 nsSocketTransportService2.h
+--- netwerk/base/src/nsSocketTransportService2.h	30 May 2007 21:36:02 -0000	1.18
++++ netwerk/base/src/nsSocketTransportService2.h	1 Sep 2007 13:28:50 -0000
+@@ -156,7 +156,7 @@
+     // notification is asynchronous, delivered via the given nsIRunnable
+     // instance on the socket transport thread.
+     //
+-    nsresult NotifyWhenCanAttachSocket(nsIRunnable *);
++    //  nsresult NotifyWhenCanAttachSocket(nsIRunnable *);
+ 
+     //
+     // add a new socket to the list of controlled sockets.  returns a socket
+@@ -166,7 +166,7 @@
+     // NOTE: this function may only be called from an event dispatch on the
+     //       socket thread.
+     //
+-    nsresult AttachSocket(PRFileDesc *fd, nsASocketHandler *);
++    //    nsresult AttachSocket(PRFileDesc *fd, nsASocketHandler *);
+ 
+ protected:
+ 
