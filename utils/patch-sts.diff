@@ -4,7 +4,7 @@ RCS file: /cvsroot/mozilla/netwerk/base/public/nsPISocketTransportService.idl,v
 retrieving revision 1.1
 diff -u -r1.1 nsPISocketTransportService.idl
 --- netwerk/base/public/nsPISocketTransportService.idl	14 Apr 2005 23:18:34 -0000	1.1
-+++ netwerk/base/public/nsPISocketTransportService.idl	1 Sep 2007 13:28:49 -0000
++++ netwerk/base/public/nsPISocketTransportService.idl	16 Sep 2007 16:02:54 -0000
 @@ -37,11 +37,21 @@
   * ***** END LICENSE BLOCK ***** */
  
@@ -60,13 +60,31 @@ diff -u -r1.1 nsPISocketTransportService.idl
 +   [noscript] void AttachSocket(in PRFileDescStar fd,
 +                                in nsASocketHandlerStar handler);
  };
+Index: netwerk/base/src/Makefile.in
+===================================================================
+RCS file: /cvsroot/mozilla/netwerk/base/src/Makefile.in,v
+retrieving revision 1.97
+diff -u -r1.97 Makefile.in
+--- netwerk/base/src/Makefile.in	25 Jul 2007 16:53:38 -0000	1.97
++++ netwerk/base/src/Makefile.in	16 Sep 2007 16:02:54 -0000
+@@ -115,6 +115,10 @@
+ 		$(srcdir)/nsScriptableIO.js \
+ 		$(NULL)
+ 
++EXPORTS		= \
++		nsSocketTransportService2.h \
++		$(NULL)
++
+ # we don't want the shared lib, but we want to force the creation of a
+ # static lib.
+ FORCE_STATIC_LIB = 1
 Index: netwerk/base/src/nsSocketTransportService2.h
 ===================================================================
 RCS file: /cvsroot/mozilla/netwerk/base/src/nsSocketTransportService2.h,v
-retrieving revision 1.18
-diff -u -r1.18 nsSocketTransportService2.h
---- netwerk/base/src/nsSocketTransportService2.h	30 May 2007 21:36:02 -0000	1.18
-+++ netwerk/base/src/nsSocketTransportService2.h	1 Sep 2007 13:28:50 -0000
+retrieving revision 1.19
+diff -u -r1.19 nsSocketTransportService2.h
+--- netwerk/base/src/nsSocketTransportService2.h	26 Aug 2007 20:14:57 -0000	1.19
++++ netwerk/base/src/nsSocketTransportService2.h	16 Sep 2007 16:02:54 -0000
 @@ -156,7 +156,7 @@
      // notification is asynchronous, delivered via the given nsIRunnable
      // instance on the socket transport thread.

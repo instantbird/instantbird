@@ -15,4 +15,4 @@ OBJS += libpurple.0.$(DYLIB_SUFFIX)
 
 CXXFLAGS += -g -Wall -Wno-non-virtual-dtor -DXP_MACOSX
 
-LINKXPCOM = g++ -g $^ -L$(GECKO_LIBS) -L$(GECKO_BINS) -Wl,-executable_path,$(MOZ_BINS) -lxpcomglue_s -lxpcom -lnspr4 -o $@ -Wl,-exported_symbols_list -Wl,/Users/florian/goinfre/instantbird/mozilla/build/unix/gnu-ld-scripts/components-export-list -bundle
+LINKXPCOM = g++ -g $^ -L$(GECKO_LIBS) -L$(GECKO_BINS) -Wl,-executable_path,$(MOZ_BINS) -lxpcomglue_s -lxpcom -lnspr4 -o $@ -Wl,-exported_symbols_list -Wl,config/macosx/components-export-list -bundle

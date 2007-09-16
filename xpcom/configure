@@ -1245,7 +1245,7 @@ Optional Packages:
   --with-gtk=DIR          GTK prefix
   --with-pidgin-src=DIR   pidgin source code prefix
   --with-libpurple=DIR    libpurple prefix
-  --with-gecko=DIR        path to gecko SDK
+  --with-gecko=DIR        path to gecko objdir
 
 Some influential environment variables:
   CC          C compiler command
@@ -3620,10 +3620,10 @@ fi
 
 if test -z "$GECKO_PREFIX" ; then GECKO_PREFIX="../gecko-sdk" ; fi
 
-CPPFLAGS="${CPPFLAGS} -I${GECKO_PREFIX}/include"
+CPPFLAGS="${CPPFLAGS} -I${GECKO_PREFIX}/include -I${GECKO_PREFIX}/include/xpcom -I${GECKO_PREFIX}/include/nspr -I${GECKO_PREFIX}/include/string"
 
-{ echo "$as_me:$LINENO: checking Gecko SDK" >&5
-echo $ECHO_N "checking Gecko SDK... $ECHO_C" >&6; }
+{ echo "$as_me:$LINENO: checking Gecko" >&5
+echo $ECHO_N "checking Gecko... $ECHO_C" >&6; }
 
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -3670,8 +3670,8 @@ else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-	{ { echo "$as_me:$LINENO: error: Cannot find Gecko SDK" >&5
-echo "$as_me: error: Cannot find Gecko SDK" >&2;}
+	{ { echo "$as_me:$LINENO: error: Cannot find Gecko" >&5
+echo "$as_me: error: Cannot find Gecko" >&2;}
    { (exit 1); exit 1; }; }
 fi
 

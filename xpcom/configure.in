@@ -164,21 +164,21 @@ AC_CHECK_FILE([$LIBPURPLE_PATH/$LIBPURPLE_NAME], ,
 ### find Gecko SDK
 AC_ARG_WITH(
     [gecko],
-    [  --with-gecko=DIR        path to gecko SDK],
+    [  --with-gecko=DIR        path to gecko objdir],
     [GECKO_PREFIX=$withval])
 
 AC_SETIF([GECKO_PREFIX], [../gecko-sdk])
 
-CPPFLAGS="${CPPFLAGS} -I${GECKO_PREFIX}/include"
+CPPFLAGS="${CPPFLAGS} -I${GECKO_PREFIX}/include -I${GECKO_PREFIX}/include/xpcom -I${GECKO_PREFIX}/include/nspr -I${GECKO_PREFIX}/include/string"
 
-AC_MSG_CHECKING([Gecko SDK])
+AC_MSG_CHECKING([Gecko])
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_TRY_COMPILE(
     [#include <nsXPCOM.h>],
     [NS_InitXPCOM2(0,0,0);],
     [AC_MSG_RESULT([found])],
-    [AC_MSG_ERROR([Cannot find Gecko SDK])])
+    [AC_MSG_ERROR([Cannot find Gecko])])
 AC_LANG_RESTORE
 
 AC_PATH_PROG([XPIDL], [xpidl], [:],
