@@ -23,6 +23,7 @@ $(call EXPAND_DLLNAME,purplexpcom): 	\
 	src/purpleMessage.o		\
 	src/purpleTimer.o		\
 	src/purpleSockets.o		\
+	src/purpleStorage.o		\
 	libpurple.$(DYLIB_SUFFIX)	\
 	$(NULL)
 
