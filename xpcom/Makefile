@@ -20,6 +20,8 @@ $(call EXPAND_DLLNAME,purplexpcom): 	\
 	src/purpleAccount.o		\
 	src/purpleUtils.o		\
 	src/purpleBuddy.o		\
+	src/purpleTag.o			\
+	src/purpleAccountBuddy.o	\
 	src/purpleMessage.o		\
 	src/purpleTimer.o		\
 	src/purpleSockets.o		\
@@ -41,6 +43,8 @@ purplexpcom.xpt:			\
 	public/purpleIAccount.xpt	\
 	public/purpleIPref.xpt		\
 	public/purpleIBuddy.xpt		\
+	public/purpleITag.xpt		\
+	public/purpleIAccountBuddy.xpt	\
 	public/purpleIMessage.xpt	\
 	public/purpleISocket.xpt	\
 	$(NULL)
