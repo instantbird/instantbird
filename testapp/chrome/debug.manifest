@@ -1,0 +1,5 @@
+content debug   content/debug/ xpcnativewrappers=yes
+content venkman jar:venkman.jar!/content/venkman/
+locale  venkman en-US jar:venkman.jar!/locale/en-US/venkman/
+skin    venkman modern/1.0 jar:venkman.jar!/skin/modern/venkman/
+overlay chrome://instantbird/content/blist.xul chrome://debug/content/debug.xul

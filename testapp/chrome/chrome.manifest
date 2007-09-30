@@ -3,7 +3,3 @@ locale  instantbird en-US locale/en-US/instantbird/
 skin    instantbird classic/1.0 skin/winstripe/instantbird/
 locale  branding    en-US locale/en-US/branding/
 content branding    content/branding/ xpcnativewrappers=yes
-
-content venkman jar:venkman.jar!/content/venkman/
-locale  venkman en-US jar:venkman.jar!/locale/en-US/venkman/
-skin    venkman modern/1.0 jar:venkman.jar!/skin/modern/venkman/
