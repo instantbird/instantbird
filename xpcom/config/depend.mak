@@ -1,7 +1,7 @@
 # temporary hack until I figure out what I should do with mkdepend
 
 src/purpleCoreService.o: src/purpleCoreService.cpp src/purpleCoreService.h
-src/purpleCoreService.h: src/purpleICoreService.h src/purpleIConversation.h src/purpleIProtocol.h src/purpleIPref.h src/purpleIAccount.h src/purpleBuddy.h
+src/purpleCoreService.h: src/purpleICoreService.h src/purpleIConversation.h src/purpleIProtocol.h src/purpleIPref.h src/purpleIAccount.h src/purpleBuddy.h src/purpleSockets.h
 
 src/purpleConversation.o: src/purpleConversation.cpp src/purpleConversation.h
 src/purpleConversation.h: src/purpleIConversation.h
