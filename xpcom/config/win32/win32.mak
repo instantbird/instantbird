@@ -11,7 +11,14 @@ CXXFLAGS += -DXP_WIN
 
 ifeq (,$(GNU_CC))
 
-LINKXPCOM = $(LD) -nologo -DLL -OUT:$@ $^ -LIBPATH:$(GECKO_LIBS) xpcomglue_s.lib xpcom.lib nspr4.lib
+LINKXPCOM = $(LD) -nologo -DLL -OUT:$@ $^ -LIBPATH:$(GECKO_LIBS) xpcomglue_s.lib xpcom.lib nspr4.lib glib-2.0.lib
+
+CXXFLAGS += /Zc:wchar_t-
+
+#ifneq (,$(DEBUG))
+CXXFLAGS += /Z7
+LINKXPCOM += /INCREMENTAL:NO /DEBUG /OPT:REF /OPT:ICF
+#endif
 
 # msvc - we need to remake the lib because mingw's export libs don't work
 
