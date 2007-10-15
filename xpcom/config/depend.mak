@@ -33,6 +33,8 @@ src/purpleTimer.o: src/purpleTimer.h
 
 src/purpleStorage.o: src/purpleStorage.h
 
+src/purpleDNS.o: src/purpleDNS.h
+
 OBJS += \
     src/purpleModule.o \
     src/purpleCoreService.o \
@@ -49,6 +51,7 @@ OBJS += \
     src/purpleMessage.o \
     src/purpleTimer.o \
     src/purpleSockets.o \
+    src/purpleDNS.o \
     src/purpleStorage.o \
     libpurple.$(DYLIB_SUFFIX) \
     $(call EXPAND_DLLNAME,purpleloader) \

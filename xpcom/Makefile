@@ -25,8 +25,10 @@ $(call EXPAND_DLLNAME,purplexpcom): 	\
 	src/purpleMessage.o		\
 	src/purpleTimer.o		\
 	src/purpleSockets.o		\
+	src/purpleDNS.o			\
 	src/purpleStorage.o		\
 	libpurple.$(DYLIB_SUFFIX)	\
+	../testapp/libraries/libglib-2.0.0.$(DYLIB_SUFFIX) \
 	$(NULL)
 
 	$(LINKXPCOM)
