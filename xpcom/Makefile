@@ -18,7 +18,6 @@ $(call EXPAND_DLLNAME,purplexpcom): 	\
 	src/purpleProtocol.o		\
 	src/purplePref.o		\
 	src/purpleAccount.o		\
-	src/purpleUtils.o		\
 	src/purpleBuddy.o		\
 	src/purpleTag.o			\
 	src/purpleAccountBuddy.o	\

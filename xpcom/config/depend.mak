@@ -42,7 +42,6 @@ OBJS += \
     src/purpleProtocol.o \
     src/purplePref.o \
     src/purpleAccount.o \
-    src/purpleUtils.o \
     src/purpleLoader.o \
     src/purpleInit.o \
     src/purpleBuddy.o \
