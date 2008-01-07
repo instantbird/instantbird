@@ -49,7 +49,7 @@
   height = "400"
   xmlns  = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
   onload = "account.onload()"
-  ondialogaccept="account.create()">
+  ondialogaccept="account.save()">
   <script type="application/javascript" src="chrome://instantbird/content/utilities.js"/>
   <script type="application/javascript" src="chrome://instantbird/content/account.js"/>
 
@@ -84,10 +84,15 @@
           <textbox id="alias" flex="1"/>
         </hbox>
 
-        <separator class="groove" hidden="true"/>
+        <separator class="groove" hidden="true" id="optionalSeparator"/>
 
         <checkbox id="newMailNotification" label="&account.newMailNotification;" hidden="true"/>
-      </tabpanel>  
+
+        <vbox id="autojoinBox" hidden="true">
+          <label value="&account.autojoin;" control="autojoin" flex="1"/>
+          <textbox id="autojoin" flex="1"/>
+        </vbox>
+      </tabpanel>
 
       <tabpanel id="advanced" flex="1" style="overflow:auto;">
         <vbox id="protoSpecific" flex="1"/>
