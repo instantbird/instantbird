@@ -1,4 +1,0 @@
-Please create a xulrunner subdirectory here with a xulrunner that you have built or downloaded.
-
-You can use the instantbird.sh script to launch the application, or
- xulrunner/xulrunner application.ini

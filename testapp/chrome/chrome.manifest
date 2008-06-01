@@ -1,5 +1,0 @@
-content instantbird content/instantbird/ xpcnativewrappers=yes
-locale  instantbird en-US locale/en-US/instantbird/
-skin    instantbird classic/1.0 skin/winstripe/instantbird/
-locale  branding    en-US locale/en-US/branding/
-content branding    content/branding/ xpcnativewrappers=yes
