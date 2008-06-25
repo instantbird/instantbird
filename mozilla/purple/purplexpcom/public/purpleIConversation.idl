@@ -46,7 +46,7 @@
 interface purpleIConversation: nsISupports {
   readonly attribute AUTF8String name;
   readonly attribute AUTF8String title;
-  readonly attribute long id;
+  readonly attribute unsigned long id;
   readonly attribute boolean isChat;
   void sendMsg(in AUTF8String aMsg);
   void close();
