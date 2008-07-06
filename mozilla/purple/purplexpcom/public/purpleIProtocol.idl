@@ -42,6 +42,12 @@
  * This is the libpurple protocol
  */
 
+%{C++
+#include <libpurple/prpl.h>
+%}
+
+[ptr] native PurpleNativePluginProtocolInfo(PurplePluginProtocolInfo);
+
 [scriptable, uuid(0a51b511-4ce7-4f4c-a109-43023b72fc5a)]
 interface purpleIProtocol: nsISupports {
   readonly attribute AUTF8String name;
@@ -90,4 +96,6 @@ interface purpleIProtocol: nsISupports {
   // when screenname is not given.
   //  Gadu-Gadu doesn't need a screenname to register new account. 
   readonly attribute boolean registerNoScreenName;
+
+  [noscript] PurpleNativePluginProtocolInfo getInfo();
 };
