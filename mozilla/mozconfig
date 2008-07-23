@@ -1,15 +1,9 @@
 mk_add_options MOZ_CO_PROJECT=xulrunner
-mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/../obj-instantbird-dbg
-#mk_add_options MOZ_BUILD_PROJECTS="xulrunner instantbird"
-#mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/../obj-instantbird
-#ac_add_app_options instantbird --enable-application=instantbird
+#mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/../obj-instantbird-dbg
+mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/../obj-instantbird
 ac_add_options --enable-application=instantbird
-#ac_add_app_options instantbird --with-libxul-sdk=../xulrunner/dist/
-#ac_add_app_options instantbird --enable-libxul
-#ac_add_app_options xulrunner --enable-application=xulrunner
 mk_add_options MOZ_MAKE_FLAGS=-j4
 #ac_add_options --with-macos-sdk=/Developer/SDKs/MacOSX10.4u.sdk
 ac_add_options --disable-tests
-ac_add_options --enable-debug
+#ac_add_options --enable-debug
 ac_add_options --disable-jemalloc
-ac_add_options --disable-javaxpcom
