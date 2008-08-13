@@ -228,6 +228,7 @@ usr_cmd(MsnCmdProc *cmdproc, MsnCommand *cmd)
 
 	session = cmdproc->session;
 	account = session->account;
+
 	gc = purple_account_get_connection(account);
 
 	if (!g_ascii_strcasecmp(cmd->params[1], "OK"))
@@ -1006,6 +1007,8 @@ url_cmd(MsnCmdProc *cmdproc, MsnCommand *cmd)
 	char buf2[3];
 	char sendbuf[64];
 	int i;
+
+	return;
 
 	session = cmdproc->session;
 	account = session->account;
