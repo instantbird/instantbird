@@ -119,12 +119,12 @@ def fixup_repo_options(options):
     for Mozilla.  That command requires a repository URL.
     """
 
-    if (options.comm_repo is None
-            and not os.path.exists(os.path.join(topsrcdir, '.hg'))):
-        o.print_help()
-        print
-        print "*** The -m option is required for the initial checkout."
-        sys.exit(2)
+#    if (options.comm_repo is None
+#            and not os.path.exists(os.path.join(topsrcdir, '.hg'))):
+#        o.print_help()
+#        print
+#        print "*** The -m option is required for the initial checkout."
+#        sys.exit(2)
 
     # Handle special case: initial checkout of Mozilla.
     if (options.mozilla_repo is None
