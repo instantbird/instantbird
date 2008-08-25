@@ -43,7 +43,9 @@
  */
 
 %{C++
+#pragma GCC visibility push(default)
 #include <libpurple/prpl.h>
+#pragma GCC visibility pop
 %}
 
 [ptr] native PurpleNativePluginProtocolInfo(PurplePluginProtocolInfo);
