@@ -1583,9 +1583,7 @@ dnl Get mozilla version from central milestone file
 MOZILLA_VERSION=`$PERL $MOZILLA_SRCDIR/config/milestone.pl -topsrcdir $MOZILLA_SRCDIR`
 
 dnl Get version of various core apps from the version files.
-THUNDERBIRD_VERSION=`cat $topsrcdir/mail/config/version.txt`
-SUNBIRD_VERSION=`cat $topsrcdir/calendar/sunbird/config/version.txt`
-SEAMONKEY_VERSION=`cat $topsrcdir/suite/config/version.txt`
+INSTANTBIRD_VERSION=`cat $topsrcdir/instantbird/config/version.txt`
 
 AC_DEFINE_UNQUOTED(MOZILLA_VERSION,"$MOZILLA_VERSION")
 AC_DEFINE_UNQUOTED(MOZILLA_VERSION_U,$MOZILLA_VERSION)
@@ -7405,9 +7403,7 @@ AC_SUBST(MOZ_APP_NAME)
 AC_SUBST(MOZ_APP_DISPLAYNAME)
 AC_SUBST(MOZ_APP_VERSION)
 AC_SUBST(FIREFOX_VERSION)
-AC_SUBST(THUNDERBIRD_VERSION)
-AC_SUBST(SUNBIRD_VERSION)
-AC_SUBST(SEAMONKEY_VERSION)
+AC_SUBST(INSTANTBIRD_VERSION)
 
 AC_SUBST(MOZ_PKG_SPECIAL)
 
