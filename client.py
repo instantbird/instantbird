@@ -72,9 +72,9 @@ def do_cvs_checkout(modules, tag, cvsroot, cvs, checkoutdir):
         print "CVS checkout end: " + datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
 
 o = OptionParser(usage="client.py [options] checkout")
-o.add_option("-m", "--comm-repo", dest="comm_repo",
+o.add_option("-m", "--instantbird-repo", dest="instantbird_repo",
              default=None,
-             help="URL of comm (Calendar/Mail/Suite) repository to pull from (default: use hg default in .hg/hgrc)")
+             help="URL of Instantbird hg repository to pull from (default: use hg default in .hg/hgrc)")
 
 o.add_option("-z", "--mozilla-repo", dest="mozilla_repo",
              default=None,
@@ -110,21 +110,21 @@ o.add_option("-v", "--verbose", dest="verbose",
 
 
 def fixup_repo_options(options):
-    """ Check options.comm_repo and options.mozilla_repo values;
+    """ Check options.instantbird_repo and options.mozilla_repo values;
     populate mozilla_repo if needed.
 
-    options.comm_repo and options.mozilla_repo are normally None.
+    options.instantbird_repo and options.mozilla_repo are normally None.
     This is fine-- our "hg pull" commands will omit the repo URL.
     The exception is the initial checkout, which does an "hg clone"
     for Mozilla.  That command requires a repository URL.
     """
 
-#    if (options.comm_repo is None
-#            and not os.path.exists(os.path.join(topsrcdir, '.hg'))):
-#        o.print_help()
-#        print
-#        print "*** The -m option is required for the initial checkout."
-#        sys.exit(2)
+    if (options.instantbird_repo is None
+        and not os.path.exists(os.path.join(topsrcdir, '.hg'))):
+        o.print_help()
+        print
+        print "*** The -m option is required for the initial checkout."
+        sys.exit(2)
 
     # Handle special case: initial checkout of Mozilla.
     if (options.mozilla_repo is None
@@ -145,8 +145,7 @@ except ValueError:
 fixup_repo_options(options)
 
 if action in ('checkout', 'co'):
-# don't pull . until we switch the instantbirde repo to hg too.
-#    do_hg_pull('.', options.comm_repo, options.hg)
+    do_hg_pull('.', options.instantbird_repo, options.hg)
 
     if not options.skip_mozilla:
         do_hg_pull('mozilla', options.mozilla_repo, options.hg)
