@@ -80,6 +80,9 @@ o.add_option("-m", "--instantbird-repo", dest="instantbird_repo",
 o.add_option("-z", "--mozilla-repo", dest="mozilla_repo",
              default=None,
              help="URL of Mozilla repository to pull from (default: use hg default in mozilla/.hg/hgrc; or if that file doesn't exist, use \"" + DEFAULT_MOZILLA_REPO + "\".)")
+o.add_option("--skip-instantbird", dest="skip_instantbird",
+             action="store_true", default=False,
+             help="Skip pulling the Instantbird repository.")
 o.add_option("--skip-mozilla", dest="skip_mozilla",
              action="store_true", default=False,
              help="Skip pulling the Mozilla repository.")
@@ -146,7 +149,8 @@ except ValueError:
 fixup_repo_options(options)
 
 if action in ('checkout', 'co'):
-    do_hg_pull('.', options.instantbird_repo, options.hg)
+    if not options.skip_instantbird:
+        do_hg_pull('.', options.instantbird_repo, options.hg)
 
     if not options.skip_mozilla:
         do_hg_pull('mozilla', options.mozilla_repo, options.hg)
