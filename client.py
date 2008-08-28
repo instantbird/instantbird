@@ -26,6 +26,7 @@ if topsrcdir == '':
     topsrcdir = '.'
 
 try:
+    from subprocess import call
     from subprocess import check_call
 except ImportError:
     import subprocess
@@ -149,6 +150,7 @@ if action in ('checkout', 'co'):
 
     if not options.skip_mozilla:
         do_hg_pull('mozilla', options.mozilla_repo, options.hg)
+        call("cat tools/patches/*.patch | patch -N -p1 -d mozilla/", shell=True)
 
     if not options.skip_inspector:
         do_hg_pull(os.path.join('mozilla', 'extensions', 'inspector'), options.inspector_repo, options.hg)

@@ -1,0 +1,14 @@
+diff -r 5adc62494942 toolkit/crashreporter/tools/symbolstore.py
+--- a/toolkit/crashreporter/tools/symbolstore.py	Wed Aug 27 21:40:25 2008 +0200
++++ b/toolkit/crashreporter/tools/symbolstore.py	Thu Aug 28 16:26:25 2008 +0200
+@@ -278,6 +278,10 @@
+                 rev = rev[:-1]
+ 
+             path = os.popen('hg -R "%s" showconfig paths.default' % srcdir, "r").readlines()[0].rstrip()
++
++            if os.path.exists(path):
++                path = os.popen('hg -R "%s" showconfig paths.default' % path, "r").readlines()[0].rstrip()
++
+             if path == '':
+                 hg_root = os.environ.get("SRCSRV_ROOT")
+                 if hg_root:
