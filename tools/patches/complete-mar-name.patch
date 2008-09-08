@@ -15,7 +15,7 @@ diff -r eb481b7dfdb1 tools/update-packaging/Makefile.in
 +endif
 +
 +ifndef MOZ_PKG_PLATFORM
-+MOZ_PKG_PLATFORM := $(TARGET_OS)-$(TARGET_CPU)
++MOZ_PKG_PLATFORM := $(OS_TARGET)_$(TARGET_XPCOM_ABI)
 +endif #MOZ_PKG_PLATFORM
 +
 +PKG_BASENAME = $(MOZ_PKG_APPNAME)-$(MOZ_PKG_VERSION).$(AB_CD).$(MOZ_PKG_PLATFORM)
