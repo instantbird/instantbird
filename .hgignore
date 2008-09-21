@@ -12,3 +12,4 @@ configure
 bug*.patch
 attachment.cgi\?id=*
 .mozconfig.mk
+.mozconfig.out
