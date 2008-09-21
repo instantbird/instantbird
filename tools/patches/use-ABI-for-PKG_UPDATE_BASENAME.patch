@@ -1,0 +1,12 @@
+diff -r 78beaa82e920 toolkit/mozapps/installer/package-name.mk
+--- a/toolkit/mozapps/installer/package-name.mk	Sun Sep 21 07:14:52 2008 +0200
++++ b/toolkit/mozapps/installer/package-name.mk	Sun Sep 21 18:31:48 2008 +0200
+@@ -98,7 +98,7 @@ PKG_PATH =
+ PKG_PATH =
+ PKG_INST_BASENAME = $(PKG_BASENAME).installer
+ PKG_INST_PATH = install/sea/
+-PKG_UPDATE_BASENAME = $(PKG_BASENAME)
++PKG_UPDATE_BASENAME = $(MOZ_PKG_APPNAME)-$(MOZ_PKG_VERSION).$(AB_CD).$(OS_TARGET)_$(TARGET_XPCOM_ABI)
+ PKG_UPDATE_PATH = update/
+ PKG_LANGPACK_BASENAME = $(MOZ_PKG_APPNAME)-$(MOZ_PKG_VERSION).$(AB_CD).langpack
+ PKG_LANGPACK_PATH = install/
