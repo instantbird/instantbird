@@ -50,9 +50,16 @@ def do_hg_pull(dir, repository, hg):
         check_call_noisy([hg, 'clone', repository, fulldir])
     else:
         if options.verbose:
-            cmd = [hg, 'pull', '-u', '-v', '-R', fulldir]
+            cmd = [hg, 'pull', '-v', '-R', fulldir]
         else:
-            cmd = [hg, 'pull', '-u', '-R', fulldir]
+            cmd = [hg, 'pull', '-R', fulldir]
+        if repository is not None:
+            cmd.append(repository)
+        check_call_noisy(cmd)
+        if options.clean:
+            cmd = [hg, 'update', '-C', '-v', '-R', fulldir]
+        else:
+            cmd = [hg, 'update', '-v', '-R', fulldir]
         if repository is not None:
             cmd.append(repository)
         check_call_noisy(cmd)
@@ -111,6 +118,9 @@ o.add_option("--cvsroot", dest="cvsroot",
 o.add_option("-v", "--verbose", dest="verbose",
              action="store_true", default=False,
              help="Enable verbose output on hg updates")
+o.add_option("-C", "--clean", dest="clean",
+             action="store_true", default=False,
+             help="Override local modifications when upgrading")
 
 
 def fixup_repo_options(options):
