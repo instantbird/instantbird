@@ -1,0 +1,11 @@
+diff -r 15aecdaab936 toolkit/themes/pinstripe/global/textbox.css
+--- a/toolkit/themes/pinstripe/global/textbox.css	Tue Sep 23 00:59:59 2008 -0700
++++ b/toolkit/themes/pinstripe/global/textbox.css	Tue Sep 23 20:12:23 2008 +0200
+@@ -110,6 +110,7 @@
+ 
+ textbox.plain {
+   -moz-appearance: none !important;
++  background-color: transparent;
+   padding: 0px !important;
+   margin: 0px !important;
+   border: none !important;
