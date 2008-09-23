@@ -60,8 +60,6 @@ def do_hg_pull(dir, repository, hg):
             cmd = [hg, 'update', '-C', '-v', '-R', fulldir]
         else:
             cmd = [hg, 'update', '-v', '-R', fulldir]
-        if repository is not None:
-            cmd.append(repository)
         check_call_noisy(cmd)
     check_call([hg, 'parent', '-R', fulldir,
                 '--template=Updated to revision {node}.\n'])
