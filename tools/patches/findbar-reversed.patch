@@ -1,0 +1,77 @@
+diff -r 920a4326d108 toolkit/components/typeaheadfind/public/nsITypeAheadFind.idl
+--- a/toolkit/components/typeaheadfind/public/nsITypeAheadFind.idl	Wed Sep 24 20:29:52 2008 +0200
++++ b/toolkit/components/typeaheadfind/public/nsITypeAheadFind.idl	Wed Sep 24 23:43:56 2008 +0200
+@@ -66,10 +66,11 @@ interface nsITypeAheadFind : nsISupports
+ 
+   /* Find aSearchString in page.  If aLinksOnly is true, only search the page's
+    * hyperlinks for the string. */
+-  unsigned short find(in AString aSearchString, in boolean aLinksOnly);
++  unsigned short find(in AString aSearchString, in boolean aLinksOnly,
++                      [optional] in boolean aFindBackwards);
+ 
+   /* Find another match in the page. */
+-  unsigned short findAgain(in boolean findBackwards, in boolean aLinksOnly);
++  unsigned short findAgain(in boolean aFindBackwards, in boolean aLinksOnly);
+ 
+ 
+   /**************************** Helper functions ***************************/
+diff -r 920a4326d108 toolkit/components/typeaheadfind/src/nsTypeAheadFind.cpp
+--- a/toolkit/components/typeaheadfind/src/nsTypeAheadFind.cpp	Wed Sep 24 20:29:52 2008 +0200
++++ b/toolkit/components/typeaheadfind/src/nsTypeAheadFind.cpp	Wed Sep 24 23:43:56 2008 +0200
+@@ -911,7 +911,7 @@ nsTypeAheadFind::FindAgain(PRBool aFindB
+ 
+ NS_IMETHODIMP
+ nsTypeAheadFind::Find(const nsAString& aSearchString, PRBool aLinksOnly,
+-                      PRUint16* aResult)
++                      PRBool aFindBackwards, PRUint16* aResult)
+ {
+   *aResult = FIND_NOTFOUND;
+ 
+@@ -1030,7 +1030,7 @@ nsTypeAheadFind::Find(const nsAString& a
+   // Beware! This may flush notifications via synchronous
+   // ScrollSelectionIntoView.
+   nsresult rv = FindItNow(nsnull, mLinksOnly, isFirstVisiblePreferred,
+-                          PR_FALSE, aResult);
++                          aFindBackwards, aResult);
+ 
+   // ---------Handle success or failure ---------------
+   if (NS_SUCCEEDED(rv)) {
+diff -r 920a4326d108 toolkit/content/widgets/findbar.xml
+--- a/toolkit/content/widgets/findbar.xml	Wed Sep 24 20:29:52 2008 +0200
++++ b/toolkit/content/widgets/findbar.xml	Wed Sep 24 23:43:56 2008 +0200
+@@ -320,6 +320,16 @@
+             this._browser.addEventListener("mouseup", this, false);
+             this._findField.value = this._browser.fastFind.searchString;
+           }
++          return val;
++        ]]></setter>
++      </property>
++
++      <property name="reversed">
++        <getter><![CDATA[
++          return this.getAttribute("reversed") == "true";
++        ]]></getter>
++        <setter><![CDATA[
++          this.setAttribute("reversed", val);
+           return val;
+         ]]></setter>
+       </property>
+@@ -1100,7 +1110,7 @@
+           this._updateCaseSensitivity(val);
+ 
+           var fastFind = this.browser.fastFind;
+-          var res = fastFind.find(val, this._findMode == this.FIND_LINKS);
++          var res = fastFind.find(val, this._findMode == this.FIND_LINKS, this.reversed);
+           this._updateFoundLink(res);
+           this._updateStatusUI(res, false);
+ 
+@@ -1282,6 +1292,9 @@
+       <method name="onFindAgainCommand">
+         <parameter name="aFindPrevious"/>
+         <body><![CDATA[
++          if (this.reversed)
++            aFindPrevious = !aFindPrevious;
++
+           var findString = this._browser.fastFind.searchString || this._findField.value;
+           if (!findString) {
+             this.startFind();
