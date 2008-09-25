@@ -1,7 +1,7 @@
-diff -r 920a4326d108 toolkit/components/typeaheadfind/public/nsITypeAheadFind.idl
---- a/toolkit/components/typeaheadfind/public/nsITypeAheadFind.idl	Wed Sep 24 20:29:52 2008 +0200
-+++ b/toolkit/components/typeaheadfind/public/nsITypeAheadFind.idl	Wed Sep 24 23:43:56 2008 +0200
-@@ -66,10 +66,11 @@ interface nsITypeAheadFind : nsISupports
+diff -r cdfaac3ff235 toolkit/components/typeaheadfind/public/nsITypeAheadFind.idl
+--- a/toolkit/components/typeaheadfind/public/nsITypeAheadFind.idl	Thu Sep 25 20:06:13 2008 +0200
++++ b/toolkit/components/typeaheadfind/public/nsITypeAheadFind.idl	Thu Sep 25 20:57:29 2008 +0200
+@@ -66,10 +66,11 @@
  
    /* Find aSearchString in page.  If aLinksOnly is true, only search the page's
     * hyperlinks for the string. */
@@ -15,10 +15,10 @@ diff -r 920a4326d108 toolkit/components/typeaheadfind/public/nsITypeAheadFind.id
  
  
    /**************************** Helper functions ***************************/
-diff -r 920a4326d108 toolkit/components/typeaheadfind/src/nsTypeAheadFind.cpp
---- a/toolkit/components/typeaheadfind/src/nsTypeAheadFind.cpp	Wed Sep 24 20:29:52 2008 +0200
-+++ b/toolkit/components/typeaheadfind/src/nsTypeAheadFind.cpp	Wed Sep 24 23:43:56 2008 +0200
-@@ -911,7 +911,7 @@ nsTypeAheadFind::FindAgain(PRBool aFindB
+diff -r cdfaac3ff235 toolkit/components/typeaheadfind/src/nsTypeAheadFind.cpp
+--- a/toolkit/components/typeaheadfind/src/nsTypeAheadFind.cpp	Thu Sep 25 20:06:13 2008 +0200
++++ b/toolkit/components/typeaheadfind/src/nsTypeAheadFind.cpp	Thu Sep 25 20:57:29 2008 +0200
+@@ -911,7 +911,7 @@
  
  NS_IMETHODIMP
  nsTypeAheadFind::Find(const nsAString& aSearchString, PRBool aLinksOnly,
@@ -27,7 +27,49 @@ diff -r 920a4326d108 toolkit/components/typeaheadfind/src/nsTypeAheadFind.cpp
  {
    *aResult = FIND_NOTFOUND;
  
-@@ -1030,7 +1030,7 @@ nsTypeAheadFind::Find(const nsAString& a
+@@ -935,10 +935,9 @@
+       nsISelectionController::SELECTION_NORMAL, getter_AddRefs(selection));
+   }
+ 
+-  if (selection)
+-    selection->CollapseToStart();
+-
+   if (aSearchString.IsEmpty()) {
++    if (selection)
++      selection->CollapseToStart();
+     mTypeAheadBuffer.Truncate();
+ 
+     // These will be initialized to their true values after the first character
+@@ -964,6 +963,28 @@
+     
+     if (!atEnd)
+       mStartFindRange = nsnull;
++  }
++
++  if (selection && atEnd) {
++    PRInt32 lengthDifference = aSearchString.Length() - mTypeAheadBuffer.Length();
++    if (lengthDifference == 1 || lengthDifference == -1) {
++      selectionController->CharacterMove(lengthDifference == 1, PR_TRUE);
++      nsString newSelection;
++      selection->ToString(getter_Copies(newSelection));
++      if (newSelection.Equals(aSearchString)) {
++        mTypeAheadBuffer = aSearchString;
++
++        *aResult = FIND_FOUND;
++        return NS_OK;
++      }
++    }
++  }
++
++  if (selection) {
++    if (aFindBackwards)
++      selection->CollapseToEnd();
++    else
++      selection->CollapseToStart();
+   }
+ 
+   if (!mIsSoundInitialized && !mNotFoundSoundURL.IsEmpty()) {
+@@ -1030,7 +1051,7 @@
    // Beware! This may flush notifications via synchronous
    // ScrollSelectionIntoView.
    nsresult rv = FindItNow(nsnull, mLinksOnly, isFirstVisiblePreferred,
@@ -36,9 +78,9 @@ diff -r 920a4326d108 toolkit/components/typeaheadfind/src/nsTypeAheadFind.cpp
  
    // ---------Handle success or failure ---------------
    if (NS_SUCCEEDED(rv)) {
-diff -r 920a4326d108 toolkit/content/widgets/findbar.xml
---- a/toolkit/content/widgets/findbar.xml	Wed Sep 24 20:29:52 2008 +0200
-+++ b/toolkit/content/widgets/findbar.xml	Wed Sep 24 23:43:56 2008 +0200
+diff -r cdfaac3ff235 toolkit/content/widgets/findbar.xml
+--- a/toolkit/content/widgets/findbar.xml	Thu Sep 25 20:06:13 2008 +0200
++++ b/toolkit/content/widgets/findbar.xml	Thu Sep 25 20:57:29 2008 +0200
 @@ -320,6 +320,16 @@
              this._browser.addEventListener("mouseup", this, false);
              this._findField.value = this._browser.fastFind.searchString;
@@ -56,7 +98,7 @@ diff -r 920a4326d108 toolkit/content/widgets/findbar.xml
            return val;
          ]]></setter>
        </property>
-@@ -1100,7 +1110,7 @@
+@@ -1106,7 +1116,7 @@
            this._updateCaseSensitivity(val);
  
            var fastFind = this.browser.fastFind;
@@ -65,7 +107,7 @@ diff -r 920a4326d108 toolkit/content/widgets/findbar.xml
            this._updateFoundLink(res);
            this._updateStatusUI(res, false);
  
-@@ -1282,6 +1292,9 @@
+@@ -1288,6 +1298,9 @@
        <method name="onFindAgainCommand">
          <parameter name="aFindPrevious"/>
          <body><![CDATA[
