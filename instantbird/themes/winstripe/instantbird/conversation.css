@@ -1,0 +1,112 @@
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is the Instantbird messenging client, released
+ * 2007.
+ *
+ * The Initial Developer of the Original Code is
+ * Florian QUEZE <florian@instantbird.org>.
+ * Portions created by the Initial Developer are Copyright (C) 2007
+ * the Initial Developer. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+.browser {
+  margin: 0 0;
+}
+
+.conv-bottom, .conv-nicklist {
+  margin: 0 0;
+  min-height: 30px;
+}
+
+.conv-top {
+  min-height: 100px;
+}
+
+.conv-messages {
+  min-width: 150px;
+%ifdef XP_MACOSX
+  border-top: 1px solid #A1A1A1;
+  border-right: 1px solid #C3C3C3;
+  border-bottom: 1px solid #DDDDDD;
+  border-left: 1px solid #C3C3C3;
+%else
+  border: solid 1px GrayText;
+%endif
+}
+
+textbox.conv-textbox {
+%ifdef XP_MACOSX
+  margin: 0 0;
+%elifdef XP_UNIX
+  margin: -1px -1px;
+%else
+  margin: 0 0;
+%endif
+  padding: 0 0;
+}
+
+notificationbox {
+  overflow-x: hidden;
+}
+
+%ifdef XP_MACOSX
+grippy {
+  display: none;
+}
+%endif
+
+.splitter {
+  margin: 0 0px;
+  border-style: none;
+  height: 3px;
+  background: transparent;
+}
+
+#conv-toolbar {
+  border-style:none;
+}
+
+.conv-nicklist .listcell-label {
+  font-weight: bold;
+}
+
+.conv-nicklist .listcell-icon {
+  min-width: 16px;
+  -moz-margin-end: 0px;
+}
+
+.conv-nicklist-header {
+  margin-top: 0;
+  -moz-margin-start: 0;
+  -moz-margin-end: 2px;
+}
+
+conversation:not([chat="true"]) .conv-chat {
+  display: none;
+}
