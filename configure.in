@@ -4850,13 +4850,8 @@ MOZ_ARG_ENABLE_BOOL(official-branding,
                           permission to use trademarks per
                           http://www.mozilla.org/foundation/trademarks/ .],
 [case "$MOZ_BUILD_APP" in
-calendar)
-    MOZ_BRANDING_DIRECTORY=other-licenses/branding/sunbird
-    MOZ_APP_DISPLAYNAME=Sunbird
-    ;;
-
-mail)
-    MOZ_BRANDING_DIRECTORY=other-licenses/branding/thunderbird
+instantbird)
+    MOZ_BRANDING_DIRECTORY=instantbird/branding/release
     ;;
 
 *)]
@@ -7792,8 +7787,7 @@ fi
 
 # --enable-application needs to find confvars.sh, build.mk, etc in the gived dir, so add ../
 # --disable-official-branding disables all checks for official branding, as we're doing this ourselves in our own repo
-# --disable-calendar turns off mozilla's configure claiming it's not supported
-ac_configure_args="$_SUBDIR_CONFIG_ARGS --enable-application=../$MOZ_BUILD_APP --disable-official-branding --disable-calendar"
+ac_configure_args="$_SUBDIR_CONFIG_ARGS --enable-application=../$MOZ_BUILD_APP --disable-official-branding --with-branding=../$MOZ_BRANDING_DIRECTORY"
 if test -z "$MOZ_DEBUG"; then
     ac_configure_args="$ac_configure_args --disable-debug"
 fi
