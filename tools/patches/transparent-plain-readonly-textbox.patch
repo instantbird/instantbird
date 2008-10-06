@@ -1,7 +1,29 @@
-diff -r 15aecdaab936 toolkit/themes/pinstripe/global/textbox.css
---- a/toolkit/themes/pinstripe/global/textbox.css	Tue Sep 23 00:59:59 2008 -0700
-+++ b/toolkit/themes/pinstripe/global/textbox.css	Tue Sep 23 20:12:23 2008 +0200
+diff -r 23659e89954c toolkit/themes/gnomestripe/global/textbox.css
+--- a/toolkit/themes/gnomestripe/global/textbox.css	Sat Sep 27 12:12:04 2008 -0400
++++ b/toolkit/themes/gnomestripe/global/textbox.css	Sun Sep 28 16:59:16 2008 +0200
+@@ -97,6 +97,7 @@
+ 
+ textbox.plain {
+   -moz-appearance: none !important;
++  background-color: transparent;
+   padding: 0px !important;
+   margin: 0px !important;
+   border: none !important;
+diff -r 23659e89954c toolkit/themes/pinstripe/global/textbox.css
+--- a/toolkit/themes/pinstripe/global/textbox.css	Sat Sep 27 12:12:04 2008 -0400
++++ b/toolkit/themes/pinstripe/global/textbox.css	Sun Sep 28 16:59:16 2008 +0200
 @@ -110,6 +110,7 @@
+ 
+ textbox.plain {
+   -moz-appearance: none !important;
++  background-color: transparent;
+   padding: 0px !important;
+   margin: 0px !important;
+   border: none !important;
+diff -r 23659e89954c toolkit/themes/winstripe/global/textbox.css
+--- a/toolkit/themes/winstripe/global/textbox.css	Sat Sep 27 12:12:04 2008 -0400
++++ b/toolkit/themes/winstripe/global/textbox.css	Sun Sep 28 16:59:16 2008 +0200
+@@ -97,6 +97,7 @@
  
  textbox.plain {
    -moz-appearance: none !important;
