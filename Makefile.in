@@ -45,8 +45,15 @@ default install export libs clean realclean distclean alldep maybe_clobber_profi
 	$(MAKE) -C mozilla $@
 
 # http://bugzilla.mozilla.org/show_bug.cgi?id=450485
+MAKE_SYM_STORE_PATH=..
+ifeq ($(OS_ARCH),Darwin)
+ifdef UNIVERSAL_BINARY
+  MAKE_SYM_STORE_PATH=dist/universal
+endif
+endif
+
 buildsymbols ::
-	$(MAKE) -C mozilla $@ MAKE_SYM_STORE_PATH=..
+	$(MAKE) -C mozilla $@ MAKE_SYM_STORE_PATH=$(MAKE_SYM_STORE_PATH)
 
 include $(topsrcdir)/$(MOZ_BUILD_APP)/build.mk
 
