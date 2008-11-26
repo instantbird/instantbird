@@ -3,10 +3,13 @@
 VENKMAN_CO_TAG = 'HEAD'
 VENKMAN_DIRS = ('extensions/venkman',)
 
+DEFAULT_INSTANTBIRD_REV = "default"
 # URL of the default hg repository to clone for Mozilla.
 DEFAULT_MOZILLA_REPO = 'http://hg.mozilla.org/mozilla-central/'
+DEFAULT_MOZILLA_REV = "tip"
 # URL of the default hg repository to clone for inspector.
 DEFAULT_INSPECTOR_REPO = 'http://hg.mozilla.org/dom-inspector/'
+DEFAULT_INSPECTOR_REV = "tip"
 
 import os
 import sys
@@ -34,7 +37,7 @@ def check_call_noisy(cmd, *args, **kwargs):
     print "Executing command:", cmd
     check_call(cmd, *args, **kwargs)
 
-def do_hg_pull(dir, repository, hg):
+def do_hg_pull(dir, repository, hg, rev):
     fulldir = os.path.join(topsrcdir, dir)
     # clone if the dir doesn't exist, pull if it does
     if not os.path.exists(fulldir):
@@ -48,11 +51,12 @@ def do_hg_pull(dir, repository, hg):
         if repository is not None:
             cmd.append(repository)
         check_call_noisy(cmd)
-        if options.clean:
-            cmd = [hg, 'update', '-C', '-v', '-R', fulldir]
-        else:
-            cmd = [hg, 'update', '-v', '-R', fulldir]
-        check_call_noisy(cmd)
+    # update to specific revision
+    if options.clean:
+        cmd = [hg, 'update', '-C', '-v', '-r', rev, '-R', fulldir]
+    else:
+        cmd = [hg, 'update', '-v', '-r', rev, '-R', fulldir]
+    check_call_noisy(cmd)
     check_call([hg, 'parent', '-R', fulldir,
                 '--template=Updated to revision {node}.\n'])
 
@@ -80,9 +84,16 @@ o.add_option("-z", "--mozilla-repo", dest="mozilla_repo",
 o.add_option("--skip-instantbird", dest="skip_instantbird",
              action="store_true", default=False,
              help="Skip pulling the Instantbird repository.")
+o.add_option("--instantbird-rev", dest="ib_rev",
+             default=DEFAULT_INSTANTBIRD_REV,
+             help="Revision of Instantbird repository to update to. Default: \"" + DEFAULT_INSTANTBIRD_REV + "\"")
+
 o.add_option("--skip-mozilla", dest="skip_mozilla",
              action="store_true", default=False,
              help="Skip pulling the Mozilla repository.")
+o.add_option("--mozilla-rev", dest="mozilla_rev",
+             default=DEFAULT_MOZILLA_REV,
+             help="Revision of Mozilla repository to update to. Default: \"" + DEFAULT_MOZILLA_REV + "\"")
 
 o.add_option("--inspector-repo", dest="inspector_repo",
              default=None,
@@ -90,6 +101,9 @@ o.add_option("--inspector-repo", dest="inspector_repo",
 o.add_option("--skip-inspector", dest="skip_inspector",
              action="store_true", default=False,
              help="Skip pulling the DOM inspector repository.")
+o.add_option("--inspector-rev", dest="inspector_rev",
+             default=DEFAULT_INSPECTOR_REV,
+             help="Revision of DOM inspector repository to update to. Default: \"" + DEFAULT_INSPECTOR_REV + "\"")
 
 o.add_option("--skip-venkman", dest="skip_venkman",
              action="store_true", default=False,
@@ -147,14 +161,14 @@ fixup_repo_options(options)
 
 if action in ('checkout', 'co'):
     if not options.skip_instantbird:
-        do_hg_pull('.', options.instantbird_repo, options.hg)
+        do_hg_pull('.', options.instantbird_repo, options.hg, options.ib_rev)
 
     if not options.skip_mozilla:
-        do_hg_pull('mozilla', options.mozilla_repo, options.hg)
+        do_hg_pull('mozilla', options.mozilla_repo, options.hg, options.mozilla_rev)
         call("cat tools/patches/*.patch | patch -N -p1 -d mozilla/", shell=True)
 
     if not options.skip_inspector:
-        do_hg_pull(os.path.join('mozilla', 'extensions', 'inspector'), options.inspector_repo, options.hg)
+        do_hg_pull(os.path.join('mozilla', 'extensions', 'inspector'), options.inspector_repo, options.hg, options.inspector_rev)
 
     if not options.skip_venkman:
         if os.path.exists(os.path.join(topsrcdir, 'mozilla', 'extensions')):
