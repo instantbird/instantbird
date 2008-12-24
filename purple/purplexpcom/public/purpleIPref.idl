@@ -48,6 +48,7 @@ interface purpleIPref: nsISupports {
   const short typeString = 3;
 
   readonly attribute AUTF8String name;
+  readonly attribute AUTF8String label;
   readonly attribute short type;
   readonly attribute boolean masked;
 
