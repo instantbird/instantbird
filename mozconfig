@@ -1,11 +1,12 @@
 mk_add_options MOZ_CO_PROJECT=xulrunner
-#mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/../obj-instantbird-dbg
-mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/../obj-instantbird
+mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/../obj-instantbird-dbg
+#mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/../obj-instantbird
 ac_add_options --enable-application=instantbird
 mk_add_options MOZ_MAKE_FLAGS=-j4
-#ac_add_options --with-macos-sdk=/Developer/SDKs/MacOSX10.4u.sdk
+ac_add_options --with-macos-sdk=/Developer/SDKs/MacOSX10.4u.sdk
 ac_add_options --disable-tests
-#ac_add_options --enable-debug
+ac_add_options --enable-debug
 ac_add_options --disable-jemalloc
 
-#ac_add_options --enable-extensions=venkman,inspector
+ac_add_options --enable-extensions=venkman,inspector
+ac_add_options --with-branding=instantbird/branding/halloween
