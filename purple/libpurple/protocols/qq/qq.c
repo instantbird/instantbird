@@ -93,7 +93,7 @@ static void server_list_create(PurpleAccount *account)
 	PurpleConnection *gc;
 	qq_data *qd;
 	PurpleProxyInfo *gpi;
-	const gchar *user_server;
+	const gchar *custom_server;
 
 	gc = purple_account_get_connection(account);
 	g_return_if_fail(gc != NULL  && gc->proto_data != NULL);
@@ -103,11 +103,14 @@ static void server_list_create(PurpleAccount *account)
 
 	qd->use_tcp = purple_account_get_bool(account, "use_tcp", TRUE);
 
-	user_server = purple_account_get_string(account, "server", NULL);
-	purple_debug_info("QQ", "Select server '%s'\n", user_server);
-	if ( (user_server != NULL && strlen(user_server) > 0) && strcasecmp(user_server, "auto") != 0) {
-		qd->servers = g_list_append(qd->servers, g_strdup(user_server));
-		return;
+	custom_server = purple_account_get_string(account, "server", NULL);
+
+	if (custom_server != NULL) {
+		purple_debug_info("QQ", "Select server '%s'\n", custom_server);
+		if (*custom_server != '\0' && g_ascii_strcasecmp(custom_server, "auto") != 0) {
+			qd->servers = g_list_append(qd->servers, g_strdup(custom_server));
+			return;
+		}
 	}
 
 	if (qd->use_tcp) {
