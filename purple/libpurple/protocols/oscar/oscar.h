@@ -34,6 +34,7 @@
 #include "eventloop.h"
 #include "internal.h"
 #include "proxy.h"
+#include "sslconn.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -285,6 +286,15 @@ struct _ClientInfo
 	"us", "en", \
 }
 
+#define CLIENTINFO_ICQBASIC_14_34_3096 { \
+	"ICQBasic", \
+	0x010a, \
+	0x0014, 0x0034, \
+	0x0000, 0x0c18, \
+	0x0000043d, \
+	"us", "en", \
+}
+
 #define CLIENTINFO_NETSCAPE_7_0_1 { \
 	"Netscape 2000 an approved user of AOL Instant Messenger (SM)", \
 	0x1d0d, \
@@ -311,14 +321,14 @@ struct _ClientInfo
 #define CLIENTINFO_PURPLE_ICQ { \
 	"Purple/" VERSION, \
 	0x010a, \
-	0x0006, 0x0000, \
-	0x0000, 0x17ab, \
-	0x00007535, \
+	0x0014, 0x0034, \
+	0x0000, 0x0c18, \
+	0x0000043d, \
 	"us", "en", \
 }
 
 #define CLIENTINFO_AIM_KNOWNGOOD CLIENTINFO_AIM_5_1_3036
-#define CLIENTINFO_ICQ_KNOWNGOOD CLIENTINFO_ICQBASIC_14_34_3000
+#define CLIENTINFO_ICQ_KNOWNGOOD CLIENTINFO_ICQBASIC_14_34_3096
 
 typedef enum
 {
@@ -362,8 +372,9 @@ typedef enum
 	OSCAR_CAPABILITY_LIVEVIDEO            = 0x02000000,
 	OSCAR_CAPABILITY_CAMERA               = 0x04000000,
 	OSCAR_CAPABILITY_ICHAT_SCREENSHARE    = 0x08000000,
-	OSCAR_CAPABILITY_GENERICUNKNOWN       = 0x10000000,
-	OSCAR_CAPABILITY_LAST                 = 0x20000000
+	OSCAR_CAPABILITY_TYPING               = 0x10000000,
+	OSCAR_CAPABILITY_GENERICUNKNOWN       = 0x20000000,
+	OSCAR_CAPABILITY_LAST                 = 0x40000000
 } OscarCapability;
 
 /*
@@ -416,8 +427,10 @@ struct _FlapConnection
 	guint16 cookielen;
 	guint8 *cookie;
 	gpointer new_conn_data;
+	gchar *ssl_cert_cn;
 
 	int fd;
+	PurpleSslConnection *gsc;
 	guint8 header[6];
 	gssize header_received;
 	FlapFrame buffer_incoming;
@@ -475,6 +488,7 @@ struct _OscarData
 	GHashTable *buddyinfo;
 	GSList *requesticon;
 
+	gboolean use_ssl;
 	gboolean icq;
 	guint getblisttimer;
 
@@ -488,15 +502,7 @@ struct _OscarData
 		guint maxawaymsglen; /* max size (bytes) of posted away message */
 	} rights;
 
-	/* ---- Client Accessible ------------------------ */
-
-	/* Our screen name. */
-	/* TODO: Get rid of this and use purple_account_get_username() everywhere? */
-	char sn[MAXSNLEN+1];
-
 	PurpleConnection *gc;
-
-	/* ---- Internal Use Only ------------------------ */
 
 	void *modlistv;
 
@@ -544,10 +550,6 @@ struct _OscarData
 
 	/** A linked list containing PeerConnections. */
 	GSList *peer_connections;
-
-	/** Queue of ICQ Status Notes to request. */
-	GSList *statusnotes_queue;
-	guint statusnotes_queue_timer;
 };
 
 /* Valid for calling aim_icq_setstatus() and for aim_userinfo_t->icqinfo.status */
@@ -600,6 +602,8 @@ struct aim_redirect_data
 	const char *ip;
 	guint16 cookielen;
 	const guint8 *cookie;
+	const char *ssl_cert_cn;
+	guint8 use_ssl;
 	struct { /* group == SNAC_FAMILY_CHAT */
 		guint16 exchange;
 		const char *room;
@@ -623,6 +627,8 @@ FlapConnection *flap_connection_findbygroup(OscarData *od, guint16 group);
 FlapConnection *flap_connection_getbytype(OscarData *, int type);
 FlapConnection *flap_connection_getbytype_all(OscarData *, int type);
 void flap_connection_recv_cb(gpointer data, gint source, PurpleInputCondition cond);
+void flap_connection_recv_cb_ssl(gpointer data, PurpleSslConnection *gsc, PurpleInputCondition cond);
+
 void flap_connection_send(FlapConnection *conn, FlapFrame *frame);
 void flap_connection_send_version(OscarData *od, FlapConnection *conn);
 void flap_connection_send_version_with_cookie(OscarData *od, FlapConnection *conn, guint16 length, const guint8 *chipsahoy);
@@ -1359,7 +1365,6 @@ int aim_icq_getsimpleinfo(OscarData *od, const char *uin);
 int aim_icq_getalias(OscarData *od, const char *uin);
 int aim_icq_getallinfo(OscarData *od, const char *uin);
 int aim_icq_sendsms(OscarData *od, const char *name, const char *msg, const char *alias);
-int aim_icq_getstatusnote(OscarData *od, const char *uin, guint8 *note_hash, guint16 note_hash_len);
 
 
 /* 0x0017 - family_auth.c */
@@ -1587,6 +1592,7 @@ int byte_stream_putle32(ByteStream *bs, guint32 v);
 int byte_stream_putraw(ByteStream *bs, const guint8 *v, int len);
 int byte_stream_putstr(ByteStream *bs, const char *str);
 int byte_stream_putbs(ByteStream *bs, ByteStream *srcbs, int len);
+int byte_stream_putuid(ByteStream *bs, OscarData *od);
 int byte_stream_putcaps(ByteStream *bs, guint32 caps);
 
 /*
