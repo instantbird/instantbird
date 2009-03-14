@@ -1,6 +1,6 @@
-diff -r b26e61de06dd tools/update-packaging/Makefile.in
---- a/tools/update-packaging/Makefile.in	Mon Jan 05 18:26:59 2009 +0200
-+++ b/tools/update-packaging/Makefile.in	Mon Jan 05 18:11:56 2009 +0100
+diff -r 0cd1584eb800 tools/update-packaging/Makefile.in
+--- a/tools/update-packaging/Makefile.in	Sat Mar 14 14:32:36 2009 +0100
++++ b/tools/update-packaging/Makefile.in	Sat Mar 14 16:21:54 2009 +0100
 @@ -71,6 +71,10 @@
  MBSDIFF_BIN	= $(DIST)/host/bin/mbsdiff$(HOST_BIN_SUFFIX)
  
@@ -21,10 +21,10 @@ diff -r b26e61de06dd tools/update-packaging/Makefile.in
  	  "$(SRC_BUILD)" \
  	  "$(DST_BUILD)"
  
-diff -r b26e61de06dd tools/update-packaging/make_updates.sh
+diff -r 0cd1584eb800 tools/update-packaging/make_updates.sh
 --- /dev/null	Thu Jan 01 00:00:00 1970 +0000
-+++ b/tools/update-packaging/make_updates.sh	Mon Jan 05 18:11:56 2009 +0100
-@@ -0,0 +1,106 @@
++++ b/tools/update-packaging/make_updates.sh	Sat Mar 14 16:21:54 2009 +0100
+@@ -0,0 +1,112 @@
 +#!/bin/bash
 +#
 +# This tool simplifies the complete + partial updates generation by doing
@@ -131,3 +131,11 @@ diff -r b26e61de06dd tools/update-packaging/make_updates.sh
 +
 +echo "Uploading mar files..."
 +scp "$1"/*.mar "$SSH_USERNAME"@"$SSH_SERVER":"$SSH_UPLOAD_DIR"/
++
++if test -z "$SSH_UPLOAD_COMMAND"; then
++    ssh_call=''
++    for upMar in `ls "$1"/*.mar`; do
++	ssh_call="$ssh_call && "`echo "$SSH_UPLOAD_COMMAND" | sed s/'$UPMAR'/"$upMar"`
++    done
++    eval ssh "'$SSH_USERNAME'"@"'$SSH_SERVER'" "$ssh_call"
++fi
