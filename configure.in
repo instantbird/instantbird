@@ -6766,6 +6766,9 @@ dnl = Libpurple related checks
 dnl =
 dnl ========================================================
 
+_SAVE_LIBS="$LIBS"
+LIBS=
+
 AC_CHECK_HEADERS(arpa/nameser_compat.h)
 AC_CHECK_FUNCS(inet_ntop)
 
@@ -6803,6 +6806,8 @@ AC_CACHE_CHECK(for tm_gmtoff in struct tm, ac_cv_struct_tm_gmtoff,
 if test $ac_cv_struct_tm_gmtoff = yes; then
     AC_DEFINE(HAVE_TM_GMTOFF)
 fi
+
+LIBS="$_SAVE_LIBS"
 
 dnl ========================================================
 dnl =
