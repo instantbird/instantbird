@@ -6,7 +6,7 @@ diff -r 2dc7975dc4be tools/update-packaging/Makefile.in
  
  full-update:: complete-patch
 +	MAR=$(MAR_BIN) \
-+	  $(srcdir)/make_updates.sh \
++	  bash $(srcdir)/make_updates.sh \
 +	  "$(STAGE_DIR)" \
 +	  "$(PACKAGE_DIR)"
  
