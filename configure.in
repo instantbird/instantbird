@@ -6762,6 +6762,50 @@ AC_SUBST(MOZ_STATIC_MAIL_BUILD)
 
 dnl ========================================================
 dnl =
+dnl = Libpurple related checks
+dnl =
+dnl ========================================================
+
+AC_CHECK_HEADERS(arpa/nameser_compat.h)
+AC_CHECK_FUNCS(inet_ntop)
+
+# AC_CHECK_SIZEOF() doesn't include <time.h>.
+AC_MSG_CHECKING(size of time_t)
+AC_CACHE_VAL(ac_cv_sizeof_time_t,
+[AC_TRY_RUN([#include <stdio.h>
+#include <time.h>
+main()
+{
+  FILE *f=fopen("conftestval", "w");
+  if (!f) exit(1);
+  fprintf(f, "%d\n", sizeof(time_t));
+  exit(0);
+}],
+ac_cv_sizeof_time_t=`cat conftestval`,
+ac_cv_sizeof_time_t=0,
+ac_cv_sizeof_time_t=4)
+])
+AC_MSG_RESULT($ac_cv_sizeof_time_t)
+AC_DEFINE_UNQUOTED(SIZEOF_TIME_T, $ac_cv_sizeof_time_t,
+[The number of bytes in a time_t.])
+
+# equivalent of AC_VAR_TIMEZONE_EXTERNALS
+AC_CACHE_CHECK(for timezone external, ac_cv_var_timezone,
+    AC_TRY_LINK([#include <time.h>], [return (int)timezone;],
+                ac_cv_var_timezone=yes, ac_cv_var_timezone=no))
+if test $ac_cv_var_timezone = yes; then
+    AC_DEFINE(HAVE_TIMEZONE)
+fi
+
+AC_CACHE_CHECK(for tm_gmtoff in struct tm, ac_cv_struct_tm_gmtoff,
+    AC_TRY_COMPILE([#include <time.h>], [struct tm tm; tm.tm_gmtoff = 1;],
+                   ac_cv_struct_tm_gmtoff=yes, ac_cv_struct_tm_gmtoff=no))
+if test $ac_cv_struct_tm_gmtoff = yes; then
+    AC_DEFINE(HAVE_TM_GMTOFF)
+fi
+
+dnl ========================================================
+dnl =
 dnl = Standalone module options
 dnl = 
 dnl ========================================================
