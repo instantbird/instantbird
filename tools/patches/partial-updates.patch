@@ -1,6 +1,6 @@
-diff -r 2dc7975dc4be tools/update-packaging/Makefile.in
---- a/tools/update-packaging/Makefile.in	Sat Mar 14 22:01:03 2009 +0100
-+++ b/tools/update-packaging/Makefile.in	Sun Mar 15 15:37:03 2009 +0100
+diff -r 7dd5b9ceebc5 tools/update-packaging/Makefile.in
+--- a/tools/update-packaging/Makefile.in	Wed Mar 18 15:24:04 2009 +0200
++++ b/tools/update-packaging/Makefile.in	Wed Mar 18 14:35:03 2009 +0100
 @@ -71,6 +71,10 @@
  MBSDIFF_BIN	= $(DIST)/host/bin/mbsdiff$(HOST_BIN_SUFFIX)
  
@@ -21,10 +21,10 @@ diff -r 2dc7975dc4be tools/update-packaging/Makefile.in
  	  "$(SRC_BUILD)" \
  	  "$(DST_BUILD)"
  
-diff -r 2dc7975dc4be tools/update-packaging/make_updates.sh
+diff -r 7dd5b9ceebc5 tools/update-packaging/make_updates.sh
 --- /dev/null	Thu Jan 01 00:00:00 1970 +0000
-+++ b/tools/update-packaging/make_updates.sh	Sun Mar 15 15:37:03 2009 +0100
-@@ -0,0 +1,117 @@
++++ b/tools/update-packaging/make_updates.sh	Wed Mar 18 14:35:03 2009 +0100
+@@ -0,0 +1,125 @@
 +#!/bin/bash
 +#
 +# This tool simplifies the complete + partial updates generation by doing
@@ -101,12 +101,20 @@ diff -r 2dc7975dc4be tools/update-packaging/make_updates.sh
 +	"$root"/unwrap_full_update.pl ../$(basename "$file") && \
 +	cd "$workdir"
 +    if test ! $? -eq 0; then
-+	echo "Error unwrapping mar $file"
++	echo "Error unwrapping mar $file" >&2
 +	exit 1
 +    fi
 +
 +    # Retrieve the mar's BuildID
-+    buildID=`grep ^BuildID= $MAR_DIR/tmp/application.ini | cut -d = -f 2`
++    appini=$MAR_DIR/tmp/application.ini
++    if test ! -f $appini; then
++	appini=$MAR_DIR/tmp/Contents/MacOS/application.ini
++	if test ! -f $appini; then
++	    echo "Could not find application.ini" >&2
++	    continue
++	fi
++    fi
++    buildID=`grep ^BuildID= $appini | cut -d = -f 2`
 +    echo "Creating partial mar from build $buildID..."
 +
 +    # Creating the partial mar
