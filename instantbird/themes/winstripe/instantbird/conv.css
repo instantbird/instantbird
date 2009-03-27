@@ -76,6 +76,16 @@ p {
   word-wrap: break-word;
 }
 
+p img {
+  margin-bottom: -3px;
+}
+
+p *:-moz-any-link img {
+  border: none;
+  border-bottom: solid 1px;
+  margin-bottom: -2px;
+}
+
 #welcome { 
   text-align: center;
 }
