@@ -5,11 +5,16 @@ syntax:glob
 purple/cache
 purple/extract
 purple/diff-*.patch
+tools/l10n/result
+tools/l10n/po
+tools/l10n/polib.pyc
 *~
 *.rej
 *.orig
+*.patch
 configure
 bug*.patch
 attachment.cgi\?id=*
+mozconfig-*
 .mozconfig.mk
 .mozconfig.out
