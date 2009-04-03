@@ -165,7 +165,6 @@ endif # MOZ_BUILD_PROJECTS
 CONFIGURES := $(TOPSRCDIR)/configure
 CONFIGURES += $(TOPSRCDIR)/mozilla/configure
 CONFIGURES += $(TOPSRCDIR)/mozilla/js/src/configure
-CONFIGURES += $(TOPSRCDIR)/mozilla/nsprpub/configure
 
 #######################################################################
 # Rules
@@ -264,6 +263,7 @@ CONFIG_STATUS_DEPS := \
 	$(TOPSRCDIR)/instantbird/config/version.txt \
 	$(TOPSRCDIR)/purple/config/version.txt \
 	$(TOPSRCDIR)/mozilla/allmakefiles.sh \
+	$(wildcard $(TOPSRCDIR)/mozilla/nsprpub/configure) \
 	$(wildcard $(TOPSRCDIR)/mozilla/config/milestone.txt) \
 	$(wildcard $(addsuffix confvars.sh,$(wildcard $(TOPSRCDIR)/*/))) \
 	$(NULL)
