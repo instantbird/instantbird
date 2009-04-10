@@ -46,7 +46,8 @@
 interface purpleIMessage: nsISupports {
   readonly attribute AUTF8String who;
   readonly attribute AUTF8String alias;
-  readonly attribute AUTF8String message;
+  readonly attribute AUTF8String originalMessage;
+           attribute AUTF8String message;
   readonly attribute AUTF8String time;
   readonly attribute purpleIConversation conversation;
 
