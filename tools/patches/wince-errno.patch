@@ -1,0 +1,25 @@
+diff --git a/build/wince/shunt/include/mozce_shunt.h b/build/wince/shunt/include/mozce_shunt.h
+--- a/build/wince/shunt/include/mozce_shunt.h
++++ b/build/wince/shunt/include/mozce_shunt.h
+@@ -105,17 +105,21 @@ _wcsndup(const wchar_t *, unsigned int);
+ #define SHGetPathFromIDListW    SHGetPathFromIDList
+ #define FONTENUMPROCW           FONTENUMPROC
+ 
+ #ifdef __cplusplus
+ extern "C" {
+ #endif
+ 
+ /* errno and family */
++#ifdef MOZCE_SHUNT_EXPORTS
+ extern int errno;
++#else
++ __declspec(dllimport) extern int errno;
++#endif
+ char* strerror(int);
+ 
+ /* abort */
+ void abort(void);
+   
+ /* Environment stuff */
+ char* getenv(const char* inName);
+ int putenv(const char *a);
