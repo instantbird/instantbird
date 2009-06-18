@@ -1,15 +1,18 @@
 #!/usr/bin/python
 
-VENKMAN_CO_TAG = 'HEAD'
-VENKMAN_DIRS = ('extensions/venkman',)
-
 DEFAULT_INSTANTBIRD_REV = "default"
+
 # URL of the default hg repository to clone for Mozilla.
 DEFAULT_MOZILLA_REPO = 'http://hg.mozilla.org/mozilla-central/'
 DEFAULT_MOZILLA_REV = "tip"
+
 # URL of the default hg repository to clone for inspector.
 DEFAULT_INSPECTOR_REPO = 'http://hg.mozilla.org/dom-inspector/'
 DEFAULT_INSPECTOR_REV = "tip"
+
+# URL of the default hg repository to clone for Venkman.
+DEFAULT_VENKMAN_REPO = 'http://hg.mozilla.org/venkman/'
+DEFAULT_VENKMAN_REV = "default"
 
 import os
 import sys
@@ -37,6 +40,24 @@ def check_call_noisy(cmd, *args, **kwargs):
     print "Executing command:", cmd
     check_call(cmd, *args, **kwargs)
 
+def backup_cvs_venkman():
+    """Backup (obsolete) Cvs checkout of Venkman.
+    """
+
+    venkmanpath = os.path.join(topsrcdir, 'mozilla', 'extensions', 'venkman')
+    # Do nothing if there is no Venkman cvs directory.
+    if not os.path.exists(os.path.join(venkmanpath, 'CVS')):
+        return
+
+    venkmancvspath = venkmanpath + '-cvs'
+    print "Moving venkman to venkman-cvs..."
+    try:
+        os.rename(venkmanpath, venkmancvspath)
+    except:
+        # Print the exception without its traceback.
+        sys.excepthook(sys.exc_info()[0], sys.exc_info()[1], None)
+        sys.exit("Error: Venkman directory renaming failed!")
+
 def do_hg_pull(dir, repository, hg, rev):
     fulldir = os.path.join(topsrcdir, dir)
     # clone if the dir doesn't exist, pull if it does
@@ -59,19 +80,6 @@ def do_hg_pull(dir, repository, hg, rev):
     check_call_noisy(cmd)
     check_call([hg, 'parent', '-R', fulldir,
                 '--template=Updated to revision {node}.\n'])
-
-def do_cvs_checkout(modules, tag, cvsroot, cvs, checkoutdir):
-    """Check out a CVS directory into the mozilla/ subdirectory.
-    modules is a list of directories to check out, e.g. ['extensions/irc']
-    """
-    for module in modules:
-        (parent, leaf) = os.path.split(module)
-        print "CVS checkout begin: " + datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
-        check_call_noisy([cvs, '-d', cvsroot, '-q',
-                          'checkout', '-P', '-r', tag, '-d', leaf,
-                          'mozilla/%s' % module],
-                         cwd=os.path.join(topsrcdir, checkoutdir, parent))
-        print "CVS checkout end: " + datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
 
 o = OptionParser(usage="client.py [options] checkout")
 o.add_option("-m", "--instantbird-repo", dest="instantbird_repo",
@@ -105,17 +113,18 @@ o.add_option("--inspector-rev", dest="inspector_rev",
              default=DEFAULT_INSPECTOR_REV,
              help="Revision of DOM inspector repository to update to. Default: \"" + DEFAULT_INSPECTOR_REV + "\"")
 
+o.add_option("--venkman-repo", dest = "venkman_repo",
+             default = None,
+             help = "URL of Venkman repository to pull from (default: use hg default in mozilla/extensions/venkman/.hg/hgrc; or if that file doesn't exist, use \"" + DEFAULT_VENKMAN_REPO + "\".)")
 o.add_option("--skip-venkman", dest="skip_venkman",
              action="store_true", default=False,
              help="Skip pulling the Venkman repository.")
+o.add_option("--venkman-rev", dest = "venkman_rev",
+             default = DEFAULT_VENKMAN_REV,
+             help = "Revision of Venkman repository to update to. Default: \"" + DEFAULT_VENKMAN_REV + "\"")
 
 o.add_option("--hg", dest="hg", default=os.environ.get('HG', 'hg'),
              help="The location of the hg binary")
-o.add_option("--cvs", dest="cvs", default=os.environ.get('CVS', 'cvs'),
-             help="The location of the cvs binary")
-o.add_option("--cvsroot", dest="cvsroot",
-             default=os.environ.get('CVSROOT', ':pserver:anonymous@cvs-mirror.mozilla.org:/cvsroot'),
-             help="The CVSROOT (default: :pserver:anonymous@cvs-mirror.mozilla.org:/cvsroot")
 o.add_option("-v", "--verbose", dest="verbose",
              action="store_true", default=False,
              help="Enable verbose output on hg updates")
@@ -123,6 +132,7 @@ o.add_option("-C", "--clean", dest="clean",
              action="store_true", default=False,
              help="Override local modifications when upgrading")
 
+backup_cvs_venkman()
 
 def fixup_repo_options(options):
     """ Check options.instantbird_repo and options.mozilla_repo values;
@@ -151,6 +161,11 @@ def fixup_repo_options(options):
             and not os.path.exists(os.path.join(topsrcdir, 'mozilla', 'extensions', 'inspector'))):
         options.inspector_repo = DEFAULT_INSPECTOR_REPO
 
+    # Handle special case: initial checkout of Venkman.
+    if (options.venkman_repo is None
+            and not os.path.exists(os.path.join(topsrcdir, 'mozilla', 'extensions', 'venkman'))):
+        options.venkman_repo = DEFAULT_VENKMAN_REPO
+
 try:
     (options, (action,)) = o.parse_args()
 except ValueError:
@@ -167,15 +182,21 @@ if action in ('checkout', 'co'):
         do_hg_pull('mozilla', options.mozilla_repo, options.hg, options.mozilla_rev)
         call("cat tools/patches/*.patch | patch -N -p1 -d mozilla/", shell=True)
 
+    # Check whether destination directory exists for these extensions.
+    if (not options.skip_inspector or not options.skip_venkman) and \
+       not os.path.exists(os.path.join(topsrcdir, 'mozilla', 'extensions')):
+        # Don't create the directory: Mozilla repository should provide it...
+        print >>sys.stderr, "Warning: mozilla/extensions directory does not exist; DOM Inspector and/or Venkman could not be checked out."
+        # Abort checking out dependent extensions.
+        options.skip_inspector = \
+        options.skip_venkman = \
+            True
+
     if not options.skip_inspector:
         do_hg_pull(os.path.join('mozilla', 'extensions', 'inspector'), options.inspector_repo, options.hg, options.inspector_rev)
 
     if not options.skip_venkman:
-        if os.path.exists(os.path.join(topsrcdir, 'mozilla', 'extensions')):
-          do_cvs_checkout(VENKMAN_DIRS, VENKMAN_CO_TAG, options.cvsroot, options.cvs, 'mozilla')
-        else:
-          print >>sys.stderr, "Warning: mozilla/extensions does not exist, Venkman could not be checked out."
-          pass
+        do_hg_pull(os.path.join('mozilla', 'extensions', 'venkman'), options.venkman_repo, options.hg, options.venkman_rev)
 
 else:
     o.print_help()
