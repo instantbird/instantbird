@@ -180,7 +180,7 @@ if action in ('checkout', 'co'):
 
     if not options.skip_mozilla:
         do_hg_pull('mozilla', options.mozilla_repo, options.hg, options.mozilla_rev)
-        call("cat tools/patches/*.patch | patch -N -p1 -d mozilla/", shell=True)
+        call("bash tools/patches/apply-patches.sh", shell=True)
 
     # Check whether destination directory exists for these extensions.
     if (not options.skip_inspector or not options.skip_venkman) and \
