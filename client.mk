@@ -169,8 +169,10 @@ CONFIGURES += $(TOPSRCDIR)/mozilla/js/src/configure
 #######################################################################
 # Rules
 
-# The default rule is build
-build::
+all:: checkout build
+
+checkout:
+	python client.py checkout
 
 # Print out any options loaded from mozconfig.
 all build clean depend distclean export libs install realclean::
