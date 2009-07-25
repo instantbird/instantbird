@@ -145,7 +145,7 @@ diff -r 7dd5b9ceebc5 tools/update-packaging/make_updates.sh
 +    ssh_call='echo "Executing the remote command for each mar"'
 +    for upMar in `ls "$1"/*.mar`; do
 +	upMar=`basename "$upMar"`
-+	ssh_call="$ssh_call && "`echo "$SSH_UPLOAD_COMMAND" | sed s@'$UPMAR'@"$upMar"@`
++	ssh_call="$ssh_call && "`echo "$SSH_UPLOAD_COMMAND" | sed s@'$UPMAR'@"$upMar"@g`
 +    done
 +
 +    ssh "$SSH_USERNAME"@"$SSH_SERVER" bash -c "$ssh_call"
