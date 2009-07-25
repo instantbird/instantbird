@@ -1,7 +1,7 @@
 diff --git a/build/package/wince/make_wince_cab.py b/build/package/wince/make_wince_cab.py
 --- a/build/package/wince/make_wince_cab.py
 +++ b/build/package/wince/make_wince_cab.py
-@@ -196,17 +196,17 @@ def output_inf_file_header(f, program_na
+@@ -202,17 +202,17 @@ def output_inf_file_header(f, program_na
      f.write("""; Duplicated Filenames ==> One of the two files
  ;   needs renaming before packaging up the CAB
  ;
@@ -20,28 +20,3 @@ diff --git a/build/package/wince/make_wince_cab.py b/build/package/wince/make_wi
      f.write("InstallDir  = %CE1%\\%AppName%       ; Program Files\Fennec\n\n")
  
  
-@@ -296,22 +296,22 @@ def output_inf_file(program_name, app_na
-     output_directory_sections(f, dirs)
-     output_registry_section(f)
-     output_shortcuts_section(f, app_name)
-     f.close()
- 
- 
- 
- def make_cab_file(cabwiz_path, program_name, cab_final_name):
--    make_cab_command = "\"%s\" %s.inf /compress" % (cabwiz_path, program_name)
-+    make_cab_command = "\"%s\" %s.inf" % (cabwiz_path, program_name)
-     print "INFORMATION: Executing command to make %s CAB file (only works on BASH)" % program_name
-     print "    [%s]" % make_cab_command
-     sys.stdout.flush()
- 
--    success = call([cabwiz_path, "%s.inf" % program_name, "/compress"],
-+    success = call([cabwiz_path, "%s.inf" % program_name],
-                    stdout=open("NUL:","w"), stderr=STDOUT)
- 
-     if not os.path.isfile("%s.CAB" % program_name):
-         print """***************************************************************************
- ERROR: CAB FILE NOT CREATED.
-        You can try running the command by hand:
-           %s" % make_cab_comman
-  ---- 
