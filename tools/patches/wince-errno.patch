@@ -23,3 +23,47 @@ diff --git a/build/wince/shunt/include/mozce_shunt.h b/build/wince/shunt/include
  /* Environment stuff */
  char* getenv(const char* inName);
  int putenv(const char *a);
+diff --git a/modules/zlib/src/zutil.c b/modules/zlib/src/zutil.c
+--- a/modules/zlib/src/zutil.c
++++ b/modules/zlib/src/zutil.c
+@@ -131,17 +131,17 @@ void z_error (m)
+  * uncompress()
+  */
+ const char * ZEXPORT zError(err)
+     int err;
+ {
+     return ERR_MSG(err);
+ }
+ 
+-#if defined(_WIN32_WCE)
++#if 0
+     /* The Microsoft C Run-Time Library for Windows CE doesn't have
+      * errno.  We define it as a global variable to simplify porting.
+      * Its value is always 0 and should not be used.
+      */
+     int errno = 0;
+ #endif
+ 
+ #ifndef HAVE_MEMCPY
+diff --git a/security/nss/cmd/zlib/zutil.c b/security/nss/cmd/zlib/zutil.c
+--- a/security/nss/cmd/zlib/zutil.c
++++ b/security/nss/cmd/zlib/zutil.c
+@@ -131,17 +131,17 @@ void z_error (m)
+  * uncompress()
+  */
+ const char * ZEXPORT zError(err)
+     int err;
+ {
+     return ERR_MSG(err);
+ }
+ 
+-#if defined(_WIN32_WCE)
++#if 0
+     /* The Microsoft C Run-Time Library for Windows CE doesn't have
+      * errno.  We define it as a global variable to simplify porting.
+      * Its value is always 0 and should not be used.
+      */
+     int errno = 0;
+ #endif
+ 
+ #ifndef HAVE_MEMCPY
