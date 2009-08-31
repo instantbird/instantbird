@@ -37,7 +37,7 @@
 
 #include "nsISupports.idl"
 
-/* 
+/*
  * This interface provides access to the content of a
  * PurpleNotifyUserInfoEntry structure.
  */

@@ -35,6 +35,6 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-richlistitem[proxy] { 
+richlistitem[proxy] {
   -moz-binding: url("chrome://instantbird/content/proxy.xml#proxy");
 }
