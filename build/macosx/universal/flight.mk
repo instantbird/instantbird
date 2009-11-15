@@ -93,6 +93,8 @@ postflight_all:
 	ln -s $(DIST_UNI) $(DIST_X86)/universal
 	rm -rf $(DIST_UNI)/$(MOZ_PKG_APPNAME)/$(APPNAME)
 	$(TOPSRCDIR)/mozilla/build/macosx/universal/unify \
+	  --unify-with-sort "\.manifest$$" \
+	  --unify-with-sort "components\.list$$" \
 	  $(DIST_PPC)/$(MOZ_PKG_APPNAME)/$(APPNAME) \
 	  $(DIST_X86)/$(MOZ_PKG_APPNAME)/$(APPNAME) \
 	  $(DIST_UNI)/$(MOZ_PKG_APPNAME)/$(APPNAME)
