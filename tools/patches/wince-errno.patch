@@ -1,7 +1,7 @@
 diff --git a/build/wince/shunt/include/mozce_shunt.h b/build/wince/shunt/include/mozce_shunt.h
 --- a/build/wince/shunt/include/mozce_shunt.h
 +++ b/build/wince/shunt/include/mozce_shunt.h
-@@ -105,17 +105,21 @@ _wcsndup(const wchar_t *, unsigned int);
+@@ -149,17 +149,21 @@ _wcsndup(const wchar_t *, unsigned int);
  #define SHGetPathFromIDListW    SHGetPathFromIDList
  #define FONTENUMPROCW           FONTENUMPROC
  

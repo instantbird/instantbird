@@ -1,7 +1,7 @@
 diff --git a/build/package/wince/make_wince_cab.py b/build/package/wince/make_wince_cab.py
 --- a/build/package/wince/make_wince_cab.py
 +++ b/build/package/wince/make_wince_cab.py
-@@ -202,17 +202,17 @@ def output_inf_file_header(f, program_na
+@@ -203,17 +203,17 @@ def output_inf_file_header(f, program_na
      f.write("""; Duplicated Filenames ==> One of the two files
  ;   needs renaming before packaging up the CAB
  ;

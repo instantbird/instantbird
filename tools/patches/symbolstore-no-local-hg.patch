@@ -1,7 +1,12 @@
-diff -r 5adc62494942 toolkit/crashreporter/tools/symbolstore.py
---- a/toolkit/crashreporter/tools/symbolstore.py	Wed Aug 27 21:40:25 2008 +0200
-+++ b/toolkit/crashreporter/tools/symbolstore.py	Thu Aug 28 16:26:25 2008 +0200
-@@ -278,6 +278,10 @@
+diff --git a/toolkit/crashreporter/tools/symbolstore.py b/toolkit/crashreporter/tools/symbolstore.py
+--- a/toolkit/crashreporter/tools/symbolstore.py
++++ b/toolkit/crashreporter/tools/symbolstore.py
+@@ -274,16 +274,20 @@ class HGFileInfo(VCSFileInfo):
+         # we should only have to collect this info once per-repo
+         if not srcdir in HGRepoInfo.repos:
+             rev = os.popen('hg identify -i "%s"' % srcdir, "r").readlines()[0].rstrip()
+             # could have a + if there are uncommitted local changes
+             if rev.endswith('+'):
                  rev = rev[:-1]
  
              path = os.popen('hg -R "%s" showconfig paths.default' % srcdir, "r").readlines()[0].rstrip()
@@ -12,3 +17,8 @@ diff -r 5adc62494942 toolkit/crashreporter/tools/symbolstore.py
              if path == '':
                  hg_root = os.environ.get("SRCSRV_ROOT")
                  if hg_root:
+                     path = hg_root
+                 else:
+                     print >> sys.stderr, "Failed to get HG Repo for %s" % srcdir
+             if path != '': # not there?
+                 match = rootRegex.match(path)
