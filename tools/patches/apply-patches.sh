@@ -31,10 +31,15 @@ do
       echo $i already applied
     else
       # either way, it doesn't apply. Display a warning showing the problem
-      echo warning: $i failed to apply >&2
+      echo error: $i failed to apply >&2
       echo --------
       patch --dry-run -N -p1 -d mozilla/ <$i
       echo --------
+      error=1
     fi
   fi
 done
+
+if [ $error ]; then
+  exit 1
+fi
