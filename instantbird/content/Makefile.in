@@ -45,18 +45,6 @@ ifdef WINCE
 DEFINES += -DWINCE
 endif
 
-EXTRA_JS_MODULES = \
-	imContentSink.jsm \
-	imSmileys.jsm \
-	$(NULL)
-
-EXTRA_PP_JS_MODULES = \
-	imThemes.jsm \
-	imWindows.jsm \
-	$(NULL)
-
-EXTRA_COMPONENTS = smileProtocolHandler.js
-
 include $(topsrcdir)/config/rules.mk
 
 # defines used for preference window files
