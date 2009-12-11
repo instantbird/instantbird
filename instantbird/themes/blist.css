@@ -75,15 +75,15 @@ group label,
   margin: 0 2px;
 }
 
-buddy[away="true"] .statusIcon {
+buddy[status="away"] .statusIcon {
   background-image: url('chrome://instantbird/skin/away.png');
 }
 
-buddy[idle="true"] .statusIcon {
+buddy[status="idle"] .statusIcon {
   background-image: url('chrome://instantbird/skin/idle.png');
 }
 
-buddy[mobile="true"] .statusIcon {
+buddy[status="mobile"] .statusIcon {
   background-image: url('chrome://instantbird/skin/mobile.png');
 }
 
@@ -91,7 +91,7 @@ buddy[idle="true"] .buddyDisplayName {
   color: GrayText;
 }
 
-buddy[offline="true"] .statusIcon {
+buddy[status="offline"] .statusIcon {
   background-image: url('chrome://instantbird/skin/offline.png');
 }
 
@@ -142,15 +142,6 @@ group[closed] .twisty {
 }
 %endif
 %endif
-
-.tooltip-header {
-  font-weight: bold;
-  font-size: 14pt;
-}
-
-tooltip label {
-  margin-top: 0;
-}
 
 #updatesMenuItem[loading="true"] {
   list-style-image: url("chrome://global/skin/icons/loading_16.png");
