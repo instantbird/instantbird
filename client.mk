@@ -134,6 +134,10 @@ MOZCONFIG_LOADER := mozilla/build/autoconf/mozconfig2client-mk
 MOZCONFIG_FINDER := mozilla/build/autoconf/mozconfig-find
 MOZCONFIG_MODULES := mozilla/build/unix/uniq.pl
 
+ifeq (,$(wildcard $(MOZCONFIG_LOADER)))
+$(error Please run "python client.py checkout" to checkout the Mozilla source code)
+endif
+
 run_for_side_effects := \
   $(shell $(TOPSRCDIR)/$(MOZCONFIG_LOADER) $(TOPSRCDIR) $(TOPSRCDIR)/.mozconfig.mk > $(TOPSRCDIR)/.mozconfig.out)
 
