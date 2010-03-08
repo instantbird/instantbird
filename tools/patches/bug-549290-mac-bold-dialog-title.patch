@@ -1,0 +1,38 @@
+diff --git a/toolkit/content/commonDialog.xul b/toolkit/content/commonDialog.xul
+--- a/toolkit/content/commonDialog.xul
++++ b/toolkit/content/commonDialog.xul
+@@ -52,17 +52,17 @@
+     <rows>
+       <row>
+         <hbox align="start">
+           <image id="info.icon" class="spaced"/>
+         </hbox>
+         <vbox id="infoContainer">
+ #ifdef XP_MACOSX
+           <!-- Dialog title is inside dialog for OS X -->
+-          <description id="info.title" class="dialogTitle"/>
++          <description id="info.title"/>
+ #endif
+           <description id="info.header" class="header"/>
+           <description id="info.body" context="contentAreaContextMenu" noinitialfocus="true"/>
+         </vbox>
+       </row>
+       <row id="loginContainer" hidden="true" align="center">
+         <label id="loginLabel" value="&editfield0.label;" control="loginTextbox"/>
+         <textbox id="loginTextbox"/>
+diff --git a/toolkit/themes/pinstripe/global/commonDialog.css b/toolkit/themes/pinstripe/global/commonDialog.css
+--- a/toolkit/themes/pinstripe/global/commonDialog.css
++++ b/toolkit/themes/pinstripe/global/commonDialog.css
+@@ -21,11 +21,11 @@
+ #info\.title,
+ #info\.header,
+ #info\.body {
+   font: menu;
+   line-height: 16px;
+   margin-bottom: 6px;
+ }
+ 
+-.dialogTitle {
++#info\.title {
+   font-weight: bold;
+ }
