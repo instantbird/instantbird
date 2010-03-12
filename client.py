@@ -4,7 +4,7 @@ DEFAULT_INSTANTBIRD_REV = "0.2b2"
 
 # URL of the default hg repository to clone for Mozilla.
 DEFAULT_MOZILLA_REPO = 'http://hg.mozilla.org/releases/mozilla-1.9.2/'
-DEFAULT_MOZILLA_REV = "f27b664528b4"
+DEFAULT_MOZILLA_REV = "GECKO1921_20100126_RELBRANCH"
 
 # URL of the default hg repository to clone for inspector.
 DEFAULT_INSPECTOR_REPO = 'http://hg.mozilla.org/dom-inspector/'
