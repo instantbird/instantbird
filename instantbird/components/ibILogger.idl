@@ -12,11 +12,11 @@
  * License.
  *
  * The Original Code is the Instantbird messenging client, released
- * 2009.
+ * 2010.
  *
  * The Initial Developer of the Original Code is
  * Florian QUEZE <florian@instantbird.org>.
- * Portions created by the Initial Developer are Copyright (C) 2009
+ * Portions created by the Initial Developer are Copyright (C) 2010
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
@@ -35,40 +35,22 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#ifndef PURPLE_LOG_H_
-# define PURPLE_LOG_H_
+#include "nsISupports.idl"
+#include "nsISimpleEnumerator.idl"
 
-#include "purpleILog.h"
-#include <nsIClassInfo.h>
+interface purpleIAccount;
+interface purpleIAccountBuddy;
+interface purpleIConversation;
 
-#pragma GCC visibility push(default)
-#include <libpurple/log.h>
-#pragma GCC visibility pop
-
-// bb4e8cfa-fe9d-4784-af4c-309ac5b468f4
-#define PURPLE_LOG_CID \
-{ 0xbb4e8cfa, 0xfe9d, 0x4784, \
-  { 0xaf, 0x4c, 0x30, 0x9a, 0xc5, 0xb4, 0x68, 0xf4 } \
- }
-
-#define PURPLE_LOG_CONTRACTID     "@instantbird.org/purple/log;1"
-
-class purpleLog : public purpleILog,
-                  public nsIClassInfo
-{
-public:
-  NS_DECL_ISUPPORTS
-  NS_DECL_NSICLASSINFO
-  NS_DECL_PURPLEILOG
-
-  purpleLog();
-  void Init(PurpleLog *aLog);
-
-private:
-  ~purpleLog();
-
-protected:
-  PurpleLog *mLog;
+[scriptable, uuid(164ff6c3-ca64-4880-b8f3-67eb1817955f)]
+interface ibILog: nsISupports {
+  readonly attribute AUTF8String path;
+  readonly attribute PRTime time;
 };
 
-#endif /* !PURPLE_LOG_H_ */
+[scriptable, uuid(ab38c01c-2245-4279-9437-1d6bcc69d556)]
+interface ibILogger: nsISupports {
+  nsISimpleEnumerator getLogsForBuddy(in purpleIAccountBuddy aBuddy);
+  nsISimpleEnumerator getLogsForConversation(in purpleIConversation aConversation);
+  nsISimpleEnumerator getSystemLogsForAccount(in purpleIAccount aAccount);
+};
