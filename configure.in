@@ -6816,6 +6816,12 @@ fi
 
 LIBS="$_SAVE_LIBS"
 
+MOZ_ARG_ENABLE_BOOL(purple-plugins,
+[  --enable-purple-plugins      Enable usage of system libpurple plugins],
+    PURPLE_PLUGINS=1,
+    PURPLE_PLUGINS= )
+AC_SUBST(PURPLE_PLUGINS)
+
 dnl ========================================================
 dnl =
 dnl = Standalone module options
