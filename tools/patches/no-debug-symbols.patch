@@ -1,12 +1,12 @@
 diff --git a/Makefile.in b/Makefile.in
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -137,41 +137,41 @@ ifdef MOZILLA_OFFICIAL
- 	/bin/find $(DIST) -name "*.dll" -a -not -name "msvc*" > rebase.lst
- 	rebase -b 60000000 -R . -G rebase.lst
- 	rm rebase.lst
- endif
- endif # WINNT
+@@ -128,41 +128,41 @@ endif
+ include $(topsrcdir)/config/rules.mk
+ 
+ distclean::
+ 	cat unallmakefiles | $(XARGS) rm -f
+ 	rm -f unallmakefiles $(DIST_GARBAGE)
  
  ifeq ($(OS_ARCH),WINNT)
  # we want to copy PDB files on Windows
