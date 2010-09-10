@@ -1,7 +1,7 @@
 diff --git a/layout/base/nsStyleConsts.h b/layout/base/nsStyleConsts.h
 --- a/layout/base/nsStyleConsts.h
 +++ b/layout/base/nsStyleConsts.h
-@@ -232,16 +232,18 @@
+@@ -234,16 +234,18 @@ static inline mozilla::css::Side operato
  #define NS_STYLE_COLOR_INVERT             2
  #endif
  
@@ -23,10 +23,10 @@ diff --git a/layout/base/nsStyleConsts.h b/layout/base/nsStyleConsts.h
 diff --git a/layout/style/nsCSSKeywordList.h b/layout/style/nsCSSKeywordList.h
 --- a/layout/style/nsCSSKeywordList.h
 +++ b/layout/style/nsCSSKeywordList.h
-@@ -69,27 +69,29 @@
+@@ -68,27 +68,29 @@
+ // MACRO_NAME=CSS_KEY
  
  CSS_KEY(-moz-activehyperlinktext, _moz_activehyperlinktext)
- CSS_KEY(-moz-alias, _moz_alias)
  CSS_KEY(-moz-all, _moz_all)
  CSS_KEY(-moz-alt-content, _moz_alt_content)
  CSS_KEY(-moz-anchor-decoration, _moz_anchor_decoration)
@@ -49,14 +49,14 @@ diff --git a/layout/style/nsCSSKeywordList.h b/layout/style/nsCSSKeywordList.h
  CSS_KEY(-moz-comboboxtext, _moz_comboboxtext)
  CSS_KEY(-moz-compact, _moz_compact)  // Disabled because not supported.
  CSS_KEY(-moz-block-height, _moz_block_height)
- CSS_KEY(-moz-context-menu, _moz_context_menu)
- CSS_KEY(-moz-copy, _moz_copy)
  CSS_KEY(-moz-deck, _moz_deck)
  CSS_KEY(-moz-desktop, _moz_desktop)
+ CSS_KEY(-moz-devanagari, _moz_devanagari)
+ CSS_KEY(-moz-dialog, _moz_dialog)
 diff --git a/layout/style/nsCSSProps.cpp b/layout/style/nsCSSProps.cpp
 --- a/layout/style/nsCSSProps.cpp
 +++ b/layout/style/nsCSSProps.cpp
-@@ -631,21 +631,23 @@ const PRInt32 nsCSSProps::kColorKTable[]
+@@ -665,21 +665,23 @@ const PRInt32 nsCSSProps::kColorKTable[]
    eCSSKeyword_threedface, nsILookAndFeel::eColor_threedface,
    eCSSKeyword_threedhighlight, nsILookAndFeel::eColor_threedhighlight,
    eCSSKeyword_threedlightshadow, nsILookAndFeel::eColor_threedlightshadow,
@@ -83,11 +83,11 @@ diff --git a/layout/style/nsCSSProps.cpp b/layout/style/nsCSSProps.cpp
 diff --git a/layout/style/nsRuleNode.cpp b/layout/style/nsRuleNode.cpp
 --- a/layout/style/nsRuleNode.cpp
 +++ b/layout/style/nsRuleNode.cpp
-@@ -461,16 +461,22 @@ static PRBool SetColor(const nsCSSValue&
+@@ -798,16 +798,22 @@ static PRBool SetColor(const nsCSSValue&
            aResult = aPresContext->DefaultActiveLinkColor();
            break;
          case NS_COLOR_CURRENTCOLOR:
-           // The data computed from this can't be shared in the rule tree 
+           // The data computed from this can't be shared in the rule tree
            // because they could be used on a node with a different color
            aCanStoreInRuleTree = PR_FALSE;
            aResult = aContext->GetStyleColor()->mColor;
