@@ -256,7 +256,7 @@ diff --git a/toolkit/mozapps/extensions/content/extensions.js b/toolkit/mozapps/
          Services.obs.notifyObservers(cancelQuit, "quit-application-requested",
                                       "restart");
          if (cancelQuit.data)
-@@ -838,17 +759,17 @@ var gViewController = {
+@@ -830,17 +751,17 @@ var gViewController = {
          return hasPermission(aAddon, "uninstall");
        },
        doCommand: function(aAddon) {
@@ -275,7 +275,7 @@ diff --git a/toolkit/mozapps/extensions/content/extensions.js b/toolkit/mozapps/
            return "";
          if (aAddon.operationsRequiringRestart & AddonManager.OP_NEEDS_RESTART_UNINSTALL)
            return gStrings.ext.GetStringFromName("uninstallAddonRestartRequiredTooltip");
-@@ -1187,41 +1108,37 @@ var gCategories = {
+@@ -1179,41 +1100,37 @@ var gCategories = {
      // Force persist of hidden state. See bug 15232
      var self = this;
      this._maybeHidden.forEach(function(aId) {
@@ -322,7 +322,7 @@ diff --git a/toolkit/mozapps/extensions/content/extensions.js b/toolkit/mozapps/
    get: function(aId) {
      var items = document.getElementsByAttribute("value", aId);
      if (items.length)
-@@ -2086,17 +2003,17 @@ var gDetailView = {
+@@ -2078,17 +1995,17 @@ var gDetailView = {
      this.updateState();
    },
  
@@ -344,14 +344,14 @@ diff --git a/toolkit/mozapps/extensions/content/extensions.js b/toolkit/mozapps/
 diff --git a/toolkit/mozapps/extensions/content/extensions.xul b/toolkit/mozapps/extensions/content/extensions.xul
 --- a/toolkit/mozapps/extensions/content/extensions.xul
 +++ b/toolkit/mozapps/extensions/content/extensions.xul
-@@ -109,18 +109,16 @@
+@@ -108,18 +108,16 @@
+   <commandset id="globalCommandSet"
                oncommand="gViewController.doCommand(event.target.id);">
      <command id="cmd_findAllUpdates"/>
      <command id="cmd_restartApp"/>
      <command id="cmd_goToDiscoverPane"/>
      <command id="cmd_goToRecentUpdates"/>
      <command id="cmd_goToAvailableUpdates"/>
-     <command id="cmd_toggleBackgroundUpdateCheck"/>
      <command id="cmd_installFromFile"/>
 -    <command id="cmd_back"/>
 -    <command id="cmd_forward"/>
@@ -363,7 +363,7 @@ diff --git a/toolkit/mozapps/extensions/content/extensions.xul b/toolkit/mozapps
  
    <!-- view commands - these act on the selected addon -->
    <commandset id="viewCommandSet"
-@@ -137,20 +135,16 @@
+@@ -136,20 +134,16 @@
      <command id="cmd_uninstallItem"/>
      <command id="cmd_cancelUninstallItem"/>
      <command id="cmd_cancelOperation"/>
