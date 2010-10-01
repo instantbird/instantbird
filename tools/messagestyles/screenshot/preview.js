@@ -60,13 +60,7 @@ Conversation.prototype = {
   account: {protocol: {name: "XMPP"}, name: "florian@instantbird.org/instantbird"},
   buddy: null,
   typingStage: Ci.purpleIConvIM.NO_TYPING,
-  topic: "Fake Conversation",
-
-  setBaseURI: function (aDoc, aURI) {
-    Components.classes["@instantbird.org/purple/convim;1"]
-              .createInstance(Ci.purpleIConversation)
-              .setBaseURI(aDoc, aURI);
-  }
+  topic: "Fake Conversation"
 };
 
 function Message(aTime, aWho, aMessage, aObject)
