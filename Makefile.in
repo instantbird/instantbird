@@ -82,6 +82,9 @@ reftest crashtest \
 xpcshell-tests \
 package-tests::
 	$(MAKE) -C mozilla $@
+else
+# OS X Universal builds will want to call this, so stub it out
+package-tests:
 endif
 
 # http://bugzilla.mozilla.org/show_bug.cgi?id=450485
