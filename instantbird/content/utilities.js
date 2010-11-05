@@ -37,6 +37,7 @@
 
 const Cc = Components.classes;
 const Ci = Components.interfaces;
+Components.utils.import("resource:///modules/imServices.jsm");
 
 function getIter(aEnumerator)
 {
@@ -44,48 +45,16 @@ function getIter(aEnumerator)
     yield aEnumerator.getNext();
 }
 
-__defineGetter__("gPrefService", function() {
-  delete this.gPrefService;
-  return this.gPrefService = Cc["@mozilla.org/preferences-service;1"].
-                             getService(Ci.nsIPrefBranch2);
-});
-
-__defineGetter__("gExtProtoService", function() {
-  delete this.gExtProtoService;
-  return this.gExtProtoService =
-    Cc["@mozilla.org/uriloader/external-protocol-service;1"].
-    getService(Ci.nsIExternalProtocolService);
-});
-
-function getObserverService()
-{
-  return Cc["@mozilla.org/observer-service;1"].getService(Ci.nsIObserverService);
-}
-
 function addObservers(aObserver, aTopics)
 {
-  var observerService = getObserverService();
+  let observerService = Services.obs;
   for (let i = 0; i < aTopics.length; ++i)
     observerService.addObserver(aObserver, aTopics[i], false);
 }
 
 function removeObservers(aObserver, aTopics)
 {
-  var observerService = getObserverService();
+  let observerService = Services.obs;
   for (let i = 0; i < aTopics.length; ++i)
     observerService.removeObserver(aObserver, aTopics[i]);
-}
-
-function makeURI(aURL, aOriginCharset, aBaseURI)
-{
-  var ioService = Components.classes["@mozilla.org/network/io-service;1"]
-                            .getService(Ci.nsIIOService);
-  return ioService.newURI(aURL, aOriginCharset, aBaseURI);
-}
-
-function logMsg(aString)
-{
-  Components.classes["@mozilla.org/consoleservice;1"]
-                     .getService(Ci.nsIConsoleService)
-                     .logStringMessage(aString);
 }
