@@ -1,7 +1,7 @@
 diff --git a/js/src/ctypes/libffi/ltmain.sh b/js/src/ctypes/libffi/ltmain.sh
 --- a/js/src/ctypes/libffi/ltmain.sh
 +++ b/js/src/ctypes/libffi/ltmain.sh
-@@ -4469,16 +4469,21 @@ func_mode_link ()
+@@ -4469,16 +4469,26 @@ func_mode_link ()
  	no/*-*-irix* | /*-*-irix*)
  	  func_append compile_command " $arg"
  	  func_append finalize_command " $arg"
@@ -10,7 +10,12 @@ diff --git a/js/src/ctypes/libffi/ltmain.sh b/js/src/ctypes/libffi/ltmain.sh
  	continue
  	;;
  
-+      # avoid match on VS20xx linker switch
++  # Avoid matching MSVC linker option.
++      -LARGEADDRESSAWARE)
++        continue
++        ;;
++
++  # Avoid matching MSVC linker option.
 +      -LTCG)
 +        continue
 +        ;;
