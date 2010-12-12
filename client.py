@@ -145,6 +145,7 @@ def fixup_repo_options(options):
     """
 
     if (options.instantbird_repo is None
+        and not options.skip_instantbird
         and not os.path.exists(os.path.join(topsrcdir, '.hg'))):
         o.print_help()
         print
