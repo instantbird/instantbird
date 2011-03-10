@@ -35,7 +35,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-tooltip[status="away"] .statusIcon {
+tooltip:-moz-any([status="away"], [status="unavailable"]) .statusIcon {
   background-image: url('chrome://instantbird/skin/away.png');
 }
 
@@ -47,7 +47,7 @@ tooltip[status="mobile"] .statusIcon {
   background-image: url('chrome://instantbird/skin/mobile.png');
 }
 
-tooltip[status="offline"] .statusIcon {
+tooltip:-moz-any([status="offline"], [status="unknown"]) .statusIcon {
   background-image: url('chrome://instantbird/skin/offline.png');
 }
 
