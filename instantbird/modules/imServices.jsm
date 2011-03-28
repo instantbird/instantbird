@@ -49,6 +49,9 @@ XPCOMUtils.defineLazyServiceGetter(Services, "cmd",
 XPCOMUtils.defineLazyServiceGetter(Services, "contacts",
                                    "@instantbird.org/purple/contacts-service;1",
                                    "imIContactsService");
+XPCOMUtils.defineLazyServiceGetter(Services, "conversations",
+                                   "@instantbird.org/purple/conversations-service;1",
+                                   "imIConversationsService");
 XPCOMUtils.defineLazyServiceGetter(Services, "tags",
                                    "@instantbird.org/purple/tags-service;1",
                                    "imITagsService");
