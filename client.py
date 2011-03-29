@@ -3,7 +3,7 @@
 DEFAULT_INSTANTBIRD_REV = "default"
 
 # URL of the default hg repository to clone for Mozilla.
-DEFAULT_MOZILLA_REPO = 'http://hg.mozilla.org/mozilla-central/'
+DEFAULT_MOZILLA_REPO = 'http://hg.mozilla.org/releases/mozilla-2.0/'
 DEFAULT_MOZILLA_REV = "default"
 
 # URL of the default hg repository to clone for inspector.
