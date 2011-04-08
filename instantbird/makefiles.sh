@@ -48,6 +48,7 @@ instantbird/branding/release/Makefile
 instantbird/branding/release/locales/Makefile
 instantbird/content/Makefile
 instantbird/components/Makefile
+instantbird/components/mintrayr/Makefile
 instantbird/locales/Makefile
 instantbird/modules/Makefile
 instantbird/themes/Makefile
