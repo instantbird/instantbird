@@ -109,12 +109,6 @@ ifneq (en-US, $(AB_CD))
 endif
 endif
 
-ifneq (en-US,$(AB_CD))
-libs realchrome::
-	@echo "Comparing $(AB_CD) to en-US"
-	@$(PERL) $(MOZILLA_SRCDIR)/toolkit/locales/compare-locales.pl $(srcdir)/en-US/chrome $(LOCALE_SRCDIR)/chrome
-endif
-
 clobber-%:
 	$(RM) -rf $(DIST)/xpi-stage/locale-$*
 
