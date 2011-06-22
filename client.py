@@ -1,18 +1,18 @@
 #!/usr/bin/python
 
-DEFAULT_INSTANTBIRD_REV = "default"
+DEFAULT_INSTANTBIRD_REV = "1.0"
 
 # URL of the default hg repository to clone for Mozilla.
 DEFAULT_MOZILLA_REPO = 'http://hg.mozilla.org/releases/mozilla-2.0/'
-DEFAULT_MOZILLA_REV = "default"
+DEFAULT_MOZILLA_REV = "b4300fdb3f0e"
 
 # URL of the default hg repository to clone for inspector.
 DEFAULT_INSPECTOR_REPO = 'http://hg.mozilla.org/dom-inspector/'
-DEFAULT_INSPECTOR_REV = "default"
+DEFAULT_INSPECTOR_REV = "ee0847102756"
 
 # URL of the default hg repository to clone for Venkman.
 DEFAULT_VENKMAN_REPO = 'http://hg.mozilla.org/venkman/'
-DEFAULT_VENKMAN_REV = "default"
+DEFAULT_VENKMAN_REV = "46fa5b8cfc2f"
 
 import os
 import sys
