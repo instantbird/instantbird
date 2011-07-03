@@ -1,7 +1,7 @@
 diff --git a/security/manager/Makefile.in b/security/manager/Makefile.in
 --- a/security/manager/Makefile.in
 +++ b/security/manager/Makefile.in
-@@ -289,20 +289,18 @@ DEFAULT_GMAKE_FLAGS += \
+@@ -285,20 +285,18 @@ DEFAULT_GMAKE_FLAGS += \
  	OS_RELEASE="2.6" \
  	OS_LIBS= \
  	STANDARDS_CFLAGS="-std=gnu89" \

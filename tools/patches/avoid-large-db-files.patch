@@ -1,7 +1,7 @@
 diff --git a/netwerk/cookie/nsCookieService.cpp b/netwerk/cookie/nsCookieService.cpp
 --- a/netwerk/cookie/nsCookieService.cpp
 +++ b/netwerk/cookie/nsCookieService.cpp
-@@ -766,18 +766,18 @@ nsCookieService::TryInitDB(bool aRecreat
+@@ -760,18 +760,18 @@ nsCookieService::TryInitDB(bool aRecreat
    NS_ENSURE_SUCCESS(rv, RESULT_RETRY);
  
    // Set up our listeners.
@@ -22,10 +22,10 @@ diff --git a/netwerk/cookie/nsCookieService.cpp b/netwerk/cookie/nsCookieService
      rv = CreateTable();
      NS_ENSURE_SUCCESS(rv, RESULT_RETRY);
  
-diff --git a/toolkit/components/places/src/nsNavHistory.cpp b/toolkit/components/places/src/nsNavHistory.cpp
---- a/toolkit/components/places/src/nsNavHistory.cpp
-+++ b/toolkit/components/places/src/nsNavHistory.cpp
-@@ -760,18 +760,18 @@ nsNavHistory::InitDB()
+diff --git a/toolkit/components/places/nsNavHistory.cpp b/toolkit/components/places/nsNavHistory.cpp
+--- a/toolkit/components/places/nsNavHistory.cpp
++++ b/toolkit/components/places/nsNavHistory.cpp
+@@ -770,18 +770,18 @@ nsNavHistory::InitDB()
  
      // Set synchronous to FULL to ensure maximum data integrity, even in
      // case of crashes or unclean shutdowns.
