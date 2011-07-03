@@ -4491,7 +4491,6 @@ dnl ========================================================
 
 MOZ_ARG_HEADER(Application)
 
-BUILD_STATIC_LIBS=
 ENABLE_TESTS=1
 MOZ_BRANDING_DIRECTORY=
 MOZ_OFFICIAL_BRANDING=
@@ -4524,7 +4523,6 @@ MOZ_SAFE_BROWSING=
 MOZ_FASTSTART=
 MOZ_HELP_VIEWER=
 MOZ_SPELLCHECK=1
-MOZ_STATIC_MAIL_BUILD=
 MOZ_STORAGE=1
 MOZ_TIMELINE=
 MOZ_UI_LOCALE=en-US
@@ -6668,23 +6666,10 @@ dnl =
 dnl ========================================================
 MOZ_ARG_HEADER(Static build options)
 
-MOZ_ARG_ENABLE_BOOL(static,
-[  --enable-static         Enable building of internal static libs],
-    BUILD_STATIC_LIBS=1,
-    BUILD_STATIC_LIBS=)
-
 MOZ_ARG_ENABLE_BOOL(libxul,
 [  --enable-libxul         Enable building of libxul],
     MOZ_ENABLE_LIBXUL=1,
     MOZ_ENABLE_LIBXUL=)
-
-if test -n "$MOZ_STATIC_BUILD_UNSUPPORTED" -a -n "$BUILD_STATIC_LIBS"; then
-	AC_MSG_ERROR([--enable-static is not supported for building $MOZ_APP_NAME. You probably want --enable-libxul.])
-fi
-
-if test -n "$MOZ_ENABLE_LIBXUL" -a -n "$BUILD_STATIC_LIBS"; then
-	AC_MSG_ERROR([--enable-libxul is not compatible with --enable-static])
-fi
 
 if test -n "$MOZ_IPC" -a -z "$MOZ_ENABLE_LIBXUL"; then
     AC_MSG_ERROR([--enable-ipc requires --enable-libxul])
@@ -6694,38 +6679,8 @@ if test -n "$MOZ_ENABLE_LIBXUL"; then
     XPCOM_LIBS="$LIBXUL_LIBS"
     AC_DEFINE(MOZ_ENABLE_LIBXUL)
 else
-    if test -n "$BUILD_STATIC_LIBS"; then
-        AC_DEFINE(MOZ_STATIC_BUILD)
-    fi
     XPCOM_LIBS="$DYNAMIC_XPCOM_LIBS"
 fi
-
-dnl Disable static mail in debug builds, but not with libxul sdk.
-if test -n "$MOZ_DEBUG" -a -z "$LIBXUL_SDK"; then
-   MOZ_STATIC_MAIL_BUILD=
-fi
-
-MOZ_ARG_ENABLE_BOOL(static-mail,
-[  --enable-static-mail Enable static mail build support],
-    MOZ_STATIC_MAIL_BUILD=1,
-    MOZ_STATIC_MAIL_BUILD= )
-
-if test -z "$MOZ_STATIC_MAIL_BUILD" -a -n "$BUILD_STATIC_LIBS"; then
-    AC_MSG_ERROR([--disable-static-mail is not compatible with --enable-static])
-fi
-
-if test -n "$MOZ_STATIC_MAIL_BUILD"; then
-    AC_DEFINE(MOZ_STATIC_MAIL_BUILD)
-fi
-
-AC_SUBST(MOZ_STATIC_MAIL_BUILD)
-
-MOZ_ARG_ENABLE_BOOL(incomplete-external-linkage,
-[  --enable-incomplete-external-linkage Changes some comm-central code to be built with external linkage. Developer only option, incomplete broken builds will result - There are already existing bugs for this. ],
-    MOZ_INCOMPLETE_EXTERNAL_LINKAGE=1,
-    MOZ_INCOMPLETE_EXTERNAL_LINKAGE= )
-
-AC_SUBST(MOZ_INCOMPLETE_EXTERNAL_LINKAGE)
 
 dnl ========================================================
 dnl =
@@ -7022,7 +6977,6 @@ AC_SUBST(MOZ_HELP_VIEWER)
 AC_SUBST(MOZ_PROFILELOCKING)
 
 AC_SUBST(XPCOM_USE_LEA)
-AC_SUBST(BUILD_STATIC_LIBS)
 AC_SUBST(MOZ_ENABLE_LIBXUL)
 AC_SUBST(ENABLE_TESTS)
 AC_SUBST(IBMBIDI)
