@@ -88,7 +88,7 @@ o.add_option("-m", "--instantbird-repo", dest="instantbird_repo",
 
 o.add_option("-z", "--mozilla-repo", dest="mozilla_repo",
              default=None,
-             help="URL of Mozilla repository to pull from (default: use hg default in mozilla/.hg/hgrc; or if that file doesn't exist, use \"" + DEFAULT_MOZILLA_REPO + "\".)")
+             help="URL of Mozilla repository to pull from (default: use \"" + DEFAULT_MOZILLA_REPO + "\".)")
 o.add_option("--skip-instantbird", dest="skip_instantbird",
              action="store_true", default=False,
              help="Skip pulling the Instantbird repository.")
@@ -105,7 +105,7 @@ o.add_option("--mozilla-rev", dest="mozilla_rev",
 
 o.add_option("--inspector-repo", dest="inspector_repo",
              default=None,
-             help="URL of DOM inspector repository to pull from (default: use hg default in mozilla/extensions/inspector/.hg/hgrc; or if that file doesn't exist, use \"" + DEFAULT_INSPECTOR_REPO + "\".)")
+             help="URL of DOM inspector repository to pull from (default: use \"" + DEFAULT_INSPECTOR_REPO + "\".)")
 o.add_option("--skip-inspector", dest="skip_inspector",
              action="store_true", default=False,
              help="Skip pulling the DOM inspector repository.")
@@ -115,7 +115,7 @@ o.add_option("--inspector-rev", dest="inspector_rev",
 
 o.add_option("--venkman-repo", dest = "venkman_repo",
              default = None,
-             help = "URL of Venkman repository to pull from (default: use hg default in mozilla/extensions/venkman/.hg/hgrc; or if that file doesn't exist, use \"" + DEFAULT_VENKMAN_REPO + "\".)")
+             help = "URL of Venkman repository to pull from (default: use \"" + DEFAULT_VENKMAN_REPO + "\".)")
 o.add_option("--skip-venkman", dest="skip_venkman",
              action="store_true", default=False,
              help="Skip pulling the Venkman repository.")
@@ -153,18 +153,15 @@ def fixup_repo_options(options):
         sys.exit(2)
 
     # Handle special case: initial checkout of Mozilla.
-    if (options.mozilla_repo is None
-            and not os.path.exists(os.path.join(topsrcdir, 'mozilla'))):
+    if (options.mozilla_repo is None):
         options.mozilla_repo = DEFAULT_MOZILLA_REPO
 
     # Handle special case: initial checkout of inspector.
-    if (options.inspector_repo is None
-            and not os.path.exists(os.path.join(topsrcdir, 'mozilla', 'extensions', 'inspector'))):
+    if (options.inspector_repo is None):
         options.inspector_repo = DEFAULT_INSPECTOR_REPO
 
     # Handle special case: initial checkout of Venkman.
-    if (options.venkman_repo is None
-            and not os.path.exists(os.path.join(topsrcdir, 'mozilla', 'extensions', 'venkman'))):
+    if (options.venkman_repo is None):
         options.venkman_repo = DEFAULT_VENKMAN_REPO
 
 try:
