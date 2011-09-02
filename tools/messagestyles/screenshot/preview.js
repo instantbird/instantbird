@@ -200,7 +200,8 @@ var previewObserver = {
     // Display all queued messages. Use a timeout so that message text
     // modifiers can be added with observers for this notification.
     setTimeout(function(aSelf) {
-      aSelf.conv.messages.forEach(aSelf.browser.appendMessage, aSelf.browser);
+      for each (let message in aSelf.conv.messages)
+        aSelf.browser.appendMessage(message, false);
       setTimeout(aSelf.saveScreenshotAndContinue, 1000);
     }, 0, this);
 
