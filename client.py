@@ -1,9 +1,11 @@
 #!/usr/bin/python
 
 DEFAULT_INSTANTBIRD_REV = "default"
+DEFAULT_INSTANTBIRD_L10N_REPO_BASE = 'https://hg.instantbird.org/l10n/'
 
 # URL of the default hg repository to clone for Mozilla.
 DEFAULT_MOZILLA_REPO = 'http://hg.mozilla.org/releases/mozilla-release/'
+DEFAULT_MOZILLA_L10N_REPO_BASE = 'http://hg.mozilla.org/releases/l10n/mozilla-release/'
 DEFAULT_MOZILLA_REV = "FIREFOX_6_0_2_RELEASE"
 
 # URL of the default hg repository to clone for inspector.
@@ -18,6 +20,7 @@ import os
 import sys
 import datetime
 from optparse import OptionParser
+from shutil import copytree, rmtree
 
 topsrcdir = os.path.dirname(__file__)
 if topsrcdir == '':
@@ -132,6 +135,13 @@ o.add_option("-C", "--clean", dest="clean",
              action="store_true", default=False,
              help="Override local modifications when upgrading")
 
+o.add_option("--l10n-base-dir", dest="l10n_base_dir",
+             default=None,
+             help="L10NBASEDIR path (for checkout-l10n)")
+o.add_option("--locale", dest="ab_cd",
+             default=None,
+             help="locale to checkout (for checkout-l10n)")
+
 backup_cvs_venkman()
 
 def fixup_repo_options(options):
@@ -195,7 +205,20 @@ if action in ('checkout', 'co'):
 
     if not options.skip_venkman:
         do_hg_pull(os.path.join('mozilla', 'extensions', 'venkman'), options.venkman_repo, options.hg, options.venkman_rev)
-
+elif action == 'checkout-l10n':
+    if options.l10n_base_dir is None or options.ab_cd is None:
+        sys.exit("Error: --l10-base-dir and --locale are required")
+    l10n_dir = os.path.join(topsrcdir, options.l10n_base_dir)
+    ib_l10n_dir = os.path.join(l10n_dir, options.ab_cd)
+    do_hg_pull(ib_l10n_dir, DEFAULT_INSTANTBIRD_L10N_REPO_BASE + options.ab_cd,
+               options.hg, 'default')
+    moz_l10n_dir = os.path.join(l10n_dir, 'moz-' + options.ab_cd)
+    do_hg_pull(moz_l10n_dir, DEFAULT_MOZILLA_L10N_REPO_BASE + options.ab_cd,
+               options.hg, DEFAULT_MOZILLA_REV)
+    for root_dir in ['dom', 'extensions', 'netwerk', 'security', 'toolkit']:
+        ib_dir = os.path.join(ib_l10n_dir, root_dir)
+        rmtree(ib_dir, True)
+        copytree(os.path.join(moz_l10n_dir, root_dir), ib_dir)
 else:
     o.print_help()
     sys.exit(2)
