@@ -194,6 +194,19 @@ check-one:
 	  $(DIST)/bin/xpcshell \
 	  $(foreach dir,$(XPCSHELL_TESTS),$(testxpcobjdir)/$(MODULE)/$(dir))
 
+# Execute a single test, specified in $(SOLO_FILE), under valgrind
+check-valgrind:
+	$(PYTHON) -u $(MOZILLA_DIR)/config/pythonpath.py \
+	  -I$(MOZILLA_DIR)/build \
+	  $(testxpcsrcdir)/runxpcshelltests.py \
+	  --symbols-path=$(DIST)/crashreporter-symbols \
+	  --test-path=$(SOLO_FILE) \
+	  --verbose \
+	  --debugger valgrind \
+	  --debugger-args "--smc-check=all" \
+	  $(DIST)/bin/xpcshell \
+	  $(foreach dir,$(XPCSHELL_TESTS),$(testxpcobjdir)/$(MODULE)/$(dir))
+
 endif # XPCSHELL_TESTS
 
 ifdef CPP_UNIT_TESTS
