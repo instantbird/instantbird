@@ -218,7 +218,13 @@ elif action == 'checkout-l10n':
     for root_dir in ['dom', 'extensions', 'netwerk', 'security', 'toolkit']:
         ib_dir = os.path.join(ib_l10n_dir, root_dir)
         rmtree(ib_dir, True)
-        copytree(os.path.join(moz_l10n_dir, root_dir), ib_dir)
+        try:
+            copytree(os.path.join(moz_l10n_dir, root_dir), ib_dir)
+        except OSError:
+            if root_dir == 'toolkit':
+                raise
+            else:
+                print "Warning: Error while copying (missing?) directory:", root_dir
 else:
     o.print_help()
     sys.exit(2)
