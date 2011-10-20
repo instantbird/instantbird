@@ -258,4 +258,4 @@ var previewObserver = {
   }
 };
 
-this.addEventListener("load", previewObserver.load, false);
+this.addEventListener("load", previewObserver.load);
