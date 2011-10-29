@@ -46,21 +46,14 @@ ifneq ($(MOZ_WIDGET_TOOLKIT),cocoa)
 DIRS = mintrayr
 endif
 
-MODULE		= instantbird
-
-XPIDLSRCS	= ibILogger.idl
-
 EXTRA_COMPONENTS = \
 	contentHandler.js contentHandler.manifest \
 	ibCommandLineHandler.manifest \
 	ibStatusCommandLineHandler.js ibStatusCommandLineHandler.manifest \
-	logger.manifest \
-	smileProtocolHandler.js smileProtocolHandler.manifest \
 	$(NULL)
 
 EXTRA_PP_COMPONENTS = \
 	ibCommandLineHandler.js \
-	logger.js \
 	$(NULL)
 
 ifeq ($(MOZ_WIDGET_TOOLKIT),cocoa)

@@ -60,6 +60,7 @@ Makefile
 config/autoconf.mk
 "
 
+. "${srcdir}/chat/makefiles.sh"
 . "${srcdir}/purple/makefiles.sh"
 
 #
