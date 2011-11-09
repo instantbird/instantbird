@@ -40,9 +40,12 @@ let EXPORTED_SYMBOLS = ["Services"];
 Components.utils.import("resource://gre/modules/Services.jsm");
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 
+XPCOMUtils.defineLazyServiceGetter(Services, "accounts",
+                                   "@instantbird.org/purple/accounts-service;1",
+                                   "imIAccountsService");
 XPCOMUtils.defineLazyServiceGetter(Services, "core",
-                                   "@instantbird.org/purple/core;1",
-                                   "purpleICoreService");
+                                   "@instantbird.org/purple/core-service;1",
+                                   "imICoreService");
 XPCOMUtils.defineLazyServiceGetter(Services, "cmd",
                                    "@instantbird.org/purple/commands-service;1",
                                    "imICommandsService");

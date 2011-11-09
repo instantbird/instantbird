@@ -35,45 +35,20 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#ifndef PURPLE_ACCOUNTS_SERVICE_H_
-#define PURPLE_ACCOUNTS_SERVICE_H_
+#include "nsISupports.idl"
+#include "imIUserStatusInfo.idl"
+#include "nsISimpleEnumerator.idl"
+#include "prplIProtocol.idl"
 
-#include "purpleIAccountsService.h"
-#include <nsCOMPtr.h>
-#include <nsIPrefBranch2.h>
-#include <nsIPrefService.h>
-#include <nsCOMArray.h>
+[scriptable, uuid(205d4b2b-1ccf-4879-9ef1-f08942566151)]
+interface imICoreService: nsISupports {
+  void init();
+  void quit(); // will emit a prpl-quit notification.
 
-class purpleAccountsService : public purpleIAccountsService,
-                              public nsIObserver
-{
-public:
-  NS_DECL_ISUPPORTS
-  NS_DECL_NSIOBSERVER
-  NS_DECL_PURPLEIACCOUNTSSERVICE
+  // returns an enumerator on a pplIProtocol array
+  nsISimpleEnumerator getProtocols();
 
-  purpleAccountsService();
+  prplIProtocol getProtocolById(in AUTF8String aProtocolId);
 
-private:
-  ~purpleAccountsService();
-  nsresult LoadAccount(nsCString &key, purpleIAccount **aResult);
-  nsresult UpdateAccountList();
-  nsCOMPtr<nsIPrefService> mPrefService;
-  nsCOMPtr<nsIPrefBranch2> mPrefBranch;
-
-protected:
-  PRBool mInitialized;
-  nsCOMArray<purpleIAccount> mAccounts;
-
-  nsresult ensureStored(PRUint32 aId,
-                        const nsCString& aName,
-                        const nsCString& aPrpl);
-  nsresult storeAccount(PRUint32 aId,
-                        const nsCString& aName,
-                        const nsCString& aPrpl);
-  nsresult NotifyObservers(nsISupports *aObj,
-                           const char *aEvent,
-                           const PRUnichar *aData = nsnull);
+  readonly attribute imIUserStatusInfo globalUserStatus;
 };
-
-#endif /* !PURPLE_ACCOUNTS_SERVICE_H_ */
