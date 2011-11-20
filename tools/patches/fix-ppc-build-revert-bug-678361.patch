@@ -1,0 +1,22 @@
+diff --git a/configure.in b/configure.in
+--- a/configure.in
++++ b/configure.in
+@@ -9322,17 +9322,17 @@ xpcom/xpcom-private.h
+ )
+ 
+ # Hack around an Apple bug that effects the egrep that comes with OS X 10.7.
+ # "arch -arch i386 egrep" always uses the 32-bit Intel part of the egrep fat
+ # binary, even on 64-bit systems.  It should work on OS X 10.4.5 and up.  We
+ # (apparently) only need this hack when egrep's "pattern" is particularly
+ # long (as in the following code).  See bug 655339.
+ case "$host" in
+-*-apple-darwin*)
++x86_64-apple-darwin*)
+     FIXED_EGREP="arch -arch i386 egrep"
+     ;;
+ *)
+     FIXED_EGREP="egrep"
+     ;;
+ esac
+ 
+ # Save the defines header file before autoconf removes it.
