@@ -80,6 +80,11 @@ $(foreach x,$(CHECK_VARS),$(check-variable))
 
 core_abspath = $(if $(findstring :,$(1)),$(1),$(if $(filter /%,$(1)),$(1),$(CURDIR)/$(1)))
 
+nullstr :=
+space :=$(nullstr) # EOL
+
+core_winabspath = $(firstword $(subst /, ,$(call core_abspath,$(1)))):$(subst $(space),,$(patsubst %,\\%,$(wordlist 2,$(words $(subst /, ,$(call core_abspath,$(1)))), $(strip $(subst /, ,$(call core_abspath,$(1)))))))
+
 # FINAL_TARGET specifies the location into which we copy end-user-shipped
 # build products (typelibs, components, chrome).
 #
@@ -89,16 +94,6 @@ FINAL_TARGET = $(if $(XPI_NAME),$(DIST)/xpi-stage/$(XPI_NAME),$(DIST)/bin)
 
 ifdef XPI_NAME
 DEFINES += -DXPI_NAME=$(XPI_NAME)
-endif
-
-# MAKE_JARS_TARGET is a staging area for make-jars.pl.  When packaging in
-# the jar format, make-jars leaves behind a directory structure that's not
-# needed in $(FINAL_TARGET).  For both, flat, and symlink, the directory
-# structure contains the chrome, so leave it in $(FINAL_TARGET).
-ifeq (jar,$(MOZ_CHROME_FILE_FORMAT))
-MAKE_JARS_TARGET = $(if $(XPI_NAME),$(FINAL_TARGET).stage,$(DIST)/chrome-stage)
-else
-MAKE_JARS_TARGET = $(FINAL_TARGET)
 endif
 
 # The VERSION_NUMBER is suffixed onto the end of the DLLs we ship.
@@ -151,11 +146,8 @@ FINAL_LINK_COMP_NAMES = $(MOZDEPTH)/config/final-link-comp-names
 MOZ_UNICHARUTIL_LIBS = $(LIBXUL_DIST)/lib/$(LIB_PREFIX)unicharutil_s.$(LIB_SUFFIX)
 MOZ_WIDGET_SUPPORT_LIBS    = $(DIST)/lib/$(LIB_PREFIX)widgetsupport_s.$(LIB_SUFFIX)
 
-ifdef MOZ_MEMORY
-ifneq (,$(filter-out WINNT WINCE,$(OS_ARCH)))
-JEMALLOC_LIBS = $(MKSHLIB_FORCE_ALL) $(call EXPAND_MOZLIBNAME,jemalloc) $(MKSHLIB_UNFORCE_ALL)
-endif
-endif
+CC := $(CC_WRAPPER) $(CC)
+CXX := $(CXX_WRAPPER) $(CXX)
 
 # determine debug-related options
 _DEBUG_CFLAGS :=
@@ -189,14 +181,6 @@ OS_CXXFLAGS += -FR
 endif
 else # ! MOZ_DEBUG
 
-# We don't build a static CRT when building a custom CRT,
-# it appears to be broken. So don't link to jemalloc if
-# the Makefile wants static CRT linking.
-ifeq ($(MOZ_MEMORY)_$(USE_STATIC_LIBS),1_)
-# Disable default CRT libs and add the right lib path for the linker
-OS_LDFLAGS += $(MOZ_MEMORY_LDFLAGS)
-endif
-
 # MOZ_DEBUG_SYMBOLS generates debug symbols in separate PDB files.
 # Used for generating an optimized build with debugging symbols.
 # Used in the Windows nightlies to generate symbols for crash reporting.
@@ -227,12 +211,24 @@ OS_LDFLAGS = -DEBUG -PDB:NONE -OPT:REF -OPT:nowin98
 endif # NS_TRACE_MALLOC
 
 endif # MOZ_DEBUG
+
+# We don't build a static CRT when building a custom CRT,
+# it appears to be broken. So don't link to jemalloc if
+# the Makefile wants static CRT linking.
+ifeq ($(MOZ_MEMORY)_$(USE_STATIC_LIBS),1_1)
+# Disable default CRT libs and add the right lib path for the linker
+MOZ_UTILS_LDFLAGS =
+endif
+
 endif # WINNT && !GNU_CC
+
+ifndef MOZ_UTILS_PROGRAM_LDFLAGS
+MOZ_UTILS_PROGRAM_LDFLAGS=$(MOZ_UTILS_LDFLAGS)
+endif
 
 # Determine if module being compiled is destined 
 # to be merged into libxul
 
-ifdef MOZ_ENABLE_LIBXUL
 ifdef LIBXUL_LIBRARY
 ifdef IS_COMPONENT
 ifdef MODULE_NAME
@@ -243,7 +239,6 @@ endif
 endif
 FORCE_STATIC_LIB=1
 SHORT_LIBNAME=
-endif
 endif
 
 # If we are building this component into an extension/xulapp, it cannot be
@@ -309,7 +304,6 @@ endif
 
 # Force XPCOM/widget/gfx methods to be _declspec(dllexport) when we're
 # building libxul libraries
-ifdef MOZ_ENABLE_LIBXUL
 ifdef LIBXUL_LIBRARY
 DEFINES += \
 		-D_IMPL_NS_COM \
@@ -324,20 +318,6 @@ DEFINES += \
 
 ifndef MOZ_NATIVE_ZLIB
 DEFINES += -DZLIB_INTERNAL
-endif
-endif
-endif
-
-# Force _all_ exported methods to be |_declspec(dllexport)| when we're
-# building them into the executable.
-
-ifeq (,$(filter-out WINNT WINCE OS2, $(OS_ARCH)))
-ifdef BUILD_STATIC_LIBS
-DEFINES += \
-        -D_IMPL_NS_GFX \
-        -D_IMPL_NS_MSG_BASE \
-        -D_IMPL_NS_WIDGET \
-        $(NULL)
 endif
 endif
 
@@ -376,15 +356,9 @@ MY_RULES	:= $(DEPTH)/config/myrules.mk
 # Default command macros; can be overridden in <arch>.mk.
 #
 CCC		= $(CXX)
-NFSPWD		= $(CONFIG_TOOLS)/nfspwd
 PURIFY		= purify $(PURIFYOPTIONS)
 QUANTIFY	= quantify $(QUANTIFYOPTIONS)
-ifdef CROSS_COMPILE
-XPIDL_COMPILE 	= $(CYGWIN_WRAPPER) $(LIBXUL_DIST)/host/bin/host_xpidl$(HOST_BIN_SUFFIX)
-else
-XPIDL_COMPILE 	= $(CYGWIN_WRAPPER) $(LIBXUL_DIST)/bin/xpidl$(BIN_SUFFIX)
-endif
-XPIDL_LINK = $(PYTHON) $(LIBXUL_DIST)/sdk/bin/xpt.py link
+XPIDL_LINK = $(PYTHON) $(SDK_BIN_DIR)/xpt.py link
 
 INCLUDES = \
   $(LOCAL_INCLUDES) \
@@ -475,8 +449,8 @@ OS_COMPILE_CMFLAGS += -fobjc-exceptions
 OS_COMPILE_CMMFLAGS += -fobjc-exceptions
 endif
 
-COMPILE_CFLAGS	= $(VISIBILITY_FLAGS) $(DEFINES) $(INCLUDES) $(PROFILER_CFLAGS) $(DSO_CFLAGS) $(DSO_PIC_CFLAGS) $(CFLAGS) $(RTL_FLAGS) $(OS_COMPILE_CFLAGS)
-COMPILE_CXXFLAGS = $(STL_FLAGS) $(VISIBILITY_FLAGS) $(DEFINES) $(INCLUDES) $(PROFILER_CFLAGS) $(DSO_CFLAGS) $(DSO_PIC_CFLAGS) $(CXXFLAGS) $(RTL_FLAGS) $(OS_COMPILE_CXXFLAGS)
+COMPILE_CFLAGS	= $(VISIBILITY_FLAGS) $(DEFINES) $(INCLUDES) $(DSO_CFLAGS) $(DSO_PIC_CFLAGS) $(CFLAGS) $(RTL_FLAGS) $(OS_COMPILE_CFLAGS)
+COMPILE_CXXFLAGS = $(STL_FLAGS) $(VISIBILITY_FLAGS) $(DEFINES) $(INCLUDES) $(DSO_CFLAGS) $(DSO_PIC_CFLAGS) $(CXXFLAGS) $(RTL_FLAGS) $(OS_COMPILE_CXXFLAGS)
 COMPILE_CMFLAGS = $(OS_COMPILE_CMFLAGS)
 COMPILE_CMMFLAGS = $(OS_COMPILE_CMMFLAGS)
 
@@ -516,10 +490,6 @@ SDK_BIN_DIR = $(DIST)/sdk/bin
 DEPENDENCIES	= .md
 
 MOZ_COMPONENT_LIBS=$(XPCOM_LIBS) $(MOZ_COMPONENT_NSPR_LIBS)
-
-ifdef GC_LEAK_DETECTOR
-XPCOM_LIBS += -lboehm
-endif
 
 ifeq (xpconnect, $(findstring xpconnect, $(BUILD_MODULES)))
 DEFINES +=  -DXPCONNECT_STANDALONE
@@ -564,13 +534,6 @@ ifeq (2,$(MOZ_OPTIMIZE))
 PBBUILD_SETTINGS += GCC_MODEL_TUNING= OPTIMIZATION_CFLAGS="$(MOZ_OPTIMIZE_FLAGS)"
 endif # MOZ_OPTIMIZE=2
 endif # MOZ_OPTIMIZE
-ifeq (1,$(HAS_XCODE_2_1))
-# Xcode 2.1 puts its build products in a directory corresponding to the
-# selected build style/configuration.
-XCODE_PRODUCT_DIR = build/$(BUILDSTYLE)
-else
-XCODE_PRODUCT_DIR = build
-endif # HAS_XCODE_2_1=1
 endif # OS_ARCH=Darwin
 
 
@@ -631,18 +594,6 @@ endif
 DEFINES		+= -DOSTYPE=\"$(OS_CONFIG)\"
 DEFINES		+= -DOSARCH=$(OS_ARCH)
 
-# For profiling
-ifdef ENABLE_EAZEL_PROFILER
-ifndef INTERNAL_TOOLS
-ifneq ($(LIBRARY_NAME), xpt)
-ifneq (, $(findstring $(shell $(MOZILLA_SRCDIR)/build/unix/print-depth-path.sh | awk -F/ '{ print $$2; }'), $(MOZ_PROFILE_MODULES)))
-PROFILER_CFLAGS	= $(EAZEL_PROFILER_CFLAGS) -DENABLE_EAZEL_PROFILER
-PROFILER_LIBS	= $(EAZEL_PROFILER_LIBS)
-endif
-endif
-endif
-endif
-
 ######################################################################
 
 GARBAGE		+= $(DEPENDENCIES) $(MKDEPENDENCIES) $(MKDEPENDENCIES).bak core $(wildcard core.[0-9]*) $(wildcard *.err) $(wildcard *.pure) $(wildcard *_pure_*.o) Templates.DB
@@ -664,36 +615,37 @@ NSINSTALL	= $(CONFIG_TOOLS)/nsinstall$(HOST_BIN_SUFFIX)
 endif # OS2
 endif # NSINSTALL_BIN
 
-
 ifeq (,$(CROSS_COMPILE)$(filter-out WINNT OS2, $(OS_ARCH)))
 INSTALL		= $(NSINSTALL)
 else
-ifeq ($(NSDISTMODE),copy)
-# copy files, but preserve source mtime
-INSTALL		= $(NSINSTALL) -t
-else
-ifeq ($(NSDISTMODE),absolute_symlink)
-# install using absolute symbolic links
-ifeq ($(OS_ARCH),Darwin)
-INSTALL		= $(NSINSTALL) -L $(PWD)
-else
-INSTALL		= $(NSINSTALL) -L `$(NFSPWD)`
-endif # Darwin
-else
-# install using relative symbolic links
-INSTALL		= $(NSINSTALL) -R
-endif # absolute_symlink
-endif # copy
+
+# This isn't laid out as conditional directives so that NSDISTMODE can be
+# target-specific.
+INSTALL         = $(if $(filter copy, $(NSDISTMODE)), $(NSINSTALL) -t, $(if $(filter absolute_symlink, $(NSDISTMODE)), $(NSINSTALL) -L $(PWD), $(NSINSTALL) -R))
+
 endif # WINNT/OS2
 
 # Use nsinstall in copy mode to install files on the system
 SYSINSTALL	= $(NSINSTALL) -t
+
+# Directory nsinstall. Windows and OS/2 nsinstall can't recursively copy
+# directories.
+ifneq (,$(filter WINNT os2-emx,$(HOST_OS_ARCH)))
+DIR_INSTALL = $(PYTHON) $(MOZILLA_SRCDIR)/config/nsinstall.py
+else
+DIR_INSTALL = $(INSTALL)
+endif # WINNT
 
 ifeq ($(OS_ARCH),WINNT)
 ifneq (,$(CYGDRIVE_MOUNT))
 export CYGDRIVE_MOUNT
 endif
 endif
+
+# png to ico converter. The function takes 5 arguments, in order: source png
+# file, left, top, size, output ico file.
+png2ico = $(PYTHON) $(MOZILLA_DIR)/config/pythonpath.py \
+  -I$(topsrcdir)/build/pypng $(topsrcdir)/build/png2ico.py $(1) $(2) $(3) $(4) $(5)
 
 #
 # Localization build automation
@@ -747,3 +699,13 @@ endif
 OPTIMIZE_JARS_CMD = $(PYTHON) $(call core_abspath,$(MOZILLA_SRCDIR)/config/optimizejars.py)
 
 CREATE_PRECOMPLETE_CMD = $(PYTHON) $(call core_abspath,$(MOZILLA_SRCDIR)/config/createprecomplete.py)
+
+LIBS_DESC_SUFFIX = desc
+EXPAND_LIBS = $(PYTHON) -I$(MOZDEPTH)/config $(MOZILLA_SRCDIR)/config/expandlibs.py
+EXPAND_LIBS_EXEC = $(PYTHON) $(MOZILLA_SRCDIR)/config/pythonpath.py -I$(MOZDEPTH)/config $(MOZILLA_SRCDIR)/config/expandlibs_exec.py
+EXPAND_LIBS_GEN = $(PYTHON) $(MOZILLA_SRCDIR)/config/pythonpath.py -I$(MOZDEPTH)/config $(MOZILLA_SRCDIR)/config/expandlibs_gen.py
+EXPAND_AR = $(EXPAND_LIBS_EXEC) --extract -- $(AR)
+EXPAND_CC = $(EXPAND_LIBS_EXEC) --uselist -- $(CC)
+EXPAND_CCC = $(EXPAND_LIBS_EXEC) --uselist -- $(CCC)
+EXPAND_LD = $(EXPAND_LIBS_EXEC) --uselist -- $(LD)
+EXPAND_MKSHLIB = $(EXPAND_LIBS_EXEC) --uselist -- $(MKSHLIB)

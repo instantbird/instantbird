@@ -55,7 +55,7 @@
 #    clean
 #    distclean
 #
-# See http://developer.mozilla.org/en/docs/Build_Documentation for 
+# See http://developer.mozilla.org/en/Build_Documentation for 
 # more information.
 #
 # Options:
@@ -86,9 +86,11 @@ endif
 
 ifndef TOPSRCDIR
 ifeq (,$(wildcard client.mk))
-$(error Must run from the client.mk directory, or specify TOPSRCDIR)
+TOPSRCDIR := $(patsubst %/,%,$(dir $(MAKEFILE_LIST)))
+MOZ_OBJDIR = .
+else
+TOPSRCDIR := $(CWD)
 endif
-TOPSRCDIR = $(CWD)
 endif
 
 # try to find autoconf 2.13 - discard errors from 'which'
@@ -143,11 +145,12 @@ run_for_side_effects := \
 
 include $(TOPSRCDIR)/.mozconfig.mk
 
+ifndef MOZ_OBJDIR
+  MOZ_OBJDIR = obj-$(CONFIG_GUESS)
+endif
+
 ifdef MOZ_BUILD_PROJECTS
 
-ifndef MOZ_OBJDIR
-  $(error When MOZ_BUILD_PROJECTS is set, you must set MOZ_OBJDIR)
-endif
 ifdef MOZ_CURRENT_PROJECT
   OBJDIR = $(MOZ_OBJDIR)/$(MOZ_CURRENT_PROJECT)
   MOZ_MAKE = $(MAKE) $(MOZ_MAKE_FLAGS) -C $(OBJDIR)
@@ -159,13 +162,8 @@ endif
 
 else # MOZ_BUILD_PROJECTS
 
-ifdef MOZ_OBJDIR
-  OBJDIR = $(MOZ_OBJDIR)
-  MOZ_MAKE = $(MAKE) $(MOZ_MAKE_FLAGS) -C $(OBJDIR)
-else
-  OBJDIR := $(TOPSRCDIR)
-  MOZ_MAKE := $(MAKE) $(MOZ_MAKE_FLAGS)
-endif
+OBJDIR = $(MOZ_OBJDIR)
+MOZ_MAKE = $(MAKE) $(MOZ_MAKE_FLAGS) -C $(OBJDIR)
 
 endif # MOZ_BUILD_PROJECTS
 
@@ -179,8 +177,17 @@ CONFIGURES += $(TOPSRCDIR)/mozilla/js/src/configure
 
 all:: checkout build
 
-checkout:
-	python client.py checkout
+# The default rule is build
+build::
+
+# These targets are candidates for auto-running client.py
+ifdef  ALWAYS_RUN_CLIENT_PY
+ifeq (0,${MAKELEVEL})
+build::                      run_client_py
+configure::                  run_client_py
+endif
+endif
+
 
 # Print out any options loaded from mozconfig.
 all build clean depend distclean export libs install realclean::
@@ -218,6 +225,7 @@ endif
 
 profiledbuild::
 	$(MAKE) -f $(TOPSRCDIR)/client.mk build MOZ_PROFILE_GENERATE=1
+	$(MAKE) -C $(PGO_OBJDIR) package
 	OBJDIR=${PGO_OBJDIR} $(PROFILE_GEN_SCRIPT)
 	$(MAKE) -f $(TOPSRCDIR)/client.mk maybe_clobber_profiledbuild
 	$(MAKE) -f $(TOPSRCDIR)/client.mk build MOZ_PROFILE_USE=1
@@ -261,7 +269,7 @@ endif
 # loop through them.
 
 ifeq (,$(MOZ_CURRENT_PROJECT)$(if $(MOZ_BUILD_PROJECTS),,1))
-configure depend build install export libs clean realclean distclean alldep preflight postflight maybe_clobber_profiledbuild::
+configure depend build install export libs clean realclean distclean alldep preflight postflight maybe_clobber_profiledbuild upload sdk::
 	set -e; \
 	for app in $(MOZ_BUILD_PROJECTS); do \
 	  $(MAKE) -f $(TOPSRCDIR)/client.mk $@ MOZ_CURRENT_PROJECT=$$app; \
@@ -275,6 +283,7 @@ else
 ####################################
 # Configure
 
+MAKEFILE      = $(wildcard $(OBJDIR)/Makefile)
 CONFIG_STATUS = $(wildcard $(OBJDIR)/config.status)
 CONFIG_CACHE  = $(wildcard $(OBJDIR)/config.cache)
 
@@ -315,7 +324,6 @@ configure-files: $(CONFIGURES)
 configure:: configure-files
 ifdef MOZ_BUILD_PROJECTS
 	@if test ! -d $(MOZ_OBJDIR); then $(MKDIR) $(MOZ_OBJDIR); else true; fi
-	export MOZ_CURRENT_PROJECT
 endif
 	@if test ! -d $(OBJDIR); then $(MKDIR) $(OBJDIR); else true; fi
 	@echo cd $(OBJDIR);
@@ -325,7 +333,13 @@ endif
                \"$(MAKE) -f client.mk build\"" && exit 1 )
 	@touch $(OBJDIR)/Makefile
 
-$(OBJDIR)/Makefile $(OBJDIR)/config.status: $(CONFIG_STATUS_DEPS)
+ifneq (,$(MAKEFILE))
+$(OBJDIR)/Makefile: $(OBJDIR)/config.status
+
+$(OBJDIR)/config.status: $(CONFIG_STATUS_DEPS)
+else
+$(OBJDIR)/Makefile: $(CONFIG_STATUS_DEPS)
+endif
 	@$(MAKE) -f $(TOPSRCDIR)/client.mk configure
 
 ifneq (,$(CONFIG_STATUS))
@@ -362,7 +376,7 @@ build::  $(OBJDIR)/Makefile $(OBJDIR)/config.status
 # Other targets
 
 # Pass these target onto the real build system
-install export libs clean realclean distclean alldep maybe_clobber_profiledbuild:: $(OBJDIR)/Makefile $(OBJDIR)/config.status
+install export libs clean realclean distclean alldep maybe_clobber_profiledbuild upload sdk:: $(OBJDIR)/Makefile $(OBJDIR)/config.status
 	$(MOZ_MAKE) $@
 
 ####################################
@@ -416,9 +430,14 @@ cleansrcdir:
 echo-variable-%:
 	@echo $($*)
 
+checkout co: run_client_py
+
+run_client_py:
+	$(PYTHON) $(TOPSRCDIR)/client.py checkout $(CLIENT_PY_ARGS)
+
 # This makefile doesn't support parallel execution. It does pass
 # MOZ_MAKE_FLAGS to sub-make processes, so they will correctly execute
 # in parallel.
 .NOTPARALLEL:
 
-.PHONY: checkout real_checkout depend build profiledbuild maybe_clobber_profiledbuild export libs alldep install clean realclean distclean cleansrcdir pull_all build_all clobber clobber_all pull_and_build_all everything configure preflight_all preflight postflight postflight_all
+.PHONY: checkout co real_checkout depend build profiledbuild maybe_clobber_profiledbuild export libs alldep install clean realclean distclean cleansrcdir pull_all build_all clobber clobber_all pull_and_build_all everything configure preflight_all preflight postflight postflight_all

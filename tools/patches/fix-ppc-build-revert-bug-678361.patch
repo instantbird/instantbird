@@ -1,7 +1,7 @@
 diff --git a/configure.in b/configure.in
 --- a/configure.in
 +++ b/configure.in
-@@ -9322,17 +9322,17 @@ xpcom/xpcom-private.h
+@@ -8620,17 +8620,17 @@ xpcom/xpcom-private.h
  )
  
  # Hack around an Apple bug that effects the egrep that comes with OS X 10.7.

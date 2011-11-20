@@ -1,7 +1,7 @@
 diff --git a/toolkit/mozapps/extensions/content/extensions.js b/toolkit/mozapps/extensions/content/extensions.js
 --- a/toolkit/mozapps/extensions/content/extensions.js
 +++ b/toolkit/mozapps/extensions/content/extensions.js
-@@ -1971,17 +1971,18 @@ var gDiscoverView = {
+@@ -1976,17 +1976,18 @@ var gDiscoverView = {
  
      // Consider the successful load of about:blank as still loading
      if (aRequest instanceof Ci.nsIChannel && aRequest.URI.spec == "about:blank")
