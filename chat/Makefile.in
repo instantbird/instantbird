@@ -41,7 +41,12 @@ VPATH		= @srcdir@
 
 include $(DEPTH)/config/autoconf.mk
 
-PROTOCOLS = twitter overrides
+PROTOCOLS = \
+		facebook \
+		gtalk \
+		twitter \
+		xmpp \
+		$(NULL)
 
 ifdef MOZ_DEBUG
 PROTOCOLS += jsTest
