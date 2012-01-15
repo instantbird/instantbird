@@ -5,7 +5,7 @@ DEFAULT_INSTANTBIRD_L10N_REPO_BASE = 'https://hg.instantbird.org/l10n/'
 
 # URL of the default hg repository to clone for Mozilla.
 DEFAULT_MOZILLA_REPO = 'http://hg.mozilla.org/releases/mozilla-release/'
-DEFAULT_MOZILLA_L10N_REPO_BASE = 'http://hg.mozilla.org/releases/l10n/mozilla-beta/'
+DEFAULT_MOZILLA_L10N_REPO_BASE = 'http://hg.mozilla.org/releases/l10n/mozilla-release/'
 DEFAULT_MOZILLA_REV = "FIREFOX_9_0_1_RELEASE"
 
 # URL of the default hg repository to clone for inspector.
