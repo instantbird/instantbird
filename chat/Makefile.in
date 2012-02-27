@@ -44,6 +44,7 @@ include $(DEPTH)/config/autoconf.mk
 PROTOCOLS = \
 		facebook \
 		gtalk \
+		irc \
 		twitter \
 		xmpp \
 		$(NULL)

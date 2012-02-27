@@ -48,7 +48,7 @@ INSTANTBIRD_VERSION = @INSTANTBIRD_VERSION@
 PURPLE_MAJOR_VERSION = @PURPLE_MAJOR_VERSION@
 PURPLE_MINOR_VERSION = @PURPLE_MINOR_VERSION@
 PURPLE_MICRO_VERSION = @PURPLE_MICRO_VERSION@
-STATIC_PRPLS = irc jabber gg oscar msn myspace novell qq sametime simple yahoo netsoul
+STATIC_PRPLS = jabber gg oscar msn myspace novell qq sametime simple yahoo netsoul
 PURPLE_PLUGINS = @PURPLE_PLUGINS@
 
 MOZ_BUILD_APP = @MOZ_BUILD_APP@
