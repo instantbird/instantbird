@@ -1,0 +1,35 @@
+diff --git a/gfx/skia/Makefile.in b/gfx/skia/Makefile.in
+--- a/gfx/skia/Makefile.in
++++ b/gfx/skia/Makefile.in
+@@ -299,21 +299,31 @@ CPPSRCS = \
+ 	$(NULL)
+ 
+ ifeq (cocoa,$(MOZ_WIDGET_TOOLKIT))
+ EXPORTS_skia += \
+ 	include/ports/SkTypeface_mac.h \
+ 	$(NULL)
+ CPPSRCS += \
+ 	SkFontHost_mac_coretext.cpp \
++	$(NULL)
++ifneq (,$(INTEL_ARCHITECTURE))
++CPPSRCS += \
+ 	SkBitmapProcState_opts_SSE2.cpp \
+ 	SkBlitRow_opts_SSE2.cpp \
+ 	SkUtils_opts_SSE2.cpp \
+ 	opts_check_SSE2.cpp \
+ 	$(NULL)
++else
++CPPSRCS += \
++	SkBitmapProcState_opts_none.cpp \
++	SkBlitRow_opts_none.cpp \
++	SkUtils_opts_none.cpp \
++	$(NULL)
++endif
+ endif
+ 
+ ifeq (android,$(MOZ_WIDGET_TOOLKIT))
+ CPPSRCS += \
+ 	SkBitmapProcState_opts_arm.cpp \
+ 	SkBlitRow_opts_arm.cpp \
+ 	SkFontHost_FreeType.cpp \
+ 	SkFontHost_android.cpp \

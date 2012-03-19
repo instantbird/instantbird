@@ -1,7 +1,7 @@
 diff --git a/js/src/jsscript.h b/js/src/jsscript.h
 --- a/js/src/jsscript.h
 +++ b/js/src/jsscript.h
-@@ -536,17 +536,17 @@ struct JSScript : public js::gc::Cell {
+@@ -534,17 +534,17 @@ struct JSScript : public js::gc::Cell {
      uint16          nClosedArgs; /* number of args which are closed over. */
      uint16          nClosedVars; /* number of vars which are closed over. */
  

@@ -1,0 +1,25 @@
+diff --git a/js/src/jsapi.h b/js/src/jsapi.h
+--- a/js/src/jsapi.h
++++ b/js/src/jsapi.h
+@@ -2260,17 +2260,21 @@ class JS_PUBLIC_API(JSAutoEnterCompartme
+     /*
+      * This is a poor man's Maybe<AutoCompartment>, because we don't have
+      * access to the AutoCompartment definition here.  We statically assert in
+      * jsapi.cpp that we have the right size here.
+      *
+      * In practice, 32-bit Windows and Android get 16-word |bytes|, while
+      * other platforms get 13-word |bytes|.
+      */
++#if (defined(__ppc__) && defined(XP_MACOSX))
++    void* bytes[15];
++#else
+     void* bytes[sizeof(void*) == 4 && MOZ_ALIGNOF(JSUint64) == 8 ? 16 : 13];
++#endif
+ 
+     /*
+      * This object may be in one of three states.  If enter() or
+      * enterAndIgnoreErrors() hasn't been called, it's in STATE_UNENTERED.
+      * Otherwise, if we were asked to enter into the current compartment, our
+      * state is STATE_SAME_COMPARTMENT.  If we actually created an
+      * AutoCompartment and entered another compartment, our state is
+      * STATE_OTHER_COMPARTMENT.

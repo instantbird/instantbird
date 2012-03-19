@@ -15,29 +15,29 @@ diff --git a/netwerk/cookie/nsCookieService.cpp b/netwerk/cookie/nsCookieService
 +  // Grow cookie db in 32KB increments
 +  mDefaultDBState->dbConn->SetGrowthIncrement(32 * 1024, EmptyCString());
  
-   PRBool tableExists = PR_FALSE;
+   bool tableExists = false;
    mDefaultDBState->dbConn->TableExists(NS_LITERAL_CSTRING("moz_cookies"),
      &tableExists);
    if (!tableExists) {
      rv = CreateTable();
      NS_ENSURE_SUCCESS(rv, RESULT_RETRY);
  
-diff --git a/toolkit/components/places/nsNavHistory.cpp b/toolkit/components/places/nsNavHistory.cpp
---- a/toolkit/components/places/nsNavHistory.cpp
-+++ b/toolkit/components/places/nsNavHistory.cpp
-@@ -848,18 +848,18 @@ nsNavHistory::InitDB()
+diff --git a/toolkit/components/places/Database.cpp b/toolkit/components/places/Database.cpp
+--- a/toolkit/components/places/Database.cpp
++++ b/toolkit/components/places/Database.cpp
+@@ -549,18 +549,18 @@ Database::InitSchema(bool* aDatabaseMigr
+   // mobile devices, limit its size.
+   // Since exceeding the limit will cause a truncate, allow a slightly
+   // larger limit than DATABASE_MAX_WAL_SIZE_IN_KIBIBYTES to reduce the number
+   // of times it is needed.
+   nsCAutoString journalSizePragma("PRAGMA journal_size_limit = ");
+   journalSizePragma.AppendInt(DATABASE_MAX_WAL_SIZE_IN_KIBIBYTES * 3);
+   (void)mMainConn->ExecuteSimpleSQL(journalSizePragma);
  
-     // Set synchronous to FULL to ensure maximum data integrity, even in
-     // case of crashes or unclean shutdowns.
-     rv = mDBConn->ExecuteSimpleSQL(NS_LITERAL_CSTRING(
-         "PRAGMA synchronous = FULL"));
-     NS_ENSURE_SUCCESS(rv, rv);
-   }
- 
--  // Grow places in 10MiB increments
--  (void)mDBConn->SetGrowthIncrement(10 * BYTES_PER_MEBIBYTE, EmptyCString());
-+  // Grow places in 64KiB increments
-+  (void)mDBConn->SetGrowthIncrement(64 * 1024, EmptyCString());
+-  // Grow places in 10MiB increments to limit fragmentation on disk.
+-  (void)mMainConn->SetGrowthIncrement(10 * BYTES_PER_MEBIBYTE, EmptyCString());
++  // Grow places in 64KiB increments to limit disk use.
++  (void)mMainConn->SetGrowthIncrement(64 * 1024, EmptyCString());
  
    // We use our functions during migration, so initialize them now.
    rv = InitFunctions();
@@ -45,4 +45,4 @@ diff --git a/toolkit/components/places/nsNavHistory.cpp b/toolkit/components/pla
  
    // Get the database schema version.
    PRInt32 currentSchemaVersion;
-   rv = mDBConn->GetSchemaVersion(&currentSchemaVersion);
+   rv = mMainConn->GetSchemaVersion(&currentSchemaVersion);
