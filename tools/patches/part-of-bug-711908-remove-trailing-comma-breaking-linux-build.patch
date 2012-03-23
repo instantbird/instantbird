@@ -1,0 +1,22 @@
+diff --git a/layout/xul/base/src/nsXULTooltipListener.h b/layout/xul/base/src/nsXULTooltipListener.h
+--- a/layout/xul/base/src/nsXULTooltipListener.h
++++ b/layout/xul/base/src/nsXULTooltipListener.h
+@@ -107,17 +107,17 @@ protected:
+   static void sTooltipCallback (nsITimer* aTimer, void* aListener);
+ 
+   // screen coordinates of the last mousemove event, stored so that the
+   // tooltip can be opened at this location.
+   PRInt32 mMouseScreenX, mMouseScreenY;
+ 
+   // various constants for tooltips
+   enum {
+-    kTooltipMouseMoveTolerance = 7,    // 7 pixel tolerance for mousemove event
++    kTooltipMouseMoveTolerance = 7     // 7 pixel tolerance for mousemove event
+   };
+ 
+   // flag specifying if the tooltip has already been displayed by a MouseMove
+   // event. The flag is reset on MouseOut so that the tooltip will display
+   // the next time the mouse enters the node (bug #395668).
+   bool mTooltipShownOnce;
+ 
+ #ifdef MOZ_XUL
