@@ -1,7 +1,7 @@
 diff --git a/build/macosx/universal/mozconfig.common b/build/macosx/universal/mozconfig.common
 --- a/build/macosx/universal/mozconfig.common
 +++ b/build/macosx/universal/mozconfig.common
-@@ -34,37 +34,42 @@
+@@ -34,36 +34,40 @@
  #
  # ***** END LICENSE BLOCK *****
  
@@ -14,9 +14,8 @@ diff --git a/build/macosx/universal/mozconfig.common b/build/macosx/universal/mo
  ac_add_app_options i386 --target=i386-apple-darwin10
  ac_add_app_options x86_64 --target=x86_64-apple-darwin10
  
+-ac_add_options --with-macos-sdk=/Developer/SDKs/MacOSX10.6.sdk
 +ac_add_app_options ppc --with-macos-sdk=/Developer/SDKs/MacOSX10.5.sdk
- ac_add_app_options i386 --with-macos-sdk=/Developer/SDKs/MacOSX10.5.sdk
- ac_add_app_options x86_64 --with-macos-sdk=/Developer/SDKs/MacOSX10.6.sdk
  
  . $topsrcdir/build/macosx/common
  
