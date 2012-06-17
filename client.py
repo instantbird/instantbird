@@ -189,6 +189,12 @@ fixup_repo_options(options)
 if action in ('checkout', 'co'):
     if not options.skip_instantbird:
         do_hg_pull('.', options.instantbird_repo, options.hg, options.ib_rev)
+        # Reexecute client.py with --skip-instantbird & exit
+        args = sys.argv
+        args.insert(1, '--skip-instantbird')
+        args.insert(0, sys.executable)
+        check_call_noisy(args)
+        sys.exit(0)
 
     if not options.skip_mozilla:
         do_hg_pull('mozilla', options.mozilla_repo, options.hg, options.mozilla_rev)
