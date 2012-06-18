@@ -1,0 +1,116 @@
+diff --git a/content/base/src/nsXMLHttpRequest.cpp b/content/base/src/nsXMLHttpRequest.cpp
+--- a/content/base/src/nsXMLHttpRequest.cpp
++++ b/content/base/src/nsXMLHttpRequest.cpp
+@@ -497,47 +497,24 @@ nsXMLHttpRequest::RootResultArrayBuffer(
+ }
+ 
+ /**
+  * This Init method is called from the factory constructor.
+  */
+ nsresult
+ nsXMLHttpRequest::Init()
+ {
+-  // Set the original mPrincipal, if available.
+-  // Get JSContext from stack.
+-  nsCOMPtr<nsIJSContextStack> stack =
+-    do_GetService("@mozilla.org/js/xpc/ContextStack;1");
+-
+-  if (!stack) {
+-    return NS_OK;
+-  }
+-
+-  JSContext *cx;
+-
+-  if (NS_FAILED(stack->Peek(&cx)) || !cx) {
+-    return NS_OK;
+-  }
+-
+   nsIScriptSecurityManager *secMan = nsContentUtils::GetSecurityManager();
+   nsCOMPtr<nsIPrincipal> subjectPrincipal;
+   if (secMan) {
+-    nsresult rv = secMan->GetSubjectPrincipal(getter_AddRefs(subjectPrincipal));
+-    NS_ENSURE_SUCCESS(rv, rv);
++    secMan->GetSystemPrincipal(getter_AddRefs(subjectPrincipal));
+   }
+   NS_ENSURE_STATE(subjectPrincipal);
+   mPrincipal = subjectPrincipal;
+-
+-  nsIScriptContext* context = GetScriptContextFromJSContext(cx);
+-  if (context) {
+-    nsCOMPtr<nsPIDOMWindow> window =
+-      do_QueryInterface(context->GetGlobalObject());
+-    BindToOwner(window ? window->GetCurrentInnerWindow() : nsnull);
+-  }
+-
++  BindToOwner(nsnull);
+   return NS_OK;
+ }
+ /**
+  * This Init method should only be called by C++ consumers.
+  */
+ NS_IMETHODIMP
+ nsXMLHttpRequest::Init(nsIPrincipal* aPrincipal,
+                        nsIScriptContext* aScriptContext,
+diff --git a/dom/base/nsDOMClassInfo.cpp b/dom/base/nsDOMClassInfo.cpp
+--- a/dom/base/nsDOMClassInfo.cpp
++++ b/dom/base/nsDOMClassInfo.cpp
+@@ -1643,17 +1643,16 @@ struct nsContractIDMapData
+   { eDOMClassInfo_##_class##_id, _contract_id },
+ 
+ static const nsContractIDMapData kConstructorMap[] =
+ {
+   NS_DEFINE_CONSTRUCTOR_DATA(DOMParser, NS_DOMPARSER_CONTRACTID)
+   NS_DEFINE_CONSTRUCTOR_DATA(FileReader, NS_FILEREADER_CONTRACTID)
+   NS_DEFINE_CONSTRUCTOR_DATA(FormData, NS_FORMDATA_CONTRACTID)
+   NS_DEFINE_CONSTRUCTOR_DATA(XMLSerializer, NS_XMLSERIALIZER_CONTRACTID)
+-  NS_DEFINE_CONSTRUCTOR_DATA(XMLHttpRequest, NS_XMLHTTPREQUEST_CONTRACTID)
+   NS_DEFINE_CONSTRUCTOR_DATA(WebSocket, NS_WEBSOCKET_CONTRACTID)
+   NS_DEFINE_CONSTRUCTOR_DATA(XPathEvaluator, NS_XPATH_EVALUATOR_CONTRACTID)
+   NS_DEFINE_CONSTRUCTOR_DATA(XSLTProcessor,
+                              "@mozilla.org/document-transformer;1?type=xslt")
+   NS_DEFINE_CONSTRUCTOR_DATA(EventSource, NS_EVENTSOURCE_CONTRACTID)
+ };
+ 
+ #define NS_DEFINE_EVENT_CTOR(_class)                        \
+@@ -1676,16 +1675,23 @@ NS_DEFINE_EVENT_CTOR(UIEvent)
+ NS_DEFINE_EVENT_CTOR(MouseEvent)
+ nsresult
+ NS_DOMStorageEventCtor(nsISupports** aInstancePtrResult)
+ {
+   nsDOMStorageEvent* e = new nsDOMStorageEvent();
+   return CallQueryInterface(e, aInstancePtrResult);
+ }
+ 
++nsresult
++NS_XMLHttpRequestCtor(nsISupports** aInstancePtrResult)
++{
++  nsXMLHttpRequest* xhr = new nsXMLHttpRequest();
++  return CallQueryInterface(xhr, aInstancePtrResult);
++}
++
+ struct nsConstructorFuncMapData
+ {
+   PRInt32 mDOMClassInfoID;
+   nsDOMConstructorFunc mConstructorFunc;
+ };
+ 
+ #define NS_DEFINE_CONSTRUCTOR_FUNC_DATA(_class, _func)                        \
+   { eDOMClassInfo_##_class##_id, _func },
+@@ -1703,16 +1709,17 @@ static const nsConstructorFuncMapData kC
+   NS_DEFINE_EVENT_CONSTRUCTOR_FUNC_DATA(PopStateEvent)
+   NS_DEFINE_EVENT_CONSTRUCTOR_FUNC_DATA(HashChangeEvent)
+   NS_DEFINE_EVENT_CONSTRUCTOR_FUNC_DATA(PageTransitionEvent)
+   NS_DEFINE_EVENT_CONSTRUCTOR_FUNC_DATA(CloseEvent)
+   NS_DEFINE_EVENT_CONSTRUCTOR_FUNC_DATA(UIEvent)
+   NS_DEFINE_EVENT_CONSTRUCTOR_FUNC_DATA(MouseEvent)
+   NS_DEFINE_EVENT_CONSTRUCTOR_FUNC_DATA(StorageEvent)
+   NS_DEFINE_CONSTRUCTOR_FUNC_DATA(MozSmsFilter, sms::SmsFilter::NewSmsFilter)
++  NS_DEFINE_CONSTRUCTOR_FUNC_DATA(XMLHttpRequest, NS_XMLHttpRequestCtor)
+ };
+ 
+ nsIXPConnect *nsDOMClassInfo::sXPConnect = nsnull;
+ nsIScriptSecurityManager *nsDOMClassInfo::sSecMan = nsnull;
+ bool nsDOMClassInfo::sIsInitialized = false;
+ bool nsDOMClassInfo::sDisableDocumentAllSupport = false;
+ bool nsDOMClassInfo::sDisableGlobalScopePollutionSupport = false;
+ 
