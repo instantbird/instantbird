@@ -1,7 +1,7 @@
 diff --git a/content/base/src/nsXMLHttpRequest.cpp b/content/base/src/nsXMLHttpRequest.cpp
 --- a/content/base/src/nsXMLHttpRequest.cpp
 +++ b/content/base/src/nsXMLHttpRequest.cpp
-@@ -497,47 +497,24 @@ nsXMLHttpRequest::RootResultArrayBuffer(
+@@ -497,47 +497,25 @@ nsXMLHttpRequest::RootResultArrayBuffer(
  }
  
  /**
@@ -42,7 +42,8 @@ diff --git a/content/base/src/nsXMLHttpRequest.cpp b/content/base/src/nsXMLHttpR
 -    BindToOwner(window ? window->GetCurrentInnerWindow() : nsnull);
 -  }
 -
-+  BindToOwner(nsnull);
++  nsPIDOMWindow* window = nsnull;
++  BindToOwner(window);
    return NS_OK;
  }
  /**
