@@ -1,0 +1,27 @@
+diff --git a/testing/xpcshell/runxpcshelltests.py b/testing/xpcshell/runxpcshelltests.py
+--- a/testing/xpcshell/runxpcshelltests.py
++++ b/testing/xpcshell/runxpcshelltests.py
+@@ -612,20 +612,21 @@ class XPCShellTests(object):
+ 
+       self.testCount += 1
+ 
+       xunitResult = {"name": test["name"], "classname": "xpcshell"}
+       # The xUnit package is defined as the path component between the root
+       # dir and the test with path characters replaced with '.' (using Java
+       # class notation).
+       if testsRootDir is not None:
+-          if test["here"].find(testsRootDir) != 0:
++          absTestsRootDir = os.path.abspath(testsRootDir)
++          if test["here"].find(absTestsRootDir) != 0:
+               raise Exception("testsRootDir is not a parent path of %s" %
+                   test["here"])
+-          relpath = test["here"][len(testsRootDir):].lstrip("/\\")
++          relpath = test["here"][len(absTestsRootDir):].lstrip("/\\")
+           xunitResult["classname"] = relpath.replace("/", ".").replace("\\", ".")
+ 
+       # Check for skipped tests
+       if 'disabled' in test:
+         self.log.info("TEST-INFO | skipping %s | %s" %
+                       (name, test['disabled']))
+ 
+         xunitResult["skipped"] = True
