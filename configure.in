@@ -6549,22 +6549,25 @@ MOZ_ARG_DISABLE_BOOL(bonjour,
 AC_SUBST(PURPLE_BONJOUR)
 
 if test "$PURPLE_BONJOUR"; then
-    if "${OS_TARGET}" = "WINNT" || "${OS_TARGET}" = "Darwin"; then
-        dnl =========================================================
-        dnl = Bonjour SDK should be installed on Mac OS X, we provide the header
-        dnl   for Windows
-        dnl =========================================================
-        STATIC_PRPLS="$STATIC_PRPLS bonjour"
-    else
-        dnl =========================================================
-        dnl = Attempt to autodetect Avahi
-        dnl =========================================================
-        PKG_CHECK_MODULES(AVAHI, avahi-client avahi-glib, PURPLE_AVAHI=1)
-
-        if test -z "$PURPLE_AVAHI"; then
-            AC_MSG_ERROR([Could not find avahi-client or avahi-glib. To build without Bonjour, reconfigure with --disable-bonjour.])
-        fi
-    fi
+    case "$OS_TARGET" in
+        WINNT|Darwin)
+            dnl =========================================================
+            dnl = Bonjour SDK should be installed on Mac OS X, we provide the
+            dnl = header for Windows
+            dnl =========================================================
+            STATIC_PRPLS="$STATIC_PRPLS bonjour"
+            ;;
+        *)
+            dnl =========================================================
+            dnl = Attempt to autodetect Avahi
+            dnl =========================================================
+            PKG_CHECK_MODULES(AVAHI, avahi-client avahi-glib, PURPLE_AVAHI=1)
+    
+            if test -z "$PURPLE_AVAHI"; then
+                AC_MSG_ERROR([Could not find avahi-client or avahi-glib. To build without Bonjour, reconfigure with --disable-bonjour.])
+            fi
+            ;;
+    esac
 fi
 AC_SUBST(STATIC_PRPLS)
 
