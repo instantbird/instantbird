@@ -6488,6 +6488,16 @@ dnl = Libpurple related checks
 dnl =
 dnl ========================================================
 
+dnl ========================================================
+dnl Check for libxml2.
+dnl ========================================================
+if test "${OS_TARGET}" = "Linux"; then
+    PKG_CHECK_MODULES(LIBXML2, libxml-2.0)
+
+    AC_SUBST(LIBXML2_CFLAGS)
+    AC_SUBST(LIBXML2_LIBS)
+fi
+
 _SAVE_LIBS="$LIBS"
 LIBS=
 
@@ -6566,6 +6576,8 @@ if test "$PURPLE_BONJOUR"; then
             if test -z "$PURPLE_AVAHI"; then
                 AC_MSG_ERROR([Could not find avahi-client or avahi-glib. To build without Bonjour, reconfigure with --disable-bonjour.])
             fi
+            AC_SUBST(AVAHI_CFLAGS)
+            AC_SUBST(AVAHI_LIBS)
             ;;
     esac
 fi
