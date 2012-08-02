@@ -1,0 +1,42 @@
+diff --git a/widget/xpwidgets/nsIdleService.cpp b/widget/xpwidgets/nsIdleService.cpp
+--- a/widget/xpwidgets/nsIdleService.cpp
++++ b/widget/xpwidgets/nsIdleService.cpp
+@@ -522,16 +522,18 @@ nsIdleService::IdleTimerCallback(void)
+     if (!curListener.isIdle) {
+       // If they have an idle time smaller than the actual idle time.
+       if (curListener.reqIdleTime <= currentIdleTimeInS) {
+         // Then add the listener to the list of listeners that should be
+         // notified.
+         notifyList.AppendObject(curListener.observer);
+         // This listener is now idle.
+         curListener.isIdle = true;
++        // Remember we have someone idle.
++        mAnyObserverIdle = true;
+       } else {
+         // Listeners that are not timed out yet are candidates for timing out.
+         mDeltaToNextIdleSwitchInS = PR_MIN(mDeltaToNextIdleSwitchInS,
+                                            curListener.reqIdleTime);
+       }
+     }
+   }
+ 
+@@ -543,19 +545,16 @@ nsIdleService::IdleTimerCallback(void)
+   Telemetry::Accumulate(Telemetry::IDLE_NOTIFY_IDLE_LISTENERS,
+                         numberOfPendingNotifications);
+ 
+   // Bail if nothing to do.
+   if (!numberOfPendingNotifications) {
+     return;
+   }
+ 
+-  // Remember we have someone idle.
+-  mAnyObserverIdle = true;
+-
+   // We need a text string to send with any state change events.
+   nsAutoString timeStr;
+   timeStr.AppendInt(currentIdleTimeInS);
+ 
+   // Notify all listeners that just timed out.
+   while (numberOfPendingNotifications--) {
+     notifyList[numberOfPendingNotifications]->Observe(this,
+                                                       OBSERVER_TOPIC_IDLE,
