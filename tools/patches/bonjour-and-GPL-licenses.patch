@@ -1,7 +1,7 @@
 diff --git a/toolkit/content/license.html b/toolkit/content/license.html
 --- a/toolkit/content/license.html
 +++ b/toolkit/content/license.html
-@@ -54,27 +54,30 @@
+@@ -54,28 +54,31 @@
         and version you choose.)
      </p>
      
@@ -17,6 +17,7 @@ diff --git a/toolkit/content/license.html b/toolkit/content/license.html
        <li><a href="about:license#bspatch">bspatch License</a></li>
        <li><a href="about:license#cairo">Cairo Component Licenses</a></li>
        <li><a href="about:license#chromium">Chromium License</a></li>
+       <li><a href="about:license#dtoa">dtoa License</a></li>
        <li><a href="about:license#hunspell-nl">Dutch Spellchecking Dictionary License</a></li>
        <li><a href="about:license#edl">Eclipse Distribution License</a></li>
        <li><a href="about:license#expat">Expat License</a></li>
@@ -32,7 +33,7 @@ diff --git a/toolkit/content/license.html b/toolkit/content/license.html
        <li><a href="about:license#harfbuzz">HarfBuzz License</a></li>
        <li><a href="about:license#icu">ICU License</a></li>
        <li><a href="about:license#jpnic">Japan Network Information Center License</a></li>
-@@ -852,16 +855,51 @@ PROFITS; OR BUSINESS INTERRUPTION) HOWEV
+@@ -856,16 +859,51 @@ PROFITS; OR BUSINESS INTERRUPTION) HOWEV
  OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
@@ -84,7 +85,7 @@ diff --git a/toolkit/content/license.html b/toolkit/content/license.html
  <pre>
  Copyright &copy; 2004, Apple Computer, Inc. and The Mozilla Foundation. 
  All rights reserved.
-@@ -1300,16 +1338,914 @@ DIRECT, INDIRECT, INCIDENTAL, SPECIAL, E
+@@ -1328,16 +1366,914 @@ DIRECT, INDIRECT, INCIDENTAL, SPECIAL, E
  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT

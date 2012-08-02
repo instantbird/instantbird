@@ -1,7 +1,7 @@
 diff --git a/js/xpconnect/loader/mozJSComponentLoader.cpp b/js/xpconnect/loader/mozJSComponentLoader.cpp
 --- a/js/xpconnect/loader/mozJSComponentLoader.cpp
 +++ b/js/xpconnect/loader/mozJSComponentLoader.cpp
-@@ -1147,31 +1147,29 @@ mozJSComponentLoader::ImportInto(const n
+@@ -1145,31 +1145,29 @@ mozJSComponentLoader::ImportInto(const n
  
      ModuleEntry* mod;
      nsAutoPtr<ModuleEntry> newEntry;

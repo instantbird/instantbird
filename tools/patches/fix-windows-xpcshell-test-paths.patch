@@ -1,7 +1,7 @@
 diff --git a/testing/xpcshell/runxpcshelltests.py b/testing/xpcshell/runxpcshelltests.py
 --- a/testing/xpcshell/runxpcshelltests.py
 +++ b/testing/xpcshell/runxpcshelltests.py
-@@ -612,20 +612,21 @@ class XPCShellTests(object):
+@@ -617,20 +617,21 @@ class XPCShellTests(object):
  
        self.testCount += 1
  

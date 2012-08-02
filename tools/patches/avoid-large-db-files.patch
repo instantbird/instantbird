@@ -1,7 +1,7 @@
 diff --git a/netwerk/cookie/nsCookieService.cpp b/netwerk/cookie/nsCookieService.cpp
 --- a/netwerk/cookie/nsCookieService.cpp
 +++ b/netwerk/cookie/nsCookieService.cpp
-@@ -761,18 +761,18 @@ nsCookieService::TryInitDB(bool aRecreat
+@@ -762,18 +762,18 @@ nsCookieService::TryInitDB(bool aRecreat
    NS_ENSURE_SUCCESS(rv, RESULT_RETRY);
  
    // Set up our listeners.

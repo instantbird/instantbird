@@ -1,7 +1,7 @@
 diff --git a/js/src/jsapi.h b/js/src/jsapi.h
 --- a/js/src/jsapi.h
 +++ b/js/src/jsapi.h
-@@ -2669,17 +2669,21 @@ class JS_PUBLIC_API(JSAutoEnterCompartme
+@@ -2763,17 +2763,21 @@ class JS_PUBLIC_API(JSAutoEnterCompartme
      /*
       * This is a poor man's Maybe<AutoCompartment>, because we don't have
       * access to the AutoCompartment definition here.  We statically assert in
@@ -16,10 +16,10 @@ diff --git a/js/src/jsapi.h b/js/src/jsapi.h
      void* bytes[sizeof(void*) == 4 && MOZ_ALIGNOF(uint64_t) == 8 ? 16 : 13];
 +#endif
  
+   protected:
+     js::AutoCompartment *getAutoCompartment() {
+         JS_ASSERT(state == STATE_OTHER_COMPARTMENT);
+         return reinterpret_cast<js::AutoCompartment*>(bytes);
+     }
+ 
      /*
-      * This object may be in one of three states.  If enter() or
-      * enterAndIgnoreErrors() hasn't been called, it's in STATE_UNENTERED.
-      * Otherwise, if we were asked to enter into the current compartment, our
-      * state is STATE_SAME_COMPARTMENT.  If we actually created an
-      * AutoCompartment and entered another compartment, our state is
-      * STATE_OTHER_COMPARTMENT.
