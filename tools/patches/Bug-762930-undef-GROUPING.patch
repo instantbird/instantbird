@@ -1,0 +1,50 @@
+diff --git a/accessible/src/base/nsAccessibilityService.cpp b/accessible/src/base/nsAccessibilityService.cpp
+--- a/accessible/src/base/nsAccessibilityService.cpp
++++ b/accessible/src/base/nsAccessibilityService.cpp
+@@ -100,16 +100,21 @@
+ #include "nsXULListboxAccessibleWrap.h"
+ #include "nsXULMenuAccessibleWrap.h"
+ #include "nsXULSliderAccessible.h"
+ #include "nsXULTabAccessible.h"
+ #include "nsXULTextAccessible.h"
+ #include "nsXULTreeGridAccessibleWrap.h"
+ #endif
+ 
++/* See bug 762930 */
++#ifdef GROUPING
++# unread GROUPING
++#endif
++
+ using namespace mozilla;
+ using namespace mozilla::a11y;
+ 
+ ////////////////////////////////////////////////////////////////////////////////
+ // nsAccessibilityService
+ ////////////////////////////////////////////////////////////////////////////////
+ 
+ nsAccessibilityService *nsAccessibilityService::gAccessibilityService = nsnull;
+diff --git a/accessible/src/xforms/nsXFormsAccessible.cpp b/accessible/src/xforms/nsXFormsAccessible.cpp
+--- a/accessible/src/xforms/nsXFormsAccessible.cpp
++++ b/accessible/src/xforms/nsXFormsAccessible.cpp
+@@ -51,16 +51,21 @@
+ #include "nsIDOMElement.h"
+ #include "nsIDOMNodeList.h"
+ #include "nsIEditor.h"
+ #include "nsIMutableArray.h"
+ #include "nsIXFormsUtilityService.h"
+ #include "nsIPlaintextEditor.h"
+ #include "nsINodeList.h"
+ 
++/* See bug 762930 */
++#ifdef GROUPING
++# unread GROUPING
++#endif
++
+ using namespace mozilla::a11y;
+ 
+ ////////////////////////////////////////////////////////////////////////////////
+ // nsXFormsAccessibleBase
+ ////////////////////////////////////////////////////////////////////////////////
+ 
+ nsIXFormsUtilityService *nsXFormsAccessibleBase::sXFormsService = nsnull;
+ 
