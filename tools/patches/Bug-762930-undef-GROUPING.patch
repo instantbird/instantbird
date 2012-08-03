@@ -12,7 +12,7 @@ diff --git a/accessible/src/base/nsAccessibilityService.cpp b/accessible/src/bas
  
 +/* See bug 762930 */
 +#ifdef GROUPING
-+# unread GROUPING
++# undef GROUPING
 +#endif
 +
  using namespace mozilla;
@@ -37,7 +37,7 @@ diff --git a/accessible/src/xforms/nsXFormsAccessible.cpp b/accessible/src/xform
  
 +/* See bug 762930 */
 +#ifdef GROUPING
-+# unread GROUPING
++# undef GROUPING
 +#endif
 +
  using namespace mozilla::a11y;
