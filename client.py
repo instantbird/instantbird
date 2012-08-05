@@ -14,11 +14,11 @@ DEFAULT_MOZILLA_REV = "FIREFOX_14_0_1_RELEASE"
 
 # URL of the default hg repository to clone for inspector.
 DEFAULT_INSPECTOR_REPO = 'http://hg.mozilla.org/dom-inspector/'
-DEFAULT_INSPECTOR_REV = "default"
+DEFAULT_INSPECTOR_REV = "DOMI_2_0_13"
 
 # URL of the default hg repository to clone for Venkman.
 DEFAULT_VENKMAN_REPO = 'http://hg.mozilla.org/venkman/'
-DEFAULT_VENKMAN_REV = "default"
+DEFAULT_VENKMAN_REV = "a6ea3ddea591"
 
 import os
 import sys
