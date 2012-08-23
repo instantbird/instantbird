@@ -131,34 +131,7 @@ then
 fi
 MOZ_BUILD_ROOT=`pwd`
 
-dnl Default to MSVC for win32 and gcc-4.2 for darwin
-dnl ==============================================================
-if test -z "$CROSS_COMPILE"; then
-case "$target" in
-*-cygwin*|*-mingw*|*-msvc*|*-mks*)
-    if test -z "$CC"; then CC=cl; fi
-    if test -z "$CXX"; then CXX=cl; fi
-    if test -z "$CPP"; then CPP="cl -E -nologo"; fi
-    if test -z "$CXXCPP"; then CXXCPP="cl -TP -E -nologo"; ac_cv_prog_CXXCPP="$CXXCPP"; fi
-    if test -z "$LD"; then LD=link; fi
-    if test -z "$AS"; then
-        case "${target_cpu}" in
-        i*86)
-            AS=ml;
-            ;;
-        x86_64)
-            AS=ml64;
-            ;;
-        esac
-    fi
-    if test -z "$MIDL"; then MIDL=midl; fi
-    ;;
-*-darwin*)
-    if test -z "$CC"; then CC=gcc-4.2; fi
-    if test -z "$CXX"; then CXX=g++-4.2; fi
-    ;;
-esac
-fi
+MOZ_DEFAULT_COMPILER
 
 COMPILE_ENVIRONMENT=1
 MOZ_ARG_DISABLE_BOOL(compile-environment,
@@ -412,6 +385,20 @@ if test "$GXX" = yes; then
    fi
 fi
 
+CLANG_CC=
+CLANG_CXX=
+if test "$GCC" = yes; then
+   if test "`$CC -v 2>&1 | grep -c 'clang version'`" != "0"; then
+     CLANG_CC=1
+   fi
+fi
+
+if test "$GXX" = yes; then
+   if test "`$CXX -v 2>&1 | grep -c 'clang version'`" != "0"; then
+     CLANG_CXX=1
+   fi
+fi
+
 dnl Special win32 checks
 dnl ========================================================
 case "$target" in
@@ -531,8 +518,6 @@ case "$target" in
             AC_MSG_ERROR([This version ($CC_VERSION) of the MSVC compiler is unsupported. See https://developer.mozilla.org/en/Windows_Build_Prerequisites.])
         fi
 
-        _MOZ_RTTI_FLAGS_ON='-GR'
-        _MOZ_RTTI_FLAGS_OFF='-GR-'
         _MOZ_EXCEPTIONS_FLAGS_ON='-EHsc'
         _MOZ_EXCEPTIONS_FLAGS_OFF=''
 
@@ -1382,8 +1367,6 @@ if test "$GNU_CC"; then
     DSO_CFLAGS=''
     DSO_PIC_CFLAGS='-fPIC'
     ASFLAGS="$ASFLAGS -fPIC"
-    _MOZ_RTTI_FLAGS_ON=${_COMPILER_PREFIX}-frtti
-    _MOZ_RTTI_FLAGS_OFF=${_COMPILER_PREFIX}-fno-rtti
     _MOZ_EXCEPTIONS_FLAGS_ON='-fexceptions'
     _MOZ_EXCEPTIONS_FLAGS_OFF='-fno-exceptions'
 
@@ -1513,6 +1496,16 @@ if test "$GNU_CXX"; then
         ])
     if test "$ac_has_werror_return_type" = "yes"; then
         _WARNINGS_CXXFLAGS="${_WARNINGS_CXXFLAGS} -Werror=return-type"
+    fi
+
+    # Recent clang and gcc support C++11 deleted functions without warnings if
+    # compiling with -std=c++0x or -std=gnu++0x (or c++11 or gnu++11 in very new
+    # versions).  We can't use -std=c++0x yet, so gcc's support must remain
+    # unused.  But clang's warning can be disabled, so when compiling with clang
+    # we use it to opt out of the warning, enabling (macro-encapsulated) use of     # deleted function syntax.
+    if test "$CLANG_CXX"; then
+        _WARNINGS_CXXFLAGS="${_WARNINGS_CXXFLAGS} -Wno-c++0x-extensions"
+        MOZ_CXX_SUPPORTS_WARNING(-Wno-, extended-offsetof, ac_cxx_has_wno_extended_offsetof)
     fi
 
 else
@@ -2739,6 +2732,7 @@ if test -z "$COMPILE_ENVIRONMENT"; then
     SKIP_LIBRARY_CHECKS=1
 fi
 
+MOZ_COMPILER_OPTS
 if test -z "$SKIP_COMPILER_CHECKS"; then
 dnl Checks for typedefs, structures, and compiler characteristics.
 dnl ========================================================
@@ -6336,23 +6330,6 @@ fi
 fi # SKIP_COMPILER_CHECKS
 
 dnl ========================================================
-dnl C++ rtti
-dnl Should be smarter and check that the compiler does indeed have rtti
-dnl ========================================================
-MOZ_ARG_ENABLE_BOOL(cpp-rtti,
-[  --enable-cpp-rtti       Enable C++ RTTI ],
-[ _MOZ_USE_RTTI=1 ],
-[ _MOZ_USE_RTTI= ])
-
-if test "$_MOZ_USE_RTTI"; then
-   _MOZ_RTTI_FLAGS=$_MOZ_RTTI_FLAGS_ON
-else
-   _MOZ_RTTI_FLAGS=$_MOZ_RTTI_FLAGS_OFF
-fi
-
-AC_SUBST(_MOZ_RTTI_FLAGS_ON)
-
-dnl ========================================================
 dnl C++ exceptions (g++/VC/irix6/Sun only - for now)
 dnl Should be smarter and check that the compiler does indeed have exceptions
 dnl ========================================================
@@ -6890,7 +6867,6 @@ CFLAGS=`echo \
 	$CFLAGS`
 
 CXXFLAGS=`echo \
-	$_MOZ_RTTI_FLAGS \
 	$_MOZ_EXCEPTIONS_FLAGS \
 	$_WARNINGS_CXXFLAGS \
 	$CXXFLAGS`
@@ -7130,11 +7106,11 @@ HAVE_WCRTOMB
 
 # Hack around an Apple bug that effects the egrep that comes with OS X 10.7.
 # "arch -arch i386 egrep" always uses the 32-bit Intel part of the egrep fat
-# binary, even on 64-bit systems.  It should work on OS X 10.4.5 and up.  We
-# (apparently) only need this hack when egrep's "pattern" is particularly
-# long (as in the following code).  See bug 655339.
+# binary, even on 64-bit systems. We (apparently) only need this hack when
+# egrep's "pattern" is particularly long (as in the following code).
+# See bug 655339.
 case "$host" in
-x86_64-apple-darwin*)
+*-apple-darwin11*)
     FIXED_EGREP="arch -arch i386 egrep"
     ;;
 *)

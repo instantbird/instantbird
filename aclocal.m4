@@ -12,6 +12,7 @@ builtin(include, mozilla/build/autoconf/altoptions.m4)dnl
 builtin(include, mozilla/build/autoconf/mozprog.m4)dnl
 builtin(include, mozilla/build/autoconf/acwinpaths.m4)dnl
 builtin(include, mozilla/build/autoconf/lto.m4)dnl
+builtin(include, mozilla/build/autoconf/compiler-opts.m4)dnl
 
 MOZ_PROG_CHECKMSYS()
 
