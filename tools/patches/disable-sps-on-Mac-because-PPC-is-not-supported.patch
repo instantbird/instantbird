@@ -1,7 +1,7 @@
 diff --git a/configure.in b/configure.in
 --- a/configure.in
 +++ b/configure.in
-@@ -1959,17 +1959,17 @@ Android)
+@@ -1981,17 +1981,17 @@ Android)
      ;;
  Linux)
      case "${CPU_ARCH}" in

@@ -1,7 +1,7 @@
 diff --git a/toolkit/components/typeaheadfind/nsITypeAheadFind.idl b/toolkit/components/typeaheadfind/nsITypeAheadFind.idl
 --- a/toolkit/components/typeaheadfind/nsITypeAheadFind.idl
 +++ b/toolkit/components/typeaheadfind/nsITypeAheadFind.idl
-@@ -61,20 +61,21 @@ interface nsITypeAheadFind : nsISupports
+@@ -27,20 +27,21 @@ interface nsITypeAheadFind : nsISupports
     * required. */
    void init(in nsIDocShell aDocShell);
  
@@ -28,7 +28,7 @@ diff --git a/toolkit/components/typeaheadfind/nsITypeAheadFind.idl b/toolkit/com
 diff --git a/toolkit/components/typeaheadfind/nsTypeAheadFind.cpp b/toolkit/components/typeaheadfind/nsTypeAheadFind.cpp
 --- a/toolkit/components/typeaheadfind/nsTypeAheadFind.cpp
 +++ b/toolkit/components/typeaheadfind/nsTypeAheadFind.cpp
-@@ -891,17 +891,17 @@ nsTypeAheadFind::FindAgain(bool aFindBac
+@@ -855,17 +855,17 @@ nsTypeAheadFind::FindAgain(bool aFindBac
      // ScrollSelectionIntoView.
      FindItNow(nsnull, aLinksOnly, false, aFindBackwards, aResult);
  
@@ -47,7 +47,7 @@ diff --git a/toolkit/components/typeaheadfind/nsTypeAheadFind.cpp b/toolkit/comp
      nsCOMPtr<nsIDocShell> ds (do_QueryReferent(mDocShell));
      NS_ENSURE_TRUE(ds, NS_ERROR_FAILURE);
  
-@@ -915,20 +915,19 @@ nsTypeAheadFind::Find(const nsAString& a
+@@ -879,20 +879,19 @@ nsTypeAheadFind::Find(const nsAString& a
      GetSelection(presShell, getter_AddRefs(selectionController),
                   getter_AddRefs(selection)); // cache for reuse
      mSelectionController = do_GetWeakReference(selectionController);
@@ -70,7 +70,7 @@ diff --git a/toolkit/components/typeaheadfind/nsTypeAheadFind.cpp b/toolkit/comp
      mSelectionController = nsnull;
  
      *aResult = FIND_FOUND;
-@@ -946,16 +945,38 @@ nsTypeAheadFind::Find(const nsAString& a
+@@ -910,16 +909,38 @@ nsTypeAheadFind::Find(const nsAString& a
      const nsAString& oldStr2 = Substring(mTypeAheadBuffer, 0, aSearchString.Length());
      if (oldStr2.Equals(newStr2))
        atEnd = true;
@@ -109,7 +109,7 @@ diff --git a/toolkit/components/typeaheadfind/nsTypeAheadFind.cpp b/toolkit/comp
      mSoundInterface = do_CreateInstance("@mozilla.org/sound;1");
      if (mSoundInterface && !mNotFoundSoundURL.Equals(NS_LITERAL_CSTRING("beep"))) {
        mSoundInterface->Init();
-@@ -1017,17 +1038,17 @@ nsTypeAheadFind::Find(const nsAString& a
+@@ -981,17 +1002,17 @@ nsTypeAheadFind::Find(const nsAString& a
        }
      }
    }
@@ -131,7 +131,7 @@ diff --git a/toolkit/components/typeaheadfind/nsTypeAheadFind.cpp b/toolkit/comp
 diff --git a/toolkit/content/widgets/findbar.xml b/toolkit/content/widgets/findbar.xml
 --- a/toolkit/content/widgets/findbar.xml
 +++ b/toolkit/content/widgets/findbar.xml
-@@ -332,16 +332,26 @@
+@@ -302,16 +302,26 @@
              this._browser.addEventListener("keypress", this, false);
              this._browser.addEventListener("mouseup", this, false);
              this._findField.value = this._browser.fastFind.searchString;
@@ -158,7 +158,7 @@ diff --git a/toolkit/content/widgets/findbar.xml b/toolkit/content/widgets/findb
                aIID.equals(Components.interfaces.nsISupportsWeakReference) ||
                aIID.equals(Components.interfaces.nsISupports))
              return this;
-@@ -1548,17 +1558,18 @@
+@@ -1522,17 +1532,18 @@
            {
              this._enableFindButtons(val);
              if (this.getElement("highlight").checked)
@@ -178,7 +178,7 @@ diff --git a/toolkit/content/widgets/findbar.xml b/toolkit/content/widgets/findb
                this._findFailedString = val;
              else
                this._findFailedString = null;
-@@ -1748,16 +1759,19 @@
+@@ -1722,16 +1733,19 @@
        <!--
          - Stub for find-next and find-previous commands
          - @param aFindPrevious

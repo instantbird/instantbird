@@ -1,14 +1,14 @@
 diff --git a/js/xpconnect/loader/mozJSComponentLoader.cpp b/js/xpconnect/loader/mozJSComponentLoader.cpp
 --- a/js/xpconnect/loader/mozJSComponentLoader.cpp
 +++ b/js/xpconnect/loader/mozJSComponentLoader.cpp
-@@ -1145,31 +1145,29 @@ mozJSComponentLoader::ImportInto(const n
- 
+@@ -1103,31 +1103,29 @@ mozJSComponentLoader::ImportInto(const n
      ModuleEntry* mod;
      nsAutoPtr<ModuleEntry> newEntry;
      if (!mImports.Get(key, &mod) && !mInProgressImports.Get(key, &mod)) {
          newEntry = new ModuleEntry;
-         if (!newEntry || !mInProgressImports.Put(key, newEntry))
+         if (!newEntry)
              return NS_ERROR_OUT_OF_MEMORY;
+         mInProgressImports.Put(key, newEntry);
  
 -        JS::Anchor<jsval> exception(JSVAL_VOID);
 +        jsval exception = JSVAL_VOID;
@@ -36,4 +36,4 @@ diff --git a/js/xpconnect/loader/mozJSComponentLoader.cpp b/js/xpconnect/loader/
              return NS_ERROR_FILE_NOT_FOUND;
          }
  
-         mod = newEntry;
+         // Set the location information for the new global, so that tools like

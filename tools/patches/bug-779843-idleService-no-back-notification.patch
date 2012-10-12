@@ -1,7 +1,7 @@
 diff --git a/widget/xpwidgets/nsIdleService.cpp b/widget/xpwidgets/nsIdleService.cpp
 --- a/widget/xpwidgets/nsIdleService.cpp
 +++ b/widget/xpwidgets/nsIdleService.cpp
-@@ -522,16 +522,18 @@ nsIdleService::IdleTimerCallback(void)
+@@ -563,16 +563,18 @@ nsIdleService::IdleTimerCallback(void)
      if (!curListener.isIdle) {
        // If they have an idle time smaller than the actual idle time.
        if (curListener.reqIdleTime <= currentIdleTimeInS) {
@@ -20,7 +20,7 @@ diff --git a/widget/xpwidgets/nsIdleService.cpp b/widget/xpwidgets/nsIdleService
      }
    }
  
-@@ -543,19 +545,16 @@ nsIdleService::IdleTimerCallback(void)
+@@ -584,19 +586,16 @@ nsIdleService::IdleTimerCallback(void)
    Telemetry::Accumulate(Telemetry::IDLE_NOTIFY_IDLE_LISTENERS,
                          numberOfPendingNotifications);
  
@@ -38,5 +38,5 @@ diff --git a/widget/xpwidgets/nsIdleService.cpp b/widget/xpwidgets/nsIdleService
  
    // Notify all listeners that just timed out.
    while (numberOfPendingNotifications--) {
-     notifyList[numberOfPendingNotifications]->Observe(this,
-                                                       OBSERVER_TOPIC_IDLE,
+     PR_LOG(sLog, PR_LOG_DEBUG,
+            ("idleService: Idle timer callback: tell observer %x user is idle",

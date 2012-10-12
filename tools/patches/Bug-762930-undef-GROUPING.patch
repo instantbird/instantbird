@@ -1,7 +1,7 @@
 diff --git a/accessible/src/base/nsAccessibilityService.cpp b/accessible/src/base/nsAccessibilityService.cpp
 --- a/accessible/src/base/nsAccessibilityService.cpp
 +++ b/accessible/src/base/nsAccessibilityService.cpp
-@@ -100,16 +100,21 @@
+@@ -74,16 +74,21 @@
  #include "nsXULListboxAccessibleWrap.h"
  #include "nsXULMenuAccessibleWrap.h"
  #include "nsXULSliderAccessible.h"
@@ -26,7 +26,7 @@ diff --git a/accessible/src/base/nsAccessibilityService.cpp b/accessible/src/bas
 diff --git a/accessible/src/xforms/nsXFormsAccessible.cpp b/accessible/src/xforms/nsXFormsAccessible.cpp
 --- a/accessible/src/xforms/nsXFormsAccessible.cpp
 +++ b/accessible/src/xforms/nsXFormsAccessible.cpp
-@@ -51,16 +51,21 @@
+@@ -18,16 +18,21 @@
  #include "nsIDOMElement.h"
  #include "nsIDOMNodeList.h"
  #include "nsIEditor.h"

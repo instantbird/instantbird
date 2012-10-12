@@ -1,9 +1,9 @@
 diff --git a/build/macosx/universal/mozconfig.common b/build/macosx/universal/mozconfig.common
 --- a/build/macosx/universal/mozconfig.common
 +++ b/build/macosx/universal/mozconfig.common
-@@ -34,36 +34,40 @@
- #
- # ***** END LICENSE BLOCK *****
+@@ -2,36 +2,40 @@
+ # License, v. 2.0. If a copy of the MPL was not distributed with this
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
  
  mk_add_options MOZ_UNIFY_BDATE=1
  

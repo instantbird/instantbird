@@ -1,7 +1,7 @@
 diff --git a/netwerk/cookie/nsCookieService.cpp b/netwerk/cookie/nsCookieService.cpp
 --- a/netwerk/cookie/nsCookieService.cpp
 +++ b/netwerk/cookie/nsCookieService.cpp
-@@ -762,18 +762,18 @@ nsCookieService::TryInitDB(bool aRecreat
+@@ -726,18 +726,18 @@ nsCookieService::TryInitDB(bool aRecreat
    NS_ENSURE_SUCCESS(rv, RESULT_RETRY);
  
    // Set up our listeners.
@@ -25,7 +25,7 @@ diff --git a/netwerk/cookie/nsCookieService.cpp b/netwerk/cookie/nsCookieService
 diff --git a/toolkit/components/places/Database.cpp b/toolkit/components/places/Database.cpp
 --- a/toolkit/components/places/Database.cpp
 +++ b/toolkit/components/places/Database.cpp
-@@ -636,18 +636,18 @@ Database::InitSchema(bool* aDatabaseMigr
+@@ -589,18 +589,18 @@ Database::InitSchema(bool* aDatabaseMigr
    // mobile devices, limit its size.
    // Since exceeding the limit will cause a truncate, allow a slightly
    // larger limit than DATABASE_MAX_WAL_SIZE_IN_KIBIBYTES to reduce the number
