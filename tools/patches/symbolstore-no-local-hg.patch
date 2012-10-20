@@ -1,7 +1,7 @@
 diff --git a/toolkit/crashreporter/tools/symbolstore.py b/toolkit/crashreporter/tools/symbolstore.py
 --- a/toolkit/crashreporter/tools/symbolstore.py
 +++ b/toolkit/crashreporter/tools/symbolstore.py
-@@ -244,16 +244,20 @@ class HGFileInfo(VCSFileInfo):
+@@ -245,16 +245,20 @@ class HGFileInfo(VCSFileInfo):
      def __init__(self, file, srcdir):
          VCSFileInfo.__init__(self, file)
          # we should only have to collect this info once per-repo

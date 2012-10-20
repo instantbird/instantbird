@@ -29,11 +29,11 @@ diff --git a/toolkit/content/license.html b/toolkit/content/license.html
        <li><a href="about:license#gears-istumbler">Google Gears/iStumbler License</a></li>
        <li><a href="about:license#vp8">Google VP8 License</a></li>
        <li><a href="about:license#growl">Growl License</a></li>
+       <li><a href="about:license#gyp">gyp License</a></li>
        <li><a href="about:license#halloc">halloc License</a></li>
        <li><a href="about:license#harfbuzz">HarfBuzz License</a></li>
        <li><a href="about:license#icu">ICU License</a></li>
-       <li><a href="about:license#jpnic">Japan Network Information Center License</a></li>
-@@ -856,16 +859,51 @@ PROFITS; OR BUSINESS INTERRUPTION) HOWEV
+@@ -861,16 +864,51 @@ PROFITS; OR BUSINESS INTERRUPTION) HOWEV
  OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
@@ -85,7 +85,7 @@ diff --git a/toolkit/content/license.html b/toolkit/content/license.html
  <pre>
  Copyright &copy; 2004, Apple Computer, Inc. and The Mozilla Foundation. 
  All rights reserved.
-@@ -1328,16 +1366,914 @@ DIRECT, INDIRECT, INCIDENTAL, SPECIAL, E
+@@ -1333,16 +1371,914 @@ DIRECT, INDIRECT, INCIDENTAL, SPECIAL, E
  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT

@@ -1,13 +1,13 @@
 diff --git a/accessible/src/base/nsAccessibilityService.cpp b/accessible/src/base/nsAccessibilityService.cpp
 --- a/accessible/src/base/nsAccessibilityService.cpp
 +++ b/accessible/src/base/nsAccessibilityService.cpp
-@@ -74,16 +74,21 @@
- #include "nsXULListboxAccessibleWrap.h"
- #include "nsXULMenuAccessibleWrap.h"
- #include "nsXULSliderAccessible.h"
- #include "nsXULTabAccessible.h"
- #include "nsXULTextAccessible.h"
- #include "nsXULTreeGridAccessibleWrap.h"
+@@ -64,16 +64,21 @@
+ #include "XULFormControlAccessible.h"
+ #include "XULListboxAccessibleWrap.h"
+ #include "XULMenuAccessibleWrap.h"
+ #include "XULSliderAccessible.h"
+ #include "XULTabAccessible.h"
+ #include "XULTreeGridAccessibleWrap.h"
  #endif
  
 +/* See bug 762930 */

@@ -1,7 +1,7 @@
 diff --git a/js/src/jsapi.h b/js/src/jsapi.h
 --- a/js/src/jsapi.h
 +++ b/js/src/jsapi.h
-@@ -2848,17 +2848,21 @@ class JS_PUBLIC_API(JSAutoEnterCompartme
+@@ -3048,17 +3048,21 @@ class JS_PUBLIC_API(JSAutoEnterCompartme
      /*
       * This is a poor man's Maybe<AutoCompartment>, because we don't have
       * access to the AutoCompartment definition here.  We statically assert in
