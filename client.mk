@@ -103,10 +103,12 @@ ifeq (,$(wildcard $(MOZCONFIG_LOADER)))
 $(error Please run "python client.py checkout" to checkout the Mozilla source code)
 endif
 
-run_for_side_effects := \
-  $(shell $(TOPSRCDIR)/$(MOZCONFIG_LOADER) $(TOPSRCDIR) $(TOPSRCDIR)/.mozconfig.mk > $(TOPSRCDIR)/.mozconfig.out)
+define CR
 
-include $(TOPSRCDIR)/.mozconfig.mk
+
+endef
+
+$(eval $(subst ||,$(CR),$(shell _PYMAKE=$(.PYMAKE) $(TOPSRCDIR)/$(MOZCONFIG_LOADER) $(TOPSRCDIR) 2> $(TOPSRCDIR)/.mozconfig.out | sed 's/$$/||/')))
 
 ifndef MOZ_OBJDIR
   MOZ_OBJDIR = obj-$(CONFIG_GUESS)
@@ -264,7 +266,6 @@ $(CONFIGURES): %: %.in $(EXTRA_CONFIG_DEPS)
 CONFIG_STATUS_DEPS := \
 	$(wildcard $(CONFIGURES)) \
 	$(TOPSRCDIR)/allmakefiles.sh \
-	$(TOPSRCDIR)/.mozconfig.mk \
 	$(TOPSRCDIR)/instantbird/config/version.txt \
 	$(TOPSRCDIR)/purple/config/version.txt \
 	$(TOPSRCDIR)/mozilla/allmakefiles.sh \
