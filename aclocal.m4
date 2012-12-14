@@ -4,6 +4,7 @@ dnl The contents of this file are under the Public Domain.
 dnl 
 
 builtin(include, build/autoconf/glib.m4)dnl
+builtin(include, mozilla/build/autoconf/config.status.m4)dnl
 builtin(include, mozilla/build/autoconf/nspr.m4)dnl
 builtin(include, mozilla/build/autoconf/nss.m4)dnl
 builtin(include, mozilla/build/autoconf/pkg.m4)dnl
