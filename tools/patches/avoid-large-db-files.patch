@@ -44,5 +44,5 @@ diff --git a/toolkit/components/places/Database.cpp b/toolkit/components/places/
    NS_ENSURE_SUCCESS(rv, rv);
  
    // Get the database schema version.
-   PRInt32 currentSchemaVersion;
+   int32_t currentSchemaVersion;
    rv = mMainConn->GetSchemaVersion(&currentSchemaVersion);

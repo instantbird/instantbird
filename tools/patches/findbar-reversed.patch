@@ -28,17 +28,17 @@ diff --git a/toolkit/components/typeaheadfind/nsITypeAheadFind.idl b/toolkit/com
 diff --git a/toolkit/components/typeaheadfind/nsTypeAheadFind.cpp b/toolkit/components/typeaheadfind/nsTypeAheadFind.cpp
 --- a/toolkit/components/typeaheadfind/nsTypeAheadFind.cpp
 +++ b/toolkit/components/typeaheadfind/nsTypeAheadFind.cpp
-@@ -854,17 +854,17 @@ nsTypeAheadFind::FindAgain(bool aFindBac
+@@ -853,17 +853,17 @@ nsTypeAheadFind::FindAgain(bool aFindBac
      // ScrollSelectionIntoView.
-     FindItNow(nsnull, aLinksOnly, false, aFindBackwards, aResult);
+     FindItNow(nullptr, aLinksOnly, false, aFindBackwards, aResult);
  
    return NS_OK;
  }
  
  NS_IMETHODIMP
  nsTypeAheadFind::Find(const nsAString& aSearchString, bool aLinksOnly,
--                      PRUint16* aResult)
-+                      bool aFindBackwards, PRUint16* aResult)
+-                      uint16_t* aResult)
++                      bool aFindBackwards, uint16_t* aResult)
  {
    *aResult = FIND_NOTFOUND;
  
@@ -47,7 +47,7 @@ diff --git a/toolkit/components/typeaheadfind/nsTypeAheadFind.cpp b/toolkit/comp
      nsCOMPtr<nsIDocShell> ds (do_QueryReferent(mDocShell));
      NS_ENSURE_TRUE(ds, NS_ERROR_FAILURE);
  
-@@ -878,20 +878,19 @@ nsTypeAheadFind::Find(const nsAString& a
+@@ -877,20 +877,19 @@ nsTypeAheadFind::Find(const nsAString& a
      GetSelection(presShell, getter_AddRefs(selectionController),
                   getter_AddRefs(selection)); // cache for reuse
      mSelectionController = do_GetWeakReference(selectionController);
@@ -66,17 +66,17 @@ diff --git a/toolkit/components/typeaheadfind/nsTypeAheadFind.cpp b/toolkit/comp
  
      // These will be initialized to their true values after the first character
      // is typed
-     mStartFindRange = nsnull;
-     mSelectionController = nsnull;
+     mStartFindRange = nullptr;
+     mSelectionController = nullptr;
  
      *aResult = FIND_FOUND;
-@@ -909,16 +908,38 @@ nsTypeAheadFind::Find(const nsAString& a
+@@ -908,16 +907,38 @@ nsTypeAheadFind::Find(const nsAString& a
      const nsAString& oldStr2 = Substring(mTypeAheadBuffer, 0, aSearchString.Length());
      if (oldStr2.Equals(newStr2))
        atEnd = true;
      
      if (!atEnd)
-       mStartFindRange = nsnull;
+       mStartFindRange = nullptr;
    }
  
 +  if (selection && atEnd) {
@@ -109,7 +109,7 @@ diff --git a/toolkit/components/typeaheadfind/nsTypeAheadFind.cpp b/toolkit/comp
      mSoundInterface = do_CreateInstance("@mozilla.org/sound;1");
      if (mSoundInterface && !mNotFoundSoundURL.Equals(NS_LITERAL_CSTRING("beep"))) {
        mSoundInterface->Init();
-@@ -980,17 +1001,17 @@ nsTypeAheadFind::Find(const nsAString& a
+@@ -979,17 +1000,17 @@ nsTypeAheadFind::Find(const nsAString& a
        }
      }
    }
@@ -117,7 +117,7 @@ diff --git a/toolkit/components/typeaheadfind/nsTypeAheadFind.cpp b/toolkit/comp
    // ----------- Find the text! ---------------------
    // Beware! This may flush notifications via synchronous
    // ScrollSelectionIntoView.
-   nsresult rv = FindItNow(nsnull, aLinksOnly, isFirstVisiblePreferred,
+   nsresult rv = FindItNow(nullptr, aLinksOnly, isFirstVisiblePreferred,
 -                          false, aResult);
 +                          aFindBackwards, aResult);
  
@@ -127,7 +127,7 @@ diff --git a/toolkit/components/typeaheadfind/nsTypeAheadFind.cpp b/toolkit/comp
        // If first letter, store where the first find succeeded
        // (mStartFindRange)
  
-       mStartFindRange = nsnull;
+       mStartFindRange = nullptr;
 diff --git a/toolkit/content/widgets/findbar.xml b/toolkit/content/widgets/findbar.xml
 --- a/toolkit/content/widgets/findbar.xml
 +++ b/toolkit/content/widgets/findbar.xml

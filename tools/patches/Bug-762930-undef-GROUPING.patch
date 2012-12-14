@@ -1,7 +1,7 @@
 diff --git a/accessible/src/base/nsAccessibilityService.cpp b/accessible/src/base/nsAccessibilityService.cpp
 --- a/accessible/src/base/nsAccessibilityService.cpp
 +++ b/accessible/src/base/nsAccessibilityService.cpp
-@@ -64,16 +64,21 @@
+@@ -69,16 +69,21 @@
  #include "XULFormControlAccessible.h"
  #include "XULListboxAccessibleWrap.h"
  #include "XULMenuAccessibleWrap.h"
@@ -22,7 +22,7 @@ diff --git a/accessible/src/base/nsAccessibilityService.cpp b/accessible/src/bas
  // nsAccessibilityService
  ////////////////////////////////////////////////////////////////////////////////
  
- nsAccessibilityService *nsAccessibilityService::gAccessibilityService = nsnull;
+ nsAccessibilityService *nsAccessibilityService::gAccessibilityService = nullptr;
 diff --git a/accessible/src/xforms/nsXFormsAccessible.cpp b/accessible/src/xforms/nsXFormsAccessible.cpp
 --- a/accessible/src/xforms/nsXFormsAccessible.cpp
 +++ b/accessible/src/xforms/nsXFormsAccessible.cpp
@@ -46,5 +46,5 @@ diff --git a/accessible/src/xforms/nsXFormsAccessible.cpp b/accessible/src/xform
  // nsXFormsAccessibleBase
  ////////////////////////////////////////////////////////////////////////////////
  
- nsIXFormsUtilityService *nsXFormsAccessibleBase::sXFormsService = nsnull;
+ nsIXFormsUtilityService *nsXFormsAccessibleBase::sXFormsService = nullptr;
  
