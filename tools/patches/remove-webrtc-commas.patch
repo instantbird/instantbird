@@ -1,0 +1,88 @@
+diff --git a/media/webrtc/trunk/src/common_types.h b/media/webrtc/trunk/src/common_types.h
+--- a/media/webrtc/trunk/src/common_types.h
++++ b/media/webrtc/trunk/src/common_types.h
+@@ -342,17 +342,17 @@ enum TelephoneEventDetectionMethods
+ enum NsModes    // type of Noise Suppression
+ {
+     kNsUnchanged = 0,   // previously set mode
+     kNsDefault,         // platform default
+     kNsConference,      // conferencing default
+     kNsLowSuppression,  // lowest suppression
+     kNsModerateSuppression,
+     kNsHighSuppression,
+-    kNsVeryHighSuppression,     // highest suppression
++    kNsVeryHighSuppression      // highest suppression
+ };
+ 
+ enum AgcModes                  // type of Automatic Gain Control
+ {
+     kAgcUnchanged = 0,        // previously set mode
+     kAgcDefault,              // platform default
+     // adaptive mode for use when analog volume control exists (e.g. for
+     // PC softphone)
+@@ -367,17 +367,17 @@ enum AgcModes                  // type o
+ 
+ // EC modes
+ enum EcModes                   // type of Echo Control
+ {
+     kEcUnchanged = 0,          // previously set mode
+     kEcDefault,                // platform default
+     kEcConference,             // conferencing default (aggressive AEC)
+     kEcAec,                    // Acoustic Echo Cancellation
+-    kEcAecm,                   // AEC mobile
++    kEcAecm                    // AEC mobile
+ };
+ 
+ // AECM modes
+ enum AecmModes                 // mode of AECM
+ {
+     kAecmQuietEarpieceOrHeadset = 0,
+                                // Quiet earpiece or headset use
+     kAecmEarpiece,             // most earpiece use
+@@ -416,43 +416,43 @@ enum NetEqModes             // NetEQ pla
+     // Optimized trade-off between low delay and jitter robustness for two-way
+     // communication.
+     kNetEqDefault = 0,
+     // Improved jitter robustness at the cost of increased delay. Can be
+     // used in one-way communication.
+     kNetEqStreaming = 1,
+     // Optimzed for decodability of fax signals rather than for perceived audio
+     // quality.
+-    kNetEqFax = 2,
++    kNetEqFax = 2
+ };
+ 
+ enum NetEqBgnModes          // NetEQ Background Noise (BGN) configurations
+ {
+     // BGN is always on and will be generated when the incoming RTP stream
+     // stops (default).
+     kBgnOn = 0,
+     // The BGN is faded to zero (complete silence) after a few seconds.
+     kBgnFade = 1,
+     // BGN is not used at all. Silence is produced after speech extrapolation
+     // has faded.
+-    kBgnOff = 2,
++    kBgnOff = 2
+ };
+ 
+ enum OnHoldModes            // On Hold direction
+ {
+     kHoldSendAndPlay = 0,    // Put both sending and playing in on-hold state.
+     kHoldSendOnly,           // Put only sending in on-hold state.
+     kHoldPlayOnly            // Put only playing in on-hold state.
+ };
+ 
+ enum AmrMode
+ {
+     kRfc3267BwEfficient = 0,
+     kRfc3267OctetAligned = 1,
+-    kRfc3267FileStorage = 2,
++    kRfc3267FileStorage = 2
+ };
+ 
+ // ==================================================================
+ // Video specific types
+ // ==================================================================
+ 
+ // Raw video types
+ enum RawVideoType
