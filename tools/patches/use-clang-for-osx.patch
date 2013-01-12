@@ -1,8 +1,7 @@
-diff --git a/build/macosx/common b/build/macosx/common
---- a/build/macosx/common
-+++ b/build/macosx/common
-@@ -1,17 +1,22 @@
- if [ -d "$topsrcdir/clang" ]; then
+diff --git a/build/macosx/mozconfig.common b/build/macosx/mozconfig.common
+--- a/build/macosx/mozconfig.common
++++ b/build/macosx/mozconfig.common
+@@ -8,9 +8,19 @@ if [ -d "$topsrcdir/clang" ]; then
      # mozilla-central based build
      export CC=$topsrcdir/clang/bin/clang
      export CXX=$topsrcdir/clang/bin/clang++
@@ -10,12 +9,7 @@ diff --git a/build/macosx/common b/build/macosx/common
      # comm-central based build
      export CC=$topsrcdir/../clang/bin/clang
      export CXX=$topsrcdir/../clang/bin/clang++
--else
--    # SeaMonkey does not have clang installed so need
--    # to set CC and CXX here.
--    export CC=/usr/bin/gcc-4.2
--    export CXX=/usr/bin/g++-4.2
-+fi
+ fi
 +
 +# If not set use the system default clang
 +if [ -z "$CC" ]; then
@@ -25,7 +19,5 @@ diff --git a/build/macosx/common b/build/macosx/common
 +# If not set use the system default clang++
 +if [ -z "$CXX" ]; then
 +    export CXX=clang++
- fi
- 
- ac_add_options --enable-stdcxx-compat
++fi
  ac_add_options --with-ccache

@@ -1,11 +1,11 @@
 diff --git a/toolkit/content/license.html b/toolkit/content/license.html
 --- a/toolkit/content/license.html
 +++ b/toolkit/content/license.html
-@@ -54,28 +54,31 @@
-        and version you choose.)
+@@ -55,28 +55,31 @@
      </p>
      
      <ul>
+       <li><a href="about:license#ACE">ACE License</a></li>
        <li><a href="about:license#android">Android Open Source License</a></li>
        <li><a href="about:license#angle">ANGLE License</a></li>
        <li><a href="about:license#apache">Apache License 2.0</a></li>
@@ -33,7 +33,7 @@ diff --git a/toolkit/content/license.html b/toolkit/content/license.html
        <li><a href="about:license#halloc">halloc License</a></li>
        <li><a href="about:license#harfbuzz">HarfBuzz License</a></li>
        <li><a href="about:license#icu">ICU License</a></li>
-@@ -861,16 +864,51 @@ PROFITS; OR BUSINESS INTERRUPTION) HOWEV
+@@ -888,16 +891,51 @@ PROFITS; OR BUSINESS INTERRUPTION) HOWEV
  OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
@@ -85,7 +85,7 @@ diff --git a/toolkit/content/license.html b/toolkit/content/license.html
  <pre>
  Copyright &copy; 2004, Apple Computer, Inc. and The Mozilla Foundation. 
  All rights reserved.
-@@ -1333,16 +1371,914 @@ DIRECT, INDIRECT, INCIDENTAL, SPECIAL, E
+@@ -1360,16 +1398,914 @@ DIRECT, INDIRECT, INCIDENTAL, SPECIAL, E
  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT

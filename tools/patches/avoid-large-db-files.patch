@@ -1,7 +1,7 @@
 diff --git a/netwerk/cookie/nsCookieService.cpp b/netwerk/cookie/nsCookieService.cpp
 --- a/netwerk/cookie/nsCookieService.cpp
 +++ b/netwerk/cookie/nsCookieService.cpp
-@@ -739,18 +739,18 @@ nsCookieService::TryInitDB(bool aRecreat
+@@ -789,18 +789,18 @@ nsCookieService::TryInitDB(bool aRecreat
    NS_ENSURE_SUCCESS(rv, RESULT_RETRY);
  
    // Set up our listeners.
@@ -25,12 +25,12 @@ diff --git a/netwerk/cookie/nsCookieService.cpp b/netwerk/cookie/nsCookieService
 diff --git a/toolkit/components/places/Database.cpp b/toolkit/components/places/Database.cpp
 --- a/toolkit/components/places/Database.cpp
 +++ b/toolkit/components/places/Database.cpp
-@@ -590,18 +590,18 @@ Database::InitSchema(bool* aDatabaseMigr
+@@ -583,18 +583,18 @@ Database::InitSchema(bool* aDatabaseMigr
    // mobile devices, limit its size.
    // Since exceeding the limit will cause a truncate, allow a slightly
    // larger limit than DATABASE_MAX_WAL_SIZE_IN_KIBIBYTES to reduce the number
    // of times it is needed.
-   nsCAutoString journalSizePragma("PRAGMA journal_size_limit = ");
+   nsAutoCString journalSizePragma("PRAGMA journal_size_limit = ");
    journalSizePragma.AppendInt(DATABASE_MAX_WAL_SIZE_IN_KIBIBYTES * 3);
    (void)mMainConn->ExecuteSimpleSQL(journalSizePragma);
  
