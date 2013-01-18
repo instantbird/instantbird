@@ -670,7 +670,6 @@ OPTIMIZE_JARS_CMD = $(PYTHON) $(call core_abspath,$(MOZILLA_SRCDIR)/config/optim
 
 CREATE_PRECOMPLETE_CMD = $(PYTHON) $(call core_abspath,$(MOZILLA_SRCDIR)/config/createprecomplete.py)
 
-LIBS_DESC_SUFFIX = desc
 EXPAND_LIBS = $(PYTHON) -I$(MOZDEPTH)/config $(MOZILLA_SRCDIR)/config/expandlibs.py
 EXPAND_LIBS_EXEC = $(PYTHON) $(MOZILLA_SRCDIR)/config/pythonpath.py -I$(MOZDEPTH)/config $(MOZILLA_SRCDIR)/config/expandlibs_exec.py $(if $@,--depend $(MDDEPDIR)/$(basename $(@F)).pp --target $@)
 EXPAND_LIBS_GEN = $(PYTHON) $(MOZILLA_SRCDIR)/config/pythonpath.py -I$(MOZDEPTH)/config $(MOZILLA_SRCDIR)/config/expandlibs_gen.py $(if $@,--depend $(MDDEPDIR)/$(basename $(@F)).pp)
