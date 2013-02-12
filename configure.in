@@ -775,6 +775,8 @@ AC_SUBST(GNU_CC)
 AC_SUBST(GNU_CXX)
 AC_SUBST(INTEL_CC)
 AC_SUBST(INTEL_CXX)
+AC_SUBST(CLANG_CC)
+AC_SUBST(CLANG_CXX)
 
 AC_SUBST(STL_FLAGS)
 AC_SUBST(MOZ_MSVC_STL_WRAP__Throw)
@@ -1500,7 +1502,8 @@ if test "$GNU_CXX"; then
     # compiling with -std=c++0x or -std=gnu++0x (or c++11 or gnu++11 in very new
     # versions).  We can't use -std=c++0x yet, so gcc's support must remain
     # unused.  But clang's warning can be disabled, so when compiling with clang
-    # we use it to opt out of the warning, enabling (macro-encapsulated) use of     # deleted function syntax.
+    # we use it to opt out of the warning, enabling (macro-encapsulated) use of
+    # deleted function syntax.
     if test "$CLANG_CXX"; then
         _WARNINGS_CXXFLAGS="${_WARNINGS_CXXFLAGS} -Wno-c++0x-extensions"
         MOZ_CXX_SUPPORTS_WARNING(-Wno-, extended-offsetof, ac_cxx_has_wno_extended_offsetof)
@@ -2885,7 +2888,24 @@ else
     AC_MSG_RESULT(no)
 fi
 
+
+dnl Check whether we can use gcc's c++0x mode
 AC_LANG_CPLUSPLUS
+
+if test "$GNU_CXX"; then
+    _SAVE_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS -std=gnu++0x"
+
+    AC_CACHE_CHECK(for gcc c++0x headers bug without rtti,
+        ac_cv_cxx0x_headers_bug,
+        [AC_TRY_COMPILE([#include <memory>], [],
+                        ac_cv_cxx0x_headers_bug="no",
+                        ac_cv_cxx0x_headers_bug="yes")])
+    CXXFLAGS="$_SAVE_CXXFLAGS"
+    if test "$ac_cv_cxx0x_headers_bug" = "no"; then
+        CXXFLAGS="$CXXFLAGS -std=gnu++0x"
+    fi
+fi
 
 dnl Check for usable char16_t (2 bytes, unsigned)
 dnl (we might not need the unsignedness check anymore)
@@ -2902,6 +2922,10 @@ AC_CACHE_CHECK(for usable char16_t (2 bytes, unsigned),
 if test "$ac_cv_have_usable_char16_t" = "yes"; then
     AC_DEFINE(HAVE_CPP_CHAR16_T)
     HAVE_CPP_CHAR16_T=1
+else
+    if test "$GNU_CXX"; then
+        CXXFLAGS="$_SAVE_CXXFLAGS"
+    fi
 fi
 
 dnl Check for usable wchar_t (2 bytes, unsigned)
