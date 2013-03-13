@@ -28,11 +28,11 @@ diff --git a/toolkit/content/license.html b/toolkit/content/license.html
        <li><a href="about:license#gears">Google Gears License</a></li>
        <li><a href="about:license#gears-istumbler">Google Gears/iStumbler License</a></li>
        <li><a href="about:license#vp8">Google VP8 License</a></li>
-       <li><a href="about:license#growl">Growl License</a></li>
        <li><a href="about:license#gyp">gyp License</a></li>
        <li><a href="about:license#halloc">halloc License</a></li>
        <li><a href="about:license#harfbuzz">HarfBuzz License</a></li>
        <li><a href="about:license#icu">ICU License</a></li>
+       <li><a href="about:license#jpnic">Japan Network Information Center License</a></li>
 @@ -888,16 +891,51 @@ PROFITS; OR BUSINESS INTERRUPTION) HOWEV
  OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE

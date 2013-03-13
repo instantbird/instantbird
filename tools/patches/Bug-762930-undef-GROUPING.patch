@@ -19,32 +19,7 @@ diff --git a/accessible/src/base/nsAccessibilityService.cpp b/accessible/src/bas
  using namespace mozilla::a11y;
  
  ////////////////////////////////////////////////////////////////////////////////
- // nsAccessibilityService
+ // Statics
  ////////////////////////////////////////////////////////////////////////////////
  
- nsAccessibilityService *nsAccessibilityService::gAccessibilityService = nullptr;
-diff --git a/accessible/src/xforms/nsXFormsAccessible.cpp b/accessible/src/xforms/nsXFormsAccessible.cpp
---- a/accessible/src/xforms/nsXFormsAccessible.cpp
-+++ b/accessible/src/xforms/nsXFormsAccessible.cpp
-@@ -18,16 +18,21 @@
- #include "nsIDOMElement.h"
- #include "nsIDOMNodeList.h"
- #include "nsIEditor.h"
- #include "nsIMutableArray.h"
- #include "nsIXFormsUtilityService.h"
- #include "nsIPlaintextEditor.h"
- #include "nsINodeList.h"
- 
-+/* See bug 762930 */
-+#ifdef GROUPING
-+# undef GROUPING
-+#endif
-+
- using namespace mozilla::a11y;
- 
- ////////////////////////////////////////////////////////////////////////////////
- // nsXFormsAccessibleBase
- ////////////////////////////////////////////////////////////////////////////////
- 
- nsIXFormsUtilityService *nsXFormsAccessibleBase::sXFormsService = nullptr;
- 
+ /**
