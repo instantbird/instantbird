@@ -10,8 +10,8 @@ diff --git a/toolkit/crashreporter/tools/symbolstore.py b/toolkit/crashreporter/
                                 'showconfig', 'paths.default')
              if not root:
                  print >> sys.stderr, "Failed to get HG Repo for %s" % path
-+        if os.path.exists(path):
-+            path = read_output('hg', '-R', path,
++        if os.path.exists(root):
++            root = read_output('hg', '-R', root,
 +                               'showconfig', 'paths.default')
 +
          cleanroot = None
