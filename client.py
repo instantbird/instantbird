@@ -16,10 +16,6 @@ DEFAULT_MOZILLA_REV = "FIREFOX_19_0_2_RELEASE"
 DEFAULT_INSPECTOR_REPO = 'http://hg.mozilla.org/dom-inspector/'
 DEFAULT_INSPECTOR_REV = "default"
 
-# URL of the default hg repository to clone for Venkman.
-DEFAULT_VENKMAN_REPO = 'http://hg.mozilla.org/venkman/'
-DEFAULT_VENKMAN_REV = "default"
-
 import os
 import sys
 import datetime
@@ -46,24 +42,6 @@ except ImportError:
 def check_call_noisy(cmd, *args, **kwargs):
     print "Executing command:", cmd
     check_call(cmd, *args, **kwargs)
-
-def backup_cvs_venkman():
-    """Backup (obsolete) Cvs checkout of Venkman.
-    """
-
-    venkmanpath = os.path.join(topsrcdir, 'mozilla', 'extensions', 'venkman')
-    # Do nothing if there is no Venkman cvs directory.
-    if not os.path.exists(os.path.join(venkmanpath, 'CVS')):
-        return
-
-    venkmancvspath = venkmanpath + '-cvs'
-    print "Moving venkman to venkman-cvs..."
-    try:
-        os.rename(venkmanpath, venkmancvspath)
-    except:
-        # Print the exception without its traceback.
-        sys.excepthook(sys.exc_info()[0], sys.exc_info()[1], None)
-        sys.exit("Error: Venkman directory renaming failed!")
 
 def do_hg_pull(dir, repository, hg, rev):
     fulldir = os.path.join(topsrcdir, dir)
@@ -120,16 +98,6 @@ o.add_option("--inspector-rev", dest="inspector_rev",
              default=DEFAULT_INSPECTOR_REV,
              help="Revision of DOM inspector repository to update to. Default: \"" + DEFAULT_INSPECTOR_REV + "\"")
 
-o.add_option("--venkman-repo", dest = "venkman_repo",
-             default = None,
-             help = "URL of Venkman repository to pull from (default: use \"" + DEFAULT_VENKMAN_REPO + "\".)")
-o.add_option("--skip-venkman", dest="skip_venkman",
-             action="store_true", default=False,
-             help="Skip pulling the Venkman repository.")
-o.add_option("--venkman-rev", dest = "venkman_rev",
-             default = DEFAULT_VENKMAN_REV,
-             help = "Revision of Venkman repository to update to. Default: \"" + DEFAULT_VENKMAN_REV + "\"")
-
 o.add_option("--hg", dest="hg", default=os.environ.get('HG', 'hg'),
              help="The location of the hg binary")
 o.add_option("-v", "--verbose", dest="verbose",
@@ -145,8 +113,6 @@ o.add_option("--l10n-base-dir", dest="l10n_base_dir",
 o.add_option("--locale", dest="ab_cd",
              default=None,
              help="locale to checkout (for checkout-l10n)")
-
-backup_cvs_venkman()
 
 def fixup_repo_options(options):
     """ Check options.instantbird_repo and options.mozilla_repo values;
@@ -174,10 +140,6 @@ def fixup_repo_options(options):
     if (options.inspector_repo is None):
         options.inspector_repo = DEFAULT_INSPECTOR_REPO
 
-    # Handle special case: initial checkout of Venkman.
-    if (options.venkman_repo is None):
-        options.venkman_repo = DEFAULT_VENKMAN_REPO
-
 try:
     (options, (action,)) = o.parse_args()
 except ValueError:
@@ -201,20 +163,16 @@ if action in ('checkout', 'co'):
         check_call_noisy("bash tools/patches/apply-patches.sh", shell=True)
 
     # Check whether destination directory exists for these extensions.
-    if (not options.skip_inspector or not options.skip_venkman) and \
+    if not options.skip_inspector and \
        not os.path.exists(os.path.join(topsrcdir, 'mozilla', 'extensions')):
         # Don't create the directory: Mozilla repository should provide it...
-        print >>sys.stderr, "Warning: mozilla/extensions directory does not exist; DOM Inspector and/or Venkman could not be checked out."
+        print >>sys.stderr, "Warning: mozilla/extensions directory does not exist; DOM Inspector could not be checked out."
         # Abort checking out dependent extensions.
         options.skip_inspector = \
-        options.skip_venkman = \
             True
 
     if not options.skip_inspector:
         do_hg_pull(os.path.join('mozilla', 'extensions', 'inspector'), options.inspector_repo, options.hg, options.inspector_rev)
-
-    if not options.skip_venkman:
-        do_hg_pull(os.path.join('mozilla', 'extensions', 'venkman'), options.venkman_repo, options.hg, options.venkman_rev)
 elif action == 'checkout-l10n':
     if options.l10n_base_dir is None or options.ab_cd is None:
         sys.exit("Error: --l10-base-dir and --locale are required")

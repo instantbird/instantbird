@@ -7,7 +7,7 @@ mk_add_options MOZ_MAKE_FLAGS=-j4
 
 if [ "$DEBUG" ]; then
   mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/../obj-instantbird-dbg
-  ac_add_options --enable-extensions=venkman,inspector
+  ac_add_options --enable-extensions=inspector
   ac_add_options --enable-debug --disable-optimize --disable-jemalloc --enable-valgrind
 else
   mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/../obj-instantbird
