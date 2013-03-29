@@ -14,7 +14,7 @@ DEFAULT_MOZILLA_REV = "FIREFOX_19_0_2_RELEASE"
 
 # URL of the default hg repository to clone for inspector.
 DEFAULT_INSPECTOR_REPO = 'http://hg.mozilla.org/dom-inspector/'
-DEFAULT_INSPECTOR_REV = "default"
+DEFAULT_INSPECTOR_REV = "DOMI_2_0_13"
 
 import os
 import sys
