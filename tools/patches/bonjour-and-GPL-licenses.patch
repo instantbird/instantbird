@@ -1,7 +1,7 @@
 diff --git a/toolkit/content/license.html b/toolkit/content/license.html
 --- a/toolkit/content/license.html
 +++ b/toolkit/content/license.html
-@@ -55,28 +55,31 @@
+@@ -55,27 +55,30 @@
      </p>
      
      <ul>
@@ -13,7 +13,6 @@ diff --git a/toolkit/content/license.html b/toolkit/content/license.html
 +      <li><a href="about:license#apple-bonjour">Apple Bonjour License</a></li>
        <li><a href="about:license#apple-mozilla">Apple/Mozilla NPRuntime License</a></li>
        <li><a href="about:license#apple-torch">Apple/Torch Mobile License</a></li>
-       <li><a href="about:license#breakpad">Breakpad License</a></li>
        <li><a href="about:license#bspatch">bspatch License</a></li>
        <li><a href="about:license#cairo">Cairo Component Licenses</a></li>
        <li><a href="about:license#chromium">Chromium License</a></li>
@@ -25,15 +24,15 @@ diff --git a/toolkit/content/license.html b/toolkit/content/license.html
        <li><a href="about:license#gfx-font-list">gfxFontList License</a></li>
 +      <li><a href="about:license#gpl">GNU General Public License</a></li>
 +      <li><a href="about:license#lgpl">GNU Lesser General Public License</a></li>
+       <li><a href="about:license#google-bsd">Google BSD License</a></li>
        <li><a href="about:license#gears">Google Gears License</a></li>
        <li><a href="about:license#gears-istumbler">Google Gears/iStumbler License</a></li>
        <li><a href="about:license#vp8">Google VP8 License</a></li>
+       <li><a href="about:license#growl">Growl License</a></li>
        <li><a href="about:license#gyp">gyp License</a></li>
        <li><a href="about:license#halloc">halloc License</a></li>
        <li><a href="about:license#harfbuzz">HarfBuzz License</a></li>
-       <li><a href="about:license#icu">ICU License</a></li>
-       <li><a href="about:license#jpnic">Japan Network Information Center License</a></li>
-@@ -888,16 +891,51 @@ PROFITS; OR BUSINESS INTERRUPTION) HOWEV
+@@ -889,16 +892,51 @@ PROFITS; OR BUSINESS INTERRUPTION) HOWEV
  OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
@@ -85,17 +84,15 @@ diff --git a/toolkit/content/license.html b/toolkit/content/license.html
  <pre>
  Copyright &copy; 2004, Apple Computer, Inc. and The Mozilla Foundation. 
  All rights reserved.
-@@ -1360,16 +1398,914 @@ DIRECT, INDIRECT, INCIDENTAL, SPECIAL, E
- (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+@@ -1324,16 +1362,916 @@ ON ANY THEORY OF LIABILITY, WHETHER IN C
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  </pre>
  
  
-+    <hr>
-+
+ 
+     <hr>
+ 
 +    <h1><a name="gpl"></a>GNU General Public License</h1>
 +
 +    <p>This license applies to the file
@@ -992,11 +989,15 @@ diff --git a/toolkit/content/license.html b/toolkit/content/license.html
 +
 +<p>That's all there is to it!
 +
++
++
++    <hr>
++
+     <h1><a id="google-bsd"></a>Google BSD License</h1>
  
-     <hr>
+     <p>This license applies to files in the directories
+     <span class="path">toolkit/crashreporter/google-breakpad/</span>,
+     <span class="path">camino/google-breakpad/</span> and
+     <span class="path">toolkit/components/protobuf/</span>.</p>
  
-     <h1><a id="gears"></a>Google Gears License</h1>
- 
-     <p>This license applies to the file
-     <span class="path">netwerk/wifi/wlanapi.h</span>.</p>
- 
+ <pre>

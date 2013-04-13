@@ -1,7 +1,7 @@
 diff --git a/toolkit/crashreporter/tools/symbolstore.py b/toolkit/crashreporter/tools/symbolstore.py
 --- a/toolkit/crashreporter/tools/symbolstore.py
 +++ b/toolkit/crashreporter/tools/symbolstore.py
-@@ -129,16 +129,20 @@ class HGRepoInfo:
+@@ -131,16 +131,20 @@ class HGRepoInfo:
          hg_root = os.environ.get("SRCSRV_ROOT")
          if hg_root:
              root = hg_root
