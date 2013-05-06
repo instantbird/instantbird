@@ -309,6 +309,16 @@ ifeq ($(OS_ARCH),OS2)
 TAR_CREATE_FLAGS = -cvf
 endif
 
+ifdef LOCALE_MERGEDIR
+MERGE_FILE = $(firstword \
+  $(wildcard $(LOCALE_MERGEDIR)/$(subst /locales,,$(relativesrcdir))/$(1)) \
+  $(wildcard $(LOCALE_SRCDIR)/$(1)) \
+  $(srcdir)/en-US/$(1) )
+else
+MERGE_FILE = $(LOCALE_SRCDIR)/$(1)
+endif
+MERGE_FILES = $(foreach f,$(1),$(call MERGE_FILE,$(f)))
+
 #
 # Personal makefile customizations go in these optional make include files.
 #
@@ -615,7 +625,9 @@ png2ico = $(PYTHON) $(MOZILLA_DIR)/config/pythonpath.py \
 AB_CD = $(MOZ_UI_LOCALE)
 
 ifndef L10NBASEDIR
-L10NBASEDIR = $(error L10NBASEDIR not defined by configure)
+  L10NBASEDIR = $(error L10NBASEDIR not defined by configure)
+else
+  IS_LANGUAGE_REPACK = 1
 endif
 
 EXPAND_LOCALE_SRCDIR = $(if $(filter en-US,$(AB_CD)),$(topsrcdir)/$(1)/en-US,$(L10NBASEDIR)/$(AB_CD)/$(subst /locales,,$(1)))
@@ -625,17 +637,21 @@ ifdef relativesrcdir
 LOCALE_SRCDIR = $(call EXPAND_LOCALE_SRCDIR,$(relativesrcdir))
 endif
 
-ifdef LOCALE_SRCDIR
-# if LOCALE_MERGEDIR is set, use mergedir first, then the localization,
-# and finally en-US
+ifdef relativesrcdir
+MAKE_JARS_FLAGS += --relativesrcdir=$(relativesrcdir)
+ifneq (en-US,$(AB_CD))
 ifdef LOCALE_MERGEDIR
-MAKE_JARS_FLAGS += -c $(LOCALE_MERGEDIR)/$(subst /locales,,$(relativesrcdir))
+MAKE_JARS_FLAGS += --locale-mergedir=$(LOCALE_MERGEDIR)
 endif
+ifdef IS_LANGUAGE_REPACK
+MAKE_JARS_FLAGS += --l10n-base=$(L10NBASEDIR)/$(AB_CD)
+endif
+else
 MAKE_JARS_FLAGS += -c $(LOCALE_SRCDIR)
-ifdef LOCALE_MERGEDIR
-MAKE_JARS_FLAGS += -c $(topsrcdir)/$(relativesrcdir)/en-US
-endif
-endif
+endif # en-US
+else
+MAKE_JARS_FLAGS += -c $(LOCALE_SRCDIR)
+endif # ! relativesrcdir
 
 ifeq (OS2,$(OS_ARCH))
 RUN_TEST_PROGRAM = $(MOZILLA_SRCDIR)/build/os2/test_os2.cmd "$(DIST)"
