@@ -12,6 +12,9 @@
 #
 
 # Define an include-at-most-once flag
+ifdef INCLUDED_CONFIG_MK
+$(error Do not include config.mk twice!)
+endif
 INCLUDED_CONFIG_MK = 1
 
 EXIT_ON_ERROR = set -e; # Shell loops continue past errors without this.
@@ -23,6 +26,20 @@ endif
 ifndef INCLUDED_AUTOCONF_MK
 include $(DEPTH)/config/autoconf.mk
 endif
+
+space = $(NULL) $(NULL)
+
+# Include defs.mk files that can be found in $(srcdir)/$(DEPTH),
+# $(srcdir)/$(DEPTH-1), $(srcdir)/$(DEPTH-2), etc., and $(srcdir)
+# where $(DEPTH-1) is one level less of depth, $(DEPTH-2), two, etc.
+# i.e. for DEPTH=../../.., DEPTH-1 is ../.. and DEPTH-2 is ..
+# These defs.mk files are used to define variables in a directory
+# and all its subdirectories, recursively.
+__depth := $(subst /, ,$(DEPTH))
+ifeq (.,$(__depth))
+__depth :=
+endif
+$(foreach __d,$(__depth) .,$(eval __depth = $(wordlist 2,$(words $(__depth)),$(__depth))$(eval -include $(subst $(space),/,$(strip $(srcdir) $(__depth) defs.mk)))))
 
 COMMA = ,
 
@@ -50,16 +67,14 @@ core_realpath = $(if $(realpath $(1)),$(realpath $(1)),$(call core_abspath,$(1))
 
 RM = rm -f
 
-nullstr :=
-space :=$(nullstr) # EOL
-
 core_winabspath = $(firstword $(subst /, ,$(call core_abspath,$(1)))):$(subst $(space),,$(patsubst %,\\%,$(wordlist 2,$(words $(subst /, ,$(call core_abspath,$(1)))), $(strip $(subst /, ,$(call core_abspath,$(1)))))))
 
 # FINAL_TARGET specifies the location into which we copy end-user-shipped
 # build products (typelibs, components, chrome).
 #
-# It will usually be the well-loved $(DIST)/bin, today, but can also be an
-# XPI-contents staging directory for ambitious and right-thinking extensions.
+# If XPI_NAME is set, the files will be shipped to $(DIST)/xpi-stage/$(XPI_NAME)
+# If DIST_SUBDIR is set, the files will be shipped to $(DIST)/$(DIST_SUBDIR)
+# Otherwise, the default $(DIST)/bin will be used.
 FINAL_TARGET = $(if $(XPI_NAME),$(DIST)/xpi-stage/$(XPI_NAME),$(DIST)/bin)
 
 ifdef XPI_NAME
@@ -105,11 +120,20 @@ FINAL_LINK_COMP_NAMES = $(MOZDEPTH)/config/final-link-comp-names
 MOZ_UNICHARUTIL_LIBS = $(LIBXUL_DIST)/lib/$(LIB_PREFIX)unicharutil_s.$(LIB_SUFFIX)
 MOZ_WIDGET_SUPPORT_LIBS    = $(DIST)/lib/$(LIB_PREFIX)widgetsupport_s.$(LIB_SUFFIX)
 
+ifdef _MSC_VER
+CC_WRAPPER ?= $(PYTHON) -O $(topsrcdir)/mozilla/build/cl.py
+CXX_WRAPPER ?= $(PYTHON) -O $(topsrcdir)/mozilla/build/cl.py
+endif # _MSC_VER
+
 CC := $(CC_WRAPPER) $(CC)
 CXX := $(CXX_WRAPPER) $(CXX)
 MKDIR ?= mkdir
 SLEEP ?= sleep
 TOUCH ?= touch
+
+ifdef .PYMAKE
+PYCOMMANDPATH += $(MOZILLA_SRCDIR)/config
+endif
 
 # determine debug-related options
 _DEBUG_CFLAGS :=
@@ -151,17 +175,6 @@ OS_CXXFLAGS += -Zi -UDEBUG -DNDEBUG
 OS_CFLAGS += -Zi -UDEBUG -DNDEBUG
 OS_LDFLAGS += -DEBUG -OPT:REF
 endif # MOZ_DEBUG_SYMBOLS
-
-ifdef MOZ_QUANTIFY
-# -FIXED:NO is needed for Quantify to work, but it increases the size
-# of executables, so only use it if building for Quantify.
-WIN32_EXE_LDFLAGS += -FIXED:NO
-
-# We need -OPT:NOICF to prevent identical methods from being merged together.
-# Otherwise, Quantify doesn't know which method was actually called when it's
-# showing you the profile.
-OS_LDFLAGS += -OPT:NOICF
-endif
 
 #
 # Handle trace-malloc in optimized builds.
@@ -227,11 +240,6 @@ ifndef STATIC_LIBRARY_NAME
 ifdef LIBRARY_NAME
 STATIC_LIBRARY_NAME=$(LIBRARY_NAME)
 endif
-endif
-
-# This comes from configure
-ifdef MOZ_PROFILE_GUIDED_OPTIMIZE_DISABLE
-NO_PROFILE_GUIDED_OPTIMIZE = 1
 endif
 
 # Enable profile-based feedback
@@ -320,9 +328,7 @@ MY_RULES	:= $(DEPTH)/config/myrules.mk
 # Default command macros; can be overridden in <arch>.mk.
 #
 CCC		= $(CXX)
-PURIFY		= purify $(PURIFYOPTIONS)
-QUANTIFY	= quantify $(QUANTIFYOPTIONS)
-XPIDL_LINK = $(PYTHON) $(SDK_BIN_DIR)/xpt.py link
+XPIDL_LINK = $(PYTHON) $(LIBXUL_DIST)/sdk/bin/xpt.py link
 
 OS_INCLUDES += $(NSPR_CFLAGS) $(NSS_CFLAGS) $(MOZ_JPEG_CFLAGS) $(MOZ_PNG_CFLAGS) $(MOZ_ZLIB_CFLAGS)
 
@@ -382,6 +388,8 @@ endif # MOZ_OPTIMIZE == 1
 endif # MOZ_OPTIMIZE
 endif # CROSS_COMPILE
 
+CFLAGS += $(MOZ_FRAMEPTR_FLAGS)
+CXXFLAGS += $(MOZ_FRAMEPTR_FLAGS)
 
 ifeq ($(OS_ARCH)_$(GNU_CC),WINNT_)
 #// Currently, unless USE_STATIC_LIBS is defined, the multithreaded
@@ -492,6 +500,13 @@ ifdef MACOSX_DEPLOYMENT_TARGET
 export MACOSX_DEPLOYMENT_TARGET
 PBBUILD_SETTINGS += MACOSX_DEPLOYMENT_TARGET="$(MACOSX_DEPLOYMENT_TARGET)"
 endif # MACOSX_DEPLOYMENT_TARGET
+
+ifdef MOZ_USING_CCACHE
+ifdef CLANG_CXX
+export CCACHE_CPP2=1
+endif
+endif
+
 ifdef MOZ_OPTIMIZE
 ifeq (2,$(MOZ_OPTIMIZE))
 # Only override project defaults if the config specified explicit settings
@@ -499,15 +514,6 @@ PBBUILD_SETTINGS += GCC_MODEL_TUNING= OPTIMIZATION_CFLAGS="$(MOZ_OPTIMIZE_FLAGS)
 endif # MOZ_OPTIMIZE=2
 endif # MOZ_OPTIMIZE
 endif # OS_ARCH=Darwin
-
-
-ifdef MOZ_NATIVE_MAKEDEPEND
-MKDEPEND_DIR	=
-MKDEPEND	= $(MOZ_NATIVE_MAKEDEPEND)
-else
-MKDEPEND_DIR	= $(CONFIG_TOOLS)/mkdepend
-MKDEPEND	= $(MKDEPEND_DIR)/mkdepend$(BIN_SUFFIX)
-endif
 
 # Set link flags according to whether we want a console.
 ifdef MOZ_WINCONSOLE
@@ -560,7 +566,7 @@ DEFINES		+= -DOSARCH=$(OS_ARCH)
 
 ######################################################################
 
-GARBAGE		+= $(DEPENDENCIES) $(MKDEPENDENCIES) $(MKDEPENDENCIES).bak core $(wildcard core.[0-9]*) $(wildcard *.err) $(wildcard *.pure) $(wildcard *_pure_*.o) Templates.DB
+GARBAGE		+= $(DEPENDENCIES) core $(wildcard core.[0-9]*) $(wildcard *.err) $(wildcard *.pure) $(wildcard *_pure_*.o) Templates.DB
 
 ifeq ($(OS_ARCH),Darwin)
 ifndef NSDISTMODE
@@ -570,6 +576,11 @@ PWD := $(CURDIR)
 endif
 
 NSINSTALL_PY := $(PYTHON) $(call core_abspath,$(MOZILLA_SRCDIR)/config/nsinstall.py)
+# For Pymake, whereever we use nsinstall.py we're also going to try to make it
+# a native command where possible. Since native commands can't be used outside
+# of single-line commands, we continue to provide INSTALL for general use.
+# Single-line commands should be switched over to install_cmd.
+NSINSTALL_NATIVECMD := %nsinstall nsinstall
 
 ifdef NSINSTALL_BIN
 NSINSTALL = $(NSINSTALL_BIN)
@@ -585,8 +596,13 @@ endif # WINNT
 endif # OS2
 endif # NSINSTALL_BIN
 
+
 ifeq (,$(CROSS_COMPILE)$(filter-out WINNT OS2, $(OS_ARCH)))
 INSTALL = $(NSINSTALL) -t
+ifdef .PYMAKE
+install_cmd = $(NSINSTALL_NATIVECMD) -t $(1)
+endif # .PYMAKE
+
 else
 
 # This isn't laid out as conditional directives so that NSDISTMODE can be
@@ -595,11 +611,17 @@ INSTALL         = $(if $(filter copy, $(NSDISTMODE)), $(NSINSTALL) -t, $(if $(fi
 
 endif # WINNT/OS2
 
+# The default for install_cmd is simply INSTALL
+install_cmd ?= $(INSTALL) $(1)
+
 # Use nsinstall in copy mode to install files on the system
-SYSINSTALL	= $(NSINSTALL) -t
+SYSINSTALL  = $(NSINSTALL) -t
+# This isn't necessarily true, just here
+sysinstall_cmd = install_cmd
 
 # Directory nsinstall.
 DIR_INSTALL = $(INSTALL)
+dir_install_cmd = install_cmd
 
 # png to ico converter. The function takes 5 arguments, in order: source png
 # file, left, top, size, output ico file.
@@ -669,9 +691,12 @@ endif
 
 CREATE_PRECOMPLETE_CMD = $(PYTHON) $(call core_abspath,$(MOZILLA_SRCDIR)/config/createprecomplete.py)
 
-EXPAND_LIBS = $(PYTHON) -I$(MOZDEPTH)/config $(MOZILLA_SRCDIR)/config/expandlibs.py
-EXPAND_LIBS_EXEC = $(PYTHON) $(MOZILLA_SRCDIR)/config/pythonpath.py -I$(MOZDEPTH)/config $(MOZILLA_SRCDIR)/config/expandlibs_exec.py $(if $@,--depend $(MDDEPDIR)/$(basename $(@F)).pp --target $@)
-EXPAND_LIBS_GEN = $(PYTHON) $(MOZILLA_SRCDIR)/config/pythonpath.py -I$(MOZDEPTH)/config $(MOZILLA_SRCDIR)/config/expandlibs_gen.py $(if $@,--depend $(MDDEPDIR)/$(basename $(@F)).pp)
+# MDDEPDIR is the subdirectory where dependency files are stored
+MDDEPDIR := .deps
+
+EXPAND_LIBS = $(PYTHON) $(MOZILLA_SRCDIR)/config/expandlibs.py
+EXPAND_LIBS_EXEC = $(PYTHON) $(MOZILLA_SRCDIR)/config/expandlibs_exec.py $(if $@,--depend $(MDDEPDIR)/$(basename $(@F)).pp --target $@)
+EXPAND_LIBS_GEN = $(PYTHON) $(MOZILLA_SRCDIR)/config/expandlibs_gen.py $(if $@,--depend $(MDDEPDIR)/$(basename $(@F)).pp)
 EXPAND_AR = $(EXPAND_LIBS_EXEC) --extract -- $(AR)
 EXPAND_CC = $(EXPAND_LIBS_EXEC) --uselist -- $(CC)
 EXPAND_CCC = $(EXPAND_LIBS_EXEC) --uselist -- $(CCC)
@@ -696,6 +721,15 @@ endif
 EXPAND_LIBNAME_PATH = $(foreach lib,$(1),$(2)/$(LIB_PREFIX)$(lib).$(LIB_SUFFIX))
 EXPAND_MOZLIBNAME = $(foreach lib,$(1),$(DIST)/lib/$(LIB_PREFIX)$(lib).$(LIB_SUFFIX))
 
+# Include internal ply only if needed
+ifndef MOZ_SYSTEM_PLY
+PLY_INCLUDE = -I$(MOZILLA_DIR)/other-licenses/ply
+endif
+ 
+export CL_INCLUDES_PREFIX
+
 # autoconf.mk sets OBJ_SUFFIX to an error to avoid use before including
 # this file
 OBJ_SUFFIX := $(_OBJ_SUFFIX)
+
+DEFINES += -DNO_NSPR_10_SUPPORT
