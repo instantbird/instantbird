@@ -1,0 +1,70 @@
+# HG changeset patch
+# Parent 702d2814efbf33eea652d5bfcc658aba75331014
+# User Gregory Szorc <gps@mozilla.com>
+Bug 842341 - Fix Windows builds with GNU make
+
+diff --git a/addon-sdk/Makefile.in b/addon-sdk/Makefile.in
+--- a/addon-sdk/Makefile.in
++++ b/addon-sdk/Makefile.in
+@@ -6,16 +6,18 @@ DEPTH     = @DEPTH@
+ topsrcdir = @top_srcdir@
+ srcdir    = @srcdir@
+ VPATH     = @srcdir@
+ 
+ include $(topsrcdir)/config/config.mk
+ 
+ TEST_DIRS += test
+ 
++export PYMAKE = $(.PYMAKE)
++
+ libs::
+ 	$(PYTHON) $(srcdir)/copy_source.py $(topsrcdir) $(srcdir)/source/lib $(FINAL_TARGET)/modules/commonjs >copy_source.mk
+ 	$(MAKE) -f copy_source.mk libs
+ 
+ include $(topsrcdir)/config/rules.mk
+ 
+ TEST_FILES = \
+   source/app-extension \
+diff --git a/addon-sdk/copy_source.py b/addon-sdk/copy_source.py
+--- a/addon-sdk/copy_source.py
++++ b/addon-sdk/copy_source.py
+@@ -1,21 +1,38 @@
+ # This Source Code Form is subject to the terms of the Mozilla Public
+ # License, v. 2.0. If a copy of the MPL was not distributed with this
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+ import os
++import posixpath
+ import sys
+ 
++
++def normpath(path):
++    """Ensure UNIX style paths are used with GNU make on Windows.
++
++    This can be removed once we no longer support GNU make on Windows (bug
++    828317).
++    """
++    if os.environ.get('PYMAKE') or os.name not in ('nt', 'ce'):
++        return path
++
++    if len(path) > 2 and path[1] == ':':
++        path = '/' + path[0] + path[2:]
++
++    return posixpath.normpath(path)
++
++
+ if len(sys.argv) != 4:
+     print >> sys.stderr, "Usage: copy_source.py " \
+                          "<topsrcdir> <source directory> <target directory>"
+     sys.exit(1)
+ 
+-topsrcdir = sys.argv[1]
++topsrcdir = normpath(sys.argv[1])
+ source_dir = sys.argv[2]
+ target_dir = sys.argv[3]
+ 
+ print """
+ DEPTH     = ..
+ topsrcdir = %(topsrcdir)s
+ srcdir    = %(topsrcdir)s/addon-sdk
+ VPATH     = %(topsrcdir)s/addon-sdk
