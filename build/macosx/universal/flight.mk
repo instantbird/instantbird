@@ -38,6 +38,7 @@ ifdef ENABLE_TESTS
            cp $(DIST_ARCH_1)/test-package-stage/reftest/automation.py   \
              $(DIST_ARCH_2)/test-package-stage/reftest/;                \
 	  $(TOPSRCDIR)/mozilla/build/macosx/universal/unify \
+	      --unify-with-sort "\.manifest$$" \
 	      --unify-with-sort "all-test-dirs\.list$$" \
 	      $(DIST_ARCH_1)/test-package-stage                         \
 	      $(DIST_ARCH_2)/test-package-stage                         \
