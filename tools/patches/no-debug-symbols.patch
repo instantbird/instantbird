@@ -1,7 +1,7 @@
 diff --git a/Makefile.in b/Makefile.in
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -108,37 +108,37 @@ endif
+@@ -77,37 +77,37 @@ endif
  include $(topsrcdir)/config/rules.mk
  
  distclean::

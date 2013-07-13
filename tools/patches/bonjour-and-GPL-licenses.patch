@@ -1,7 +1,7 @@
 diff --git a/toolkit/content/license.html b/toolkit/content/license.html
 --- a/toolkit/content/license.html
 +++ b/toolkit/content/license.html
-@@ -55,27 +55,30 @@
+@@ -55,28 +55,31 @@
      </p>
      
      <ul>
@@ -19,6 +19,7 @@ diff --git a/toolkit/content/license.html b/toolkit/content/license.html
        <li><a href="about:license#dtoa">dtoa License</a></li>
        <li><a href="about:license#hunspell-nl">Dutch Spellchecking Dictionary License</a></li>
        <li><a href="about:license#edl">Eclipse Distribution License</a></li>
+       <li><a href="about:license#hunspell-ee">Estonian Spellchecking Dictionary License</a></li>
        <li><a href="about:license#expat">Expat License</a></li>
        <li><a href="about:license#firebug">Firebug License</a></li>
        <li><a href="about:license#gfx-font-list">gfxFontList License</a></li>
@@ -32,7 +33,7 @@ diff --git a/toolkit/content/license.html b/toolkit/content/license.html
        <li><a href="about:license#gyp">gyp License</a></li>
        <li><a href="about:license#halloc">halloc License</a></li>
        <li><a href="about:license#harfbuzz">HarfBuzz License</a></li>
-@@ -889,16 +892,51 @@ PROFITS; OR BUSINESS INTERRUPTION) HOWEV
+@@ -891,16 +894,51 @@ PROFITS; OR BUSINESS INTERRUPTION) HOWEV
  OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
@@ -84,7 +85,7 @@ diff --git a/toolkit/content/license.html b/toolkit/content/license.html
  <pre>
  Copyright &copy; 2004, Apple Computer, Inc. and The Mozilla Foundation. 
  All rights reserved.
-@@ -1324,16 +1362,916 @@ ON ANY THEORY OF LIABILITY, WHETHER IN C
+@@ -1378,16 +1416,916 @@ ON ANY THEORY OF LIABILITY, WHETHER IN C
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  </pre>

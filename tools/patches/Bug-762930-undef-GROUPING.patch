@@ -1,7 +1,7 @@
 diff --git a/accessible/src/base/nsAccessibilityService.cpp b/accessible/src/base/nsAccessibilityService.cpp
 --- a/accessible/src/base/nsAccessibilityService.cpp
 +++ b/accessible/src/base/nsAccessibilityService.cpp
-@@ -71,16 +71,21 @@
+@@ -76,16 +76,21 @@
  #include "XULFormControlAccessible.h"
  #include "XULListboxAccessibleWrap.h"
  #include "XULMenuAccessibleWrap.h"
