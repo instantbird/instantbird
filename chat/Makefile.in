@@ -17,6 +17,7 @@ PROTOCOLS = \
 		twitter \
 		vkontakte \
 		xmpp \
+		yahoo \
 		$(NULL)
 
 ifdef MOZ_DEBUG
