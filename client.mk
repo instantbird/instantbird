@@ -276,7 +276,6 @@ CONFIG_STATUS_DEPS := \
 	$(TOPSRCDIR)/allmakefiles.sh \
 	$(TOPSRCDIR)/instantbird/config/version.txt \
 	$(TOPSRCDIR)/purple/config/version.txt \
-	$(TOPSRCDIR)/mozilla/allmakefiles.sh \
 	$(wildcard $(TOPSRCDIR)/mozilla/nsprpub/configure) \
 	$(wildcard $(TOPSRCDIR)/mozilla/config/milestone.txt) \
 	$(wildcard $(addsuffix confvars.sh,$(wildcard $(TOPSRCDIR)/*/))) \
