@@ -10,6 +10,7 @@ tools/l10n/polib.pyc
 *.orig
 *.patch
 *.diff
+*.pyc
 configure
 attachment.cgi\?id=*
 mozconfig-*
