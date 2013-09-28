@@ -6195,6 +6195,15 @@ else
 fi
 AC_SUBST(MOZ_MACBUNDLE_NAME)
 
+dnl ========================================================
+dnl = Child Process Name for IPC
+dnl ========================================================
+MOZ_CHILD_PROCESS_NAME="plugin-container${BIN_SUFFIX}"
+MOZ_CHILD_PROCESS_BUNDLE="plugin-container.app/Contents/MacOS/"
+
+AC_SUBST(MOZ_CHILD_PROCESS_NAME)
+AC_SUBST(MOZ_CHILD_PROCESS_BUNDLE)
+
 # For extensions and langpacks, we require a max version that is compatible
 # across security releases. MOZ_APP_MAXVERSION is our method for doing that.
 # 10.0a1 and 10.0a2 aren't affected
