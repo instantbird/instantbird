@@ -6473,14 +6473,7 @@ case "$host" in
     ;;
 esac
 
-dnl Load the list of Makefiles to generate.
-dnl   To add new Makefiles, edit allmakefiles.sh.
-dnl   allmakefiles.sh sets the variable, MAKEFILES.
-. ${srcdir}/allmakefiles.sh
-
-echo $MAKEFILES > unallmakefiles
-
-AC_OUTPUT($MAKEFILES)
+AC_OUTPUT([comm-config.h config/autoconf.mk])
 
 dnl ========================================================
 dnl = Setup a nice relatively clean build environment for
@@ -6497,7 +6490,6 @@ HOST_CFLAGS="$_SUBDIR_HOST_CFLAGS"
 HOST_LDFLAGS="$_SUBDIR_HOST_LDFLAGS"
 RC=
 
-unset MAKEFILES
 unset CONFIG_FILES
 
 export WRAP_LDFLAGS

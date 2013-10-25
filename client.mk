@@ -273,7 +273,6 @@ $(CONFIGURES): %: %.in $(EXTRA_CONFIG_DEPS)
 
 CONFIG_STATUS_DEPS := \
 	$(wildcard $(CONFIGURES)) \
-	$(TOPSRCDIR)/allmakefiles.sh \
 	$(TOPSRCDIR)/instantbird/config/version.txt \
 	$(TOPSRCDIR)/purple/config/version.txt \
 	$(wildcard $(TOPSRCDIR)/mozilla/nsprpub/configure) \
