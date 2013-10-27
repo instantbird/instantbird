@@ -34,7 +34,7 @@ diff --git a/toolkit/content/license.html b/toolkit/content/license.html
        <li><a href="about:license#gyp">gyp License</a></li>
        <li><a href="about:license#halloc">halloc License</a></li>
        <li><a href="about:license#harfbuzz">HarfBuzz License</a></li>
-@@ -894,16 +897,51 @@ PROFITS; OR BUSINESS INTERRUPTION) HOWEV
+@@ -895,16 +898,51 @@ PROFITS; OR BUSINESS INTERRUPTION) HOWEV
  OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
@@ -86,7 +86,7 @@ diff --git a/toolkit/content/license.html b/toolkit/content/license.html
  <pre>
  Copyright &copy; 2004, Apple Computer, Inc. and The Mozilla Foundation. 
  All rights reserved.
-@@ -1417,16 +1455,916 @@ ON ANY THEORY OF LIABILITY, WHETHER IN C
+@@ -1418,16 +1456,916 @@ ON ANY THEORY OF LIABILITY, WHETHER IN C
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  </pre>

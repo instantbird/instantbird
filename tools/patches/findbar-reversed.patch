@@ -131,7 +131,7 @@ diff --git a/toolkit/components/typeaheadfind/nsTypeAheadFind.cpp b/toolkit/comp
 diff --git a/toolkit/content/widgets/findbar.xml b/toolkit/content/widgets/findbar.xml
 --- a/toolkit/content/widgets/findbar.xml
 +++ b/toolkit/content/widgets/findbar.xml
-@@ -316,16 +316,26 @@
+@@ -306,16 +306,26 @@
              this._browser.addEventListener("keypress", this, false);
              this._browser.addEventListener("mouseup", this, false);
              this._findField.value = this._browser.fastFind.searchString;
@@ -158,7 +158,7 @@ diff --git a/toolkit/content/widgets/findbar.xml b/toolkit/content/widgets/findb
                aIID.equals(Components.interfaces.nsISupportsWeakReference) ||
                aIID.equals(Components.interfaces.nsISupports))
              return this;
-@@ -1561,17 +1571,18 @@
+@@ -1578,17 +1588,18 @@
            {
              this._enableFindButtons(val);
              if (this.getElement("highlight").checked)
@@ -178,7 +178,7 @@ diff --git a/toolkit/content/widgets/findbar.xml b/toolkit/content/widgets/findb
                this._findFailedString = val;
              else
                this._findFailedString = null;
-@@ -1792,16 +1803,19 @@
+@@ -1807,16 +1818,19 @@
        <!--
          - Stub for find-next and find-previous commands
          - @param aFindPrevious
