@@ -178,23 +178,3 @@ diff --git a/toolkit/content/widgets/findbar.xml b/toolkit/content/widgets/findb
                this._findFailedString = val;
              else
                this._findFailedString = null;
-@@ -1807,16 +1818,19 @@
-       <!--
-         - Stub for find-next and find-previous commands
-         - @param aFindPrevious
-         -        true for find-previous, false otherwise.
-         -->
-       <method name="onFindAgainCommand">
-         <parameter name="aFindPrevious"/>
-         <body><![CDATA[
-+          if (this.reversed)
-+            aFindPrevious = !aFindPrevious;
-+
-           var findString = this._browser.fastFind.searchString || this._findField.value;
-           if (!findString) {
-             this.startFind();
-             return;
-           }
- 
-           // We dispatch the findAgain event here instead of in _findAgain since
-           // if there is a find event handler that prevents the default then
